@@ -9,9 +9,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
-      - ./SampleCollections:/usr/local/sampleCollections
       - mongo-data:/data/db
-    working_dir: /usr/local/sampleCollections
 
   server:
     image: node:alpine
@@ -33,7 +31,7 @@ services:
       - ./client:/usr/local/server
     working_dir: /usr/local/server
     environment:
-      - REACT_API_URL=http://server:3001
+      - VUE_API_URL=http://server:3001
       - CLIENT_PORT=3001
       - CLIENT_HOST=0.0.0.0
     ports:
