@@ -6,8 +6,8 @@ export default class AuthRepository {
         return await Request.make('post', '/login', { email, password })
     }
 
-    static async register({ name, email, password}) {
-        return await Request.make('post', '/register', { name, email, password });
+    static async register(body) {
+        return await Request.make('post', '/register', {...body});
     }
 
     static async logout() {

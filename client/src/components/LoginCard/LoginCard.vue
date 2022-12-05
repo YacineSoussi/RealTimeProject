@@ -2,7 +2,7 @@
 import { ref, reactive, computed } from 'vue'
 import AuthLogic from '../../logics/AuthLogic';
 import router from '../../router';
-
+import { RouterLink, RouterView } from 'vue-router';
 
 const isLoading = ref(false);
 const showPassword = ref(false);
@@ -15,49 +15,29 @@ const form = reactive({
 const onSubmit = () => {
     isLoading.value = true;
     AuthLogic.login({...form})
-        .then(() => {
-        isLoading.value = false;
-        redirectToHome();
+        .then((data) => {
+            if(data.status_code === 200 || data.status_code === 201)  { 
+                isLoading.value = false;
+                redirectToHome();
+            } else {
+                data = data.response.data;
+                error.value = data?.message;
+                isLoading.value = false;
+            }
         })
-        .catch(() => {
-        isLoading.value = false;
-        
-        });
     };
 
 const redirectToHome = () => {
+    console.log('redirecting to home');
     router.push({ name: 'home' });
     };
 
-const isEmail = () => {
-    const re = /\S+@\S+\.\S+/;
-    const email = form.email;
-    if(!re.test(email)) {
-        errors.email = 'Email is invalid';
-    } else {
-        errors.email = '';
-    }
-    };
-
-const isPassword = () => {
-    const re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-    const password = form.password;
-     if(!re.test(password)) {
-        errors.password = 'Password must contain at least one number, one lowercase and one uppercase letter and at least six characters';
-     } else {
-        errors.password = '';
-     }
-    };
 
 const typePassword = computed(() => {
   return showPassword.value ? 'text' : 'password';
 });
 
-const errors = reactive({
-  email: '',
-  password: '',
-});
-
+const error = ref('');
 
 </script>
 
@@ -71,22 +51,23 @@ const errors = reactive({
                 <form class="form" @submit.prevent="onSubmit">
                     <div class="form__group">
                         <label class="form__label" for="email">Email</label>
-                        <input class="form__input" type="email" id="email" v-model="form.email" @input="isEmail" />
+                        <input class="form__input" type="email" id="email" v-model="form.email" />
                     </div>
                     <div class="form__group">
                         <label class="form__label" for="password">Password</label>
                         <div class="form__input-group">
-                            <input class="form__input" :type="typePassword" id="password" v-model="form.password" @input="isPassword" />
+                            <input class="form__input" :type="typePassword" id="password" v-model="form.password" />
                             <button class="form__input-button" :class="errors ? 'red' : null" type="button" @click="showPassword = !showPassword">
                                 <font-awesome-icon icon="eye" />
                             </button>
                         </div>
                     </div>
                     <div class="errors">
-                        <div class="error messageErrors m-2" v-if="errors.email"> <li> Veuillez saisir un email valide </li></div>
-                        <div class="error messageErrors m-2" v-if="errors.password"><li>{{errors.password}}</li> </div>
+                        <div class="error messageErrors m-2" v-if="error"> <li> {{error}} </li></div>
                     </div>
-                    <div class="form__group">
+                    <!-- Pas encore inscrit ? -->
+                    <RouterLink to="/register" class="form__link">Pas encore inscrit ?</RouterLink>
+                    <div class="form__group mt-10">
                         <button class="form__button" type="submit" :disabled="isLoading">
                             <span v-if="isLoading">Loading...</span>
                             <span v-else>Login</span>
@@ -160,5 +141,9 @@ align-items: center;
 .messageErrors {
   color: red;
 
+}
+
+.mt-10 {
+    margin-top: 10px;
 }
 </style>

@@ -3,13 +3,12 @@
 GET http://localhost:3000/users/users-list
 
 ###
-POST http://localhost:3000/users/users
+POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-    "email": "Slimane@Symfony.com",
-    "password": "azertyuiop",
-    "firstName": "Slimane",
-    "lastName": "Symfony",
-    "role": "admin"
+    "email": "Yacine.soussii@gmail.com",
+    "password": "poiuytreza926",
+    "firstName": "Yacine",
+    "lastName": "SOUSSI"
 }

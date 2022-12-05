@@ -7,8 +7,13 @@ export default class AuthLogic {
     }
 
     static async login(body) {
-        const response = await AuthRepository.login({...body});
-        AuthLogic.setTokens({token: response.token});
+        const response = await AuthRepository.login({...body})
+        const result = response.responseObject();
+        result.userData = response.responseObject().userData[0];
+        AuthLogic.setTokens(result);
+        AuthLogic.setStorageUser();
+        
+        return response;
     }
         
     static getTokens() {
@@ -40,7 +45,8 @@ export default class AuthLogic {
       }
 
     static setStorageUser() {
-        const user = AuthLogic.getTokens().user;
+        const user = AuthLogic.getTokens().userData
+        ;
         LocalStorage.set("user", user);
     }
     }

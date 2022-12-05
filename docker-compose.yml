@@ -31,7 +31,7 @@ services:
       - ./client:/usr/local/server
     working_dir: /usr/local/server
     environment:
-      - VUE_API_URL=http://server:3001
+      - VITE_VUE_API_URL=http://127.0.0.1:3000
       - CLIENT_PORT=3001
       - CLIENT_HOST=0.0.0.0
     ports:

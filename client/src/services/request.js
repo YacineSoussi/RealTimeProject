@@ -5,7 +5,7 @@ import AuthLogic from '../logics/AuthLogic';
 class Request {
     constructor() {
         this.client = axios.create({
-          baseURL: import.meta.env.VUE_APP_API_URL,
+          baseURL: import.meta.env.VITE_VUE_API_URL,
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -36,10 +36,11 @@ class Request {
    */
   async make(method, url, config = {}) {
     try {
-      let response = await this.client[method.toLowerCase()](url, config)
+      let response = await this.client[method.toLowerCase()](url, config);
+
       return new JsonApiResponse(response)
     } catch (error) {
-      return await this.parseError(error, url)
+      return new JsonApiResponse(error.response)
     }
   }
 }

@@ -1,6 +1,7 @@
 // create server express
 const express = require('express');
 const userRoutes = require('./models/routes/users');
+const securityRoutes = require('./models/routes/security');
 const cors = require('cors');
 const app = express();
 const port = 3000;
@@ -13,7 +14,9 @@ app.use(express.json());
 app.use(cors({
     origin: "*"
 }));
-app.use('/users', userRoutes);
+app.use('/', userRoutes);
+app.use('/', securityRoutes);
+
 
 
 // create server http

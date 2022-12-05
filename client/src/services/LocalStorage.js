@@ -7,7 +7,8 @@ export default class LocalStorage {
         return `${storageKey}-${key}`
     }
     static set(key, value) {
-        localStorage.setItem(this.getKey(key), JSON.stringify(value))
+        localStorage.setItem(this.getKey(key), JSON.stringify(value));
+        console.log("set", key, value)
     }
     static get(key) {
         return JSON.parse(localStorage.getItem(this.getKey(key)))

@@ -1,6 +1,6 @@
 <script setup>
 import {RouterLink, RouterView} from 'vue-router';
-
+import LocalStorage from '../../services/LocalStorage';
 
 </script>
 
@@ -54,7 +54,8 @@ import {RouterLink, RouterView} from 'vue-router';
             <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
         
-              <RouterLink to="/login" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page"> Login </RouterLink>  
+              <RouterLink to="/login" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page"> Login / Register</RouterLink>  
+              
             </button>
           </div>
 

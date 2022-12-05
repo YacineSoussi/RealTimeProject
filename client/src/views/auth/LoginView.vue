@@ -1,11 +1,5 @@
 <script setup>
-import { ref } from 'vue'
-import LoginCardVue from '../../components/LoginCard.vue/LoginCard.vue';
-
-
-const isLoading = ref(false);
-
-
+import LoginCardVue from '../../components/LoginCard/LoginCard.vue';
 </script>
 
 <template>
