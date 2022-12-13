@@ -7,13 +7,15 @@ export default class AuthLogic {
     }
 
     static async login(body) {
-        const response = await AuthRepository.login({...body})
-        const result = response.responseObject();
-        result.userData = response.responseObject().userData[0];
-        AuthLogic.setTokens(result);
-        AuthLogic.setStorageUser();
+        const result = await AuthRepository.login({...body});
+            const res = {}
+            res.userData = result.response.data.userData[0];
+            res.token = result.response.data.token;
+            AuthLogic.setTokens(res);
+            AuthLogic.setStorageUser();
+
+            return result;
         
-        return response;
     }
         
     static getTokens() {
@@ -39,7 +41,7 @@ export default class AuthLogic {
     }
 
     static deleteRefreshToken() {
-        let token = LocalStorage.get("token")
+        let token = LocalStorage.get("tokens")
         delete token.refresh_token
         AuthLogic.setTokens(token)
       }

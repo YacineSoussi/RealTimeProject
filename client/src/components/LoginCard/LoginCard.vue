@@ -12,10 +12,11 @@ const form = reactive({
   password: '',
 });
 
-const onSubmit = () => {
+ const onSubmit = async () => {
     isLoading.value = true;
-    AuthLogic.login({...form})
+    await  AuthLogic.login({...form})
         .then((data) => {
+            console.log(data);
             if(data.status_code === 200 || data.status_code === 201)  { 
                 isLoading.value = false;
                 redirectToHome();
@@ -57,7 +58,7 @@ const error = ref('');
                         <label class="form__label" for="password">Password</label>
                         <div class="form__input-group">
                             <input class="form__input" :type="typePassword" id="password" v-model="form.password" />
-                            <button class="form__input-button" :class="errors ? 'red' : null" type="button" @click="showPassword = !showPassword">
+                            <button class="form__input-button" type="button" @click="showPassword = !showPassword">
                                 <font-awesome-icon icon="eye" />
                             </button>
                         </div>

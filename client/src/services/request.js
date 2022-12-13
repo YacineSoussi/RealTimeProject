@@ -1,48 +1,49 @@
 import axios from 'axios';
-import JsonApiResponse from './JsonApiResponse';
 import AuthLogic from '../logics/AuthLogic';
+import LocalStorage from '../services/LocalStorage';
+import JsonApiResponse from '../services/JsonApiResponse';
 
-class Request {
-    constructor() {
-        this.client = axios.create({
-          baseURL: import.meta.env.VITE_VUE_API_URL,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          // withCredentials: true,
-        })
-    
-        this.client.interceptors.request.use(config => {
-          const tokens = AuthLogic.getTokens()
-    
-          if (tokens) {
-            config.headers["Authorization"] = `Bearer ${tokens.access_token}`
-          }
-    
-          return Promise.resolve(config)
-        });
 
-        
-      }
-
-        /**
-   * Make a new AJAX request.
-   *
-   * @param {string} method
-   * @param {string} url
-   * @param {Object} config
-   * @returns {Promise}
-   */
-  async make(method, url, config = {}) {
-    try {
-      let response = await this.client[method.toLowerCase()](url, config);
-
-      return new JsonApiResponse(response)
-    } catch (error) {
-      return new JsonApiResponse(error.response)
+const request = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
     }
-  }
-}
+});
 
-export default new Request();
+request.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    }
+);  
+
+// use request to make api calls
+
+
+export default request;
+
+export const make = async (method, url, data = {}) => {
+    const config = {
+        method,
+        url,
+        data
+    };
+
+    try {
+        const response = await request(config);
+        return new JsonApiResponse(response);
+    } catch (error) {
+        if (error.response.status === 401) {
+            const tokens = AuthLogic.getTokens();
+            const newTokens = await AuthLogic.refreshToken(tokens.refresh_token);
+            AuthLogic.setTokens(newTokens);
+            return await make(method, url, data, params);
+        }
+        return new JsonApiResponse(error.response);
+    }
+}
