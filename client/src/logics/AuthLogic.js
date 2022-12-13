@@ -7,7 +7,11 @@ export default class AuthLogic {
     }
 
     static async login(body) {
+
         const result = await AuthRepository.login({...body});
+        if (result.response.status === 401) {
+            return result;
+        }
             const res = {}
             res.userData = result.response.data.userData[0];
             res.token = result.response.data.token;

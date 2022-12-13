@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, provide } from 'vue'
 import AuthLogic from '../../logics/AuthLogic';
 import router from '../../router';
 import { RouterLink, RouterView } from 'vue-router';
@@ -16,7 +16,6 @@ const form = reactive({
     isLoading.value = true;
     await  AuthLogic.login({...form})
         .then((data) => {
-            console.log(data);
             if(data.status_code === 200 || data.status_code === 201)  { 
                 isLoading.value = false;
                 redirectToHome();
@@ -29,7 +28,6 @@ const form = reactive({
     };
 
 const redirectToHome = () => {
-    console.log('redirecting to home');
     router.push({ name: 'home' });
     };
 

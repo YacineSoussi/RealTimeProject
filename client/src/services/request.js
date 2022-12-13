@@ -39,10 +39,7 @@ export const make = async (method, url, data = {}) => {
         return new JsonApiResponse(response);
     } catch (error) {
         if (error.response.status === 401) {
-            const tokens = AuthLogic.getTokens();
-            const newTokens = await AuthLogic.refreshToken(tokens.refresh_token);
-            AuthLogic.setTokens(newTokens);
-            return await make(method, url, data, params);
+           return new JsonApiResponse(error.response);
         }
         return new JsonApiResponse(error.response);
     }

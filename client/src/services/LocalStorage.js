@@ -8,7 +8,6 @@ export default class LocalStorage {
     }
     static set(key, value) {
         localStorage.setItem(this.getKey(key), JSON.stringify(value));
-        console.log("set", key, value)
     }
     static get(key) {
         return JSON.parse(localStorage.getItem(this.getKey(key)))

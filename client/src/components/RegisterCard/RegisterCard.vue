@@ -46,7 +46,6 @@ const register = async () => {
 
   await AuthLogic.register({ ...form })
   .then((data) => {
-    console.log(data);
     if(data.status_code === 200 || data.status_code === 201)  { 
       isLoading.value = false;
       redirectToLogin();
@@ -74,13 +73,20 @@ const typePassword = computed(() => {
 });
 
 const isValid = computed(() => {
-  if(errors.email === '' && errors.password === '' && errors.firstName === '' && errors.lastName === '' && isLoading.value === false) {
-    
+   console.log(errors)
+  if(errors.email === ''  && errors.firstName === '' && errors.lastName === '' && errors.password === '' && form.email !== '' && form.firstName !== '' && form.lastName !== '' && form.password !== '' ) {
     return false;
   } else {
-
     return true;
+  }
+});
 
+const isValidStyle = computed(() => {
+  if(isValid.value === true) {
+    return {
+      cursor: 'not-allowed',
+      backgroundColor: '#e0e0e0',
+    }
   }
 });
 
@@ -168,7 +174,7 @@ const isValid = computed(() => {
             </RouterLink>
           <div class="form__group">
             
-            <button class="form__button mt-10" type="submit" :disabled="isValid" >
+            <button class="form__button mt-10" :style="isValidStyle" type="submit" :disabled="isValid" >
               <span v-if="isLoading">Loading...</span>
               <span v-else>S'inscrire</span>
             </button>
@@ -233,8 +239,9 @@ const isValid = computed(() => {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background: #ccc;
+  background: rgb(11, 11, 11);
   cursor: pointer;
+  color: #fff;
 }
 
 .messageErrors {

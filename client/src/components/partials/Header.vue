@@ -1,7 +1,21 @@
 <script setup>
 import {RouterLink, RouterView} from 'vue-router';
 import LocalStorage from '../../services/LocalStorage';
+import {computed, onMounted, inject } from 'vue';
+import router from '../../router';
 
+const connect = inject('connect');
+
+const isAuth = computed(() => {
+  console.log(connect)
+  return LocalStorage.get('tokens') ? true : false;
+});
+
+
+const logout = () => {
+  LocalStorage.clear();
+  router.push({name: 'home'});
+};
 </script>
 
 <template>
@@ -54,8 +68,9 @@ import LocalStorage from '../../services/LocalStorage';
             <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
         
-              <RouterLink to="/login" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page"> Login / Register</RouterLink>  
-              
+              <RouterLink v-if="!isAuth" to="/login" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page"> Login / Register</RouterLink>  
+            
+                <font-awesome-icon v-else icon="right-from-bracket" class="icon-bracket" @click="logout" />
             </button>
           </div>
 
@@ -79,5 +94,14 @@ import LocalStorage from '../../services/LocalStorage';
   </div>
 </nav>
     
-    <RouterView />
+<RouterView />
 </template>
+
+<style scoped> 
+.icon-bracket {
+  color: #fff;
+  font-size: 1.5rem;
+  margin: 0 1rem;
+}
+
+</style>
