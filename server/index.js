@@ -2,6 +2,9 @@
 const express = require('express');
 const userRoutes = require('./models/routes/users');
 const securityRoutes = require('./models/routes/security');
+const messageRoutes = require('./models/routes/messages');
+const participantRoutes = require('./models/routes/participants');
+const conversationRoutes = require('./models/routes/conversations');
 const cors = require('cors');
 const app = express();
 const port = 3000;
@@ -16,6 +19,9 @@ app.use(cors({
 }));
 app.use('/', userRoutes);
 app.use('/', securityRoutes);
+app.use('/', messageRoutes);
+app.use('/', participantRoutes);
+app.use('/', conversationRoutes);
 
 
 
