@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, inject } from "vue";
 import AuthLogic from "../../logics/AuthLogic";
 import router from "../../router";
 import { RouterLink, RouterView } from "vue-router";
@@ -21,6 +21,8 @@ const errors = reactive({
   lastName: "",
 });
 
+const errorMsg = ref("");
+
 const isPassword = () => {
   const password = form.password;
   if (password.length < 8) {
@@ -41,27 +43,19 @@ const isEmail = () => {
   }
 };
 
-const register = async () => {
+const register = inject("ProviderRegister");
+
+const onSubmit = async () => {
   isLoading.value = true;
 
-  await AuthLogic.register({ ...form })
-  .then((data) => {
-    if(data.status_code === 200 || data.status_code === 201)  { 
-      isLoading.value = false;
-      redirectToLogin();
-    } else {
-    data = data.response.data;
-    errors.email = data?.email;
-    errors.password = data?.password;
+  try {
+   await register(form);
+    redirectToLogin();
+  } catch (err) {
+    errorMsg.value = err.message;
+  } finally {
     isLoading.value = false;
-    
-    }
-   
-  })
-  .catch((data) => {
-    console.log(data);
-    isLoading.value = false;
-  });
+  }
 };
 
 const redirectToLogin = () => {
@@ -73,7 +67,6 @@ const typePassword = computed(() => {
 });
 
 const isValid = computed(() => {
-   console.log(errors)
   if(errors.email === ''  && errors.firstName === '' && errors.lastName === '' && errors.password === '' && form.email !== '' && form.firstName !== '' && form.lastName !== '' && form.password !== '' ) {
     return false;
   } else {
@@ -99,7 +92,7 @@ const isValidStyle = computed(() => {
         <h1 class="block__title-text">S'inscrire</h1>
       </div>
       <div class="block__content">
-        <form class="form" @submit.prevent="register">
+        <form class="form" @submit.prevent="onSubmit">
           <!-- Champ Nom et Prenom cote a cote  with flex-->
           <div class="form__group flex">
             <div class="m-2">
@@ -167,6 +160,9 @@ const isValidStyle = computed(() => {
             <div class="error messageErrors m-2" v-if="errors.password">
               <li>{{ errors.password }}</li>
             </div>
+          </div>
+          <div class="error messageErrors m-2" v-if="errorMsg">
+            <li>{{ errorMsg }}</li>
           </div>
           <!-- Déjà inscrit ? -->
           <RouterLink to="/login" class="form__link">

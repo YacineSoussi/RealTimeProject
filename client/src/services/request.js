@@ -22,9 +22,6 @@ request.interceptors.request.use(
     }
 );  
 
-// use request to make api calls
-
-
 export default request;
 
 export const make = async (method, url, data = {}) => {

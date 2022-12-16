@@ -2,15 +2,24 @@ import LocalStorage from "../services/LocalStorage";
 import AuthRepository from "../repositories/AuthRepository";
 
 export default class AuthLogic {
-    static register(body) {
-        return AuthRepository.register(body);
+
+    static async register(body) {
+        const result = await AuthRepository.register(body);
+        if (result.response.status === 422) {
+            
+            const errors = result.response.data;
+            const errorsArray = Object.values(errors);
+            throw new Error(errorsArray);
+        }
+        return result.response.data;
     }
 
     static async login(body) {
-
+        
         const result = await AuthRepository.login({...body});
+
         if (result.response.status === 401) {
-            return result;
+            throw new Error(result.response.data?.message);
         }
             const res = {}
             res.userData = result.response.data.userData[0];
@@ -18,9 +27,18 @@ export default class AuthLogic {
             AuthLogic.setTokens(res);
             AuthLogic.setStorageUser();
 
-            return result;
+            return res.userData;
         
     }
+
+    static logout() {
+        this.clear();
+    }
+
+    static isAuth() {
+        return !!this.getTokens();
+    }
+
         
     static getTokens() {
         return LocalStorage.get("tokens");

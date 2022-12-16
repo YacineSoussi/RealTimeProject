@@ -1,42 +1,38 @@
 <script setup>
-import { ref, reactive, computed, provide } from 'vue'
-import AuthLogic from '../../logics/AuthLogic';
+import { ref, reactive, computed, inject } from 'vue'
 import router from '../../router';
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink } from 'vue-router';
+
 
 const isLoading = ref(false);
 const showPassword = ref(false);
-
+const error = ref('');
 const form = reactive({
   email: '',
   password: '',
 });
-
- const onSubmit = async () => {
-    isLoading.value = true;
-    await  AuthLogic.login({...form})
-        .then((data) => {
-            if(data.status_code === 200 || data.status_code === 201)  { 
-                isLoading.value = false;
-                redirectToHome();
-            } else {
-                data = data.response.data;
-                error.value = data?.message;
-                isLoading.value = false;
-            }
-        })
-    };
+const login = inject('ProviderLogin');
 
 const redirectToHome = () => {
     router.push({ name: 'home' });
     };
 
-
 const typePassword = computed(() => {
   return showPassword.value ? 'text' : 'password';
 });
 
-const error = ref('');
+ const onSubmit = async () => {
+    isLoading.value = true;
+   try {
+    await login(form);
+    redirectToHome();
+   } catch (err) {
+       error.value = err.message;
+   } finally {
+       isLoading.value = false;
+    }
+    };
+
 
 </script>
 
@@ -47,7 +43,7 @@ const error = ref('');
                 <h1 class="block__title-text">Login</h1>
             </div>
             <div class="block__content">
-                <form class="form" @submit.prevent="onSubmit">
+                <form class="form" @submit.prevent="onSubmit()">
                     <div class="form__group">
                         <label class="form__label" for="email">Email</label>
                         <input class="form__input" type="email" id="email" v-model="form.email" />
