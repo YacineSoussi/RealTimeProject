@@ -18,8 +18,15 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('../views/auth/RegisterView.vue')
-    }
+    },
+    {
+      path: '/conversation',
+      name: 'conversation',
+      component: () => import('../views/tchats/GlobalView.vue'),
+
+    },
   ]
+
 })
 
 router.beforeEach((to, from, next) => {
