@@ -103,6 +103,42 @@ router.post("/conversations", checkAuthentication, async (req, res) => {
 }
 );
 
+// post conversation with many participants
+router.post("/rooms", checkAuthentication, async (req, res) => {
+    try {
+        const result = await Conversation.create(req.body);
+    
+        const participants = req.body.participants;
+        participants.forEach(async (participant) => {
+            await Participant.create(
+                {
+                    conversationId: result.id,
+                    userId: participant.userId
+                }
+            );
+        });
+        const results = await Conversation.findOne({
+            where: { id: result.id },
+            include: [
+                { model: Participant, as: "participants" }
+            ]
+        });
+    
+        res.status(201).json(results);
+        
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            console.error(error);
+            res.status(422).json(formatError(error));
+        } else {
+            res.sendStatus(500);
+            console.error(error);
+        }
+    }
+}
+);
+
+
 router.put("/conversations/:id", checkAuthentication, async (req, res) => {
     try {
         const result = await Conversation.update(req.body, { where: { id: req.params.id } });

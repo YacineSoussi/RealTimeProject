@@ -57,4 +57,12 @@ export default class ConversationLogic {
         }
         return result.response.data;
     }
+    static async createRoom(body) {
+        const result = await ConversationRepository.createRoom(body);
+
+        if (result.response.status !== 201) {
+            throw new Error(result.response.data?.message);
+        }
+        return result.response.data;
+    }
 }

@@ -14,9 +14,10 @@ const request = axios.create({
 
 request.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
+        const token = LocalStorage.get("tokens");
+        
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token.token}`;
         }
         return config;
     }
@@ -35,6 +36,7 @@ export const make = async (method, url, data = {}) => {
         const response = await request(config);
         return new JsonApiResponse(response);
     } catch (error) {
+        console.log('error', error);
         if (error.response.status === 401) {
            return new JsonApiResponse(error.response);
         }

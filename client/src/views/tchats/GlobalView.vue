@@ -2,12 +2,14 @@
 import { onMounted } from 'vue';
 import NavConversationsVue from './ListConversations/NavConversationsView.vue';
 import MessagesView from './BlockMessage/MessagesView.vue';
+import ConversationProvider from '../../components/providers/ConversationProvider.vue';
 onMounted(() => {
     console.log('GlobalView mounted');
 });
 </script>
 
 <template>
+<ConversationProvider>
 <div>
         <div class="w-full h-32" ></div>
 
@@ -25,4 +27,5 @@ onMounted(() => {
             </div>
         </div>
     </div>
+</ConversationProvider>
 </template>
