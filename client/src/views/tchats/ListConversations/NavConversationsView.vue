@@ -1,4 +1,21 @@
 <script setup>
+import { ref, reactive, inject, onMounted } from 'vue'
+import moment from 'moment';
+
+const User = inject('ProviderUser');
+const conversations = inject('ProviderConversations');
+const getConversationOfUser = inject('ProviderGetConversationOfUser');
+const selectedConversationId = inject('ProviderSelectedConversationId');
+
+onMounted(() => {
+    getConversationOfUser().then(() =>{
+        if (conversations.value.length > 0) {
+            selectedConversationId.value = conversations.value[0].id;
+            
+        }
+    });
+    
+});
 </script>
 
 <template>
@@ -30,7 +47,7 @@
 
 <!-- Contacts -->
 <div class="bg-grey-lighter flex-1 overflow-auto">
-    <div class="px-3 flex items-center bg-grey-light cursor-pointer">
+    <div v-for="conversation in conversations" class="px-3 flex items-center bg-grey-light cursor-pointer">
         <div>
             <img class="h-12 w-12 rounded-full"
                  src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"/>
@@ -38,18 +55,18 @@
         <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
             <div class="flex items-bottom justify-between">
                 <p class="text-grey-darkest">
-                    New Movie! Expendables 4
+                    {{conversation.name}}
                 </p>
                 <p class="text-xs text-grey-darkest">
-                    12:45 pm
+                    {{moment(conversation.updatedAt).format('hh:mm a')}}
                 </p>
             </div>
             <p class="text-grey-dark mt-1 text-sm">
-                Get Andrés on this movie ASAP!
+                {{conversation.lastMessage ? conversation.lastMessage.content : ''}}
             </p>
         </div>
     </div>
-    <div class="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
+    <!-- <div class="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
         <div>
             <img class="h-12 w-12 rounded-full"
                  src="https://www.biography.com/.image/t_share/MTE5NDg0MDU1MTIyMTE4MTU5/arnold-schwarzenegger-9476355-1-402.jpg"/>
@@ -124,7 +141,7 @@
                 Tell Java I have the money
             </p>
         </div>
-    </div>
+    </div> -->
 </div>
 
 </div>

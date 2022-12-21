@@ -36,10 +36,10 @@ export const make = async (method, url, data = {}) => {
         const response = await request(config);
         return new JsonApiResponse(response);
     } catch (error) {
-        console.log('error', error);
-        if (error.response.status === 401) {
-           return new JsonApiResponse(error.response);
-        }
+        
+        // if (error.response.status === 401) {
+        //    return new JsonApiResponse(error.response);
+        // }
         return new JsonApiResponse(error.response);
     }
 }

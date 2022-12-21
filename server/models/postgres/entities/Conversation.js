@@ -13,6 +13,10 @@ Conversation.init({
         allowNull: true,
         defaultValue: false,
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     sequelize: connection,
     modelName: "Conversation",
@@ -24,10 +28,11 @@ Conversation.beforeUpdate(async (conversation) => {
     }
 });
 
-Conversation.afterCreate(async (conversation) => {
-    if(conversation.maxParticipants ===  conversation.participants.length) {
-        conversation.completed = true;
-    }
-});
-    
+// Conversation.afterCreate(async (conversation) => {
+//     if(conversation.maxParticipants ===  conversation.participants.length) {
+//         conversation.completed = true;
+//     }
+// });
+
+
 module.exports = Conversation;

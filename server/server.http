@@ -27,9 +27,9 @@ POST http://localhost:3000/messages
 Content-Type: application/json
 
 {   
-    "content": "Ça va Moncef ?",
-    "authorId": 4,
-    "conversationId": 1
+    "content": "Test date moi",
+    "authorId": 40,
+    "conversationId": 8
 }
 
 ###
@@ -60,7 +60,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROY
 
 {
     "firstUserId": 4,
-    "secondUserId": 7
+    "secondUserId": 7,
+    "maxParticipants": 200,
+    "name": "First conversation"
 }
 
 ###
@@ -77,7 +79,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROY
 
 ###
 
-DELETE http://localhost:3000/conversations/68
+DELETE http://localhost:3000/conversations/7
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
 
 ###
@@ -91,8 +93,12 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 {
-    "userId": 2,
-    "conversationId": 10
+    "userId": 40,
+    "conversationId": 2
 }
 
+
+###
+GET http://localhost:3000/participantsOfConversation/8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 

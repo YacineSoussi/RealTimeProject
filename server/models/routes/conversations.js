@@ -10,7 +10,6 @@ const router = new Router();
 router.get("/conversations", checkAuthentication, async(req, res) => {
     try {
         const result = await Conversation.findAll({
-            order: [["createdAt", "ASC"]],
             include: [
                 {
                     model: Message,
@@ -22,6 +21,17 @@ router.get("/conversations", checkAuthentication, async(req, res) => {
                 }
             ]
         });
+        // trier les conversations par date de dernier message
+        result.sort((a, b) => {
+            if (a.messages.length === 0) {
+                return 1;
+            }
+            if (b.messages.length === 0) {
+                return -1;
+            }
+            return b.messages[b.messages.length - 1].createdAt - a.messages[a.messages.length - 1].createdAt;
+        });
+
         res.json(result);
     } catch (error) {
         res.sendStatus(500);
@@ -53,10 +63,21 @@ router.get("/myconversations/:userId", checkAuthentication, async (req, res) => 
         });
 
         if (conversations.length === 0) {
-            res.json({
-                message: "No conversation found"
-            });
+           
+            res.json([])
+           
         } else {
+            // trier les conversations par date de dernier message
+            conversations.sort((a, b) => {
+                if (a.messages.length === 0) {
+                    return 1;
+                }
+                if (b.messages.length === 0) {
+                    return -1;
+                }
+                return b.messages[b.messages.length - 1].createdAt - a.messages[a.messages.length - 1].createdAt;
+            });
+            
             res.json(conversations);
         }
     } catch (error) {
@@ -123,7 +144,8 @@ router.post("/rooms", checkAuthentication, async (req, res) => {
                 { model: Participant, as: "participants" }
             ]
         });
-    
+        
+        
         res.status(201).json(results);
         
     } catch (error) {

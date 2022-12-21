@@ -11,7 +11,6 @@ export default class ConversationLogic {
     }
     static async getConversationOfUser(id) {
         const result = await ConversationRepository.getConversationOfUser(id);
-
         if (result.response.status !== 200) {
             throw new Error(result.response.data?.message);
         }
@@ -61,6 +60,14 @@ export default class ConversationLogic {
         const result = await ConversationRepository.createRoom(body);
 
         if (result.response.status !== 201) {
+            throw new Error(result.response.data?.message);
+        }
+        return result.response.data;
+    }
+    static async getParticipants(id) {
+        const result = await ConversationRepository.getParticipants(id);
+
+        if (result.response.status !== 200) {
             throw new Error(result.response.data?.message);
         }
         return result.response.data;

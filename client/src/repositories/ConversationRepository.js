@@ -26,4 +26,10 @@ export default class ConversationRepository {
     static async postParticipant({conversationId, userId}) {
         return await Request.make('post', `/participants`, {conversationId, userId});
     }
+    static async getParticipants(id) {
+        return await Request.make('get', `/participantsOfConversation/${id}`);
+    }
+    static async deleteParticipant(id) {
+        return await Request.make('delete', `/participants/${id}`);
+    }
 }
