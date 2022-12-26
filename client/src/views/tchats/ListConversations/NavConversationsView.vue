@@ -49,7 +49,7 @@ onMounted(() => {
     <div @click="setSelectedConversationId(conversation.id)" v-for="conversation in conversations" class="px-3 flex items-center bg-grey-light cursor-pointer">
         <div>
             <img class="h-12 w-12 rounded-full"
-                 src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"/>
+                 src="../../../../public/roomLogo.png"/>
         </div>
         <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
             <div class="flex items-bottom justify-between">
