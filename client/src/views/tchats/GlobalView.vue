@@ -15,9 +15,8 @@ import ConversationProvider from '../../components/providers/ConversationProvide
         <div class="container mx-auto" style="margin-top: -128px;">
             <div class="py-6 h-screen">
                 <div class="flex border border-grey rounded shadow-lg h-full">
-
+                    
                     <!-- Left -->
-                   
                     <NavConversationsVue />
 
                     <!-- Right -->

@@ -19,6 +19,7 @@ const fullName = (authorId) => {
         }
 }
 };
+
 </script>
 
 <template>
@@ -35,7 +36,7 @@ const fullName = (authorId) => {
             <p class="text-grey-darker text-xs mt-1">
                <template v-if="participantsOFConversation">
                     <template v-for="participant in participantsOFConversation">
-                        {{participant.user.lastName + ', ' + participant.user.firstName + ' '}}
+                        {{fullName(participant.user.id)}}, 
                     </template> 
                 </template>
             

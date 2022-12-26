@@ -130,6 +130,8 @@ router.post("/rooms", checkAuthentication, async (req, res) => {
         const result = await Conversation.create(req.body);
     
         const participants = req.body.participants;
+
+        if(participants) {
         participants.forEach(async (participant) => {
             await Participant.create(
                 {
@@ -138,6 +140,7 @@ router.post("/rooms", checkAuthentication, async (req, res) => {
                 }
             );
         });
+    }
         const results = await Conversation.findOne({
             where: { id: result.id },
             include: [
@@ -159,7 +162,6 @@ router.post("/rooms", checkAuthentication, async (req, res) => {
     }
 }
 );
-
 
 router.put("/conversations/:id", checkAuthentication, async (req, res) => {
     try {

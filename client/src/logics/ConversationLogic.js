@@ -68,7 +68,8 @@ export default class ConversationLogic {
         const result = await ConversationRepository.getParticipants(id);
 
         if (result.response.status !== 200) {
-            throw new Error(result.response.data?.message);
+            console.log(result.response.data)
+            throw new Error(result.response.data);
         }
         return result.response.data;
     }

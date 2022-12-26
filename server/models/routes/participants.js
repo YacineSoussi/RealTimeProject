@@ -24,7 +24,7 @@ router.get("/participantsOfConversation/:idConversation", checkAuthentication, a
             const user = await participant.getUser();
             return { ...participant.dataValues, user };
         }));
-        console.log(result)
+        
         res.json(result);
     } catch (error) {
         res.sendStatus(500);
@@ -37,6 +37,9 @@ router.get("/participantsOfConversation/:idConversation", checkAuthentication, a
 router.post("/participants", checkAuthentication, async (req, res) => {
     try {
         const result = await Participant.create(req.body);
+        // get conversation of participant
+        const conversation = await result.getConversation();
+        result.dataValues.conversation = conversation;
         res.status(201).json(result);
     } catch (error) {
         if (error instanceof ValidationError) {

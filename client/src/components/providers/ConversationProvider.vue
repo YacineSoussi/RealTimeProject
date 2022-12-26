@@ -9,16 +9,19 @@ const User = LocalStorage.get('user');
 
 const messages = ref([]);
 const conversations = ref([]);
+const rooms = ref([]);
 const selectedConversation = ref(null);
 const selectedConversationId = ref(null);
 const updatedConversation = ref(null);
 const participantsOFConversation = ref(null);
+const isOpenModal = ref(false);
 
 const filterByUpdated = (conversations) => {
-    // return conversations.sort((a, b) => {
-    //     return new Date(b.updatedAt) - new Date(a.updatedAt);
-    // });
+   
     return conversations.sort((a, b) => {
+        if(!a.lastMessage || !b.lastMessage) {
+            return 0;
+        }
         return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
     });
 };
@@ -37,7 +40,8 @@ const getConversations = () => {
                     lastMessage
                 }
             });
-            conversations.value = conversations;
+            rooms.value = conversations;
+            
         })
 };
 
@@ -139,7 +143,6 @@ const createMessage = (form) => {
                 completed: selectedConversation.value?.completed,
             }
             selectedConversation.value = ConversationMaj;
-            
             //  On met à jour la conversation dans la liste des conversations
             conversations.value = conversations.value.map((conversation) => {
                 if (conversation.id === data.conversationId) {
@@ -147,6 +150,7 @@ const createMessage = (form) => {
                 }
                 return conversation;
             })
+            filterByUpdated(conversations.value);
             return data;
         })
 };
@@ -182,6 +186,23 @@ const getParticipants = (id) => {
         })
 };
 
+const postParticipant = (form) => {
+    return ConversationLogic.postParticipant({...form})
+        .then((data) => {
+            conversations.value.push(data.conversation);
+            rooms.value = rooms.value.map((room) => {
+                if (room.id === data.conversationId) {
+                    return {
+                        ...room,
+                        participants: [...room.participants, data]
+                    }
+                }
+                return room;
+            });
+
+        })
+};
+
 const getUser = (id) => {
     return UserLogic.getUser(id)
         .then((data) => {
@@ -189,6 +210,19 @@ const getUser = (id) => {
         })
 };
 
+const setValueModal = () => {
+    isOpenModal.value = !isOpenModal.value;
+}
+
+const checkUserInConversation = (conversation) => {
+    if (conversation.participants) {
+       if(conversation.participants.find((participant) => participant.userId === User.id)) {
+            console.log('true');
+           return true;
+       }
+    }
+    return false;
+};
 
 // Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
 watchEffect(() => {
@@ -204,7 +238,10 @@ watchEffect(() => {
         filterByUpdated(conversations.value);
     }
 });
-
+// Au chargement de la page, on récupère toutes les rooms
+watchEffect(() => {
+    getConversations();
+})
 provide('ProviderMessages', messages);
 provide('ProviderConversations', conversations);
 provide('ProviderSelectedConversation', selectedConversation);
@@ -212,6 +249,8 @@ provide('ProviderSelectedConversationId', selectedConversationId);
 provide('ProviderUpdatedConversation', updatedConversation);
 provide('ProviderUser', User);
 provide('ProviderParticipantsOFConversation', participantsOFConversation);
+provide('ProviderIsOpenModal', isOpenModal);
+provide('ProviderRooms', rooms);
 
 
 provide('ProviderGetConversations', getConversations);
@@ -227,6 +266,9 @@ provide('ProviderDeleteMessage', deleteMessage);
 provide('ProviderSetSelectedConversationId', setSelectedConversationId);
 provide('ProviderCreateRoom', createRoom);
 provide('ProviderGetUser', getUser);
+provide('ProviderSetValueModal', setValueModal);
+provide('ProviderCheckUserInConversation', checkUserInConversation);
+provide('ProviderPostParticipant', postParticipant);
 
 </script>
 

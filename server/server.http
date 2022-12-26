@@ -1,7 +1,14 @@
 ###
 
-GET http://localhost:3000/users/users-list
+PUT http://localhost:3000/users/40
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
+Content-Type: application/json
+
+{
+    "firstName": "Administrateur",
+    "lastName": "numero 1"
+}
+
 
 ###
 POST http://localhost:3000/register
@@ -28,9 +35,9 @@ POST http://localhost:3000/messages
 Content-Type: application/json
 
 {   
-    "content": "Vous êtes tous virés",
-    "authorId": 10,
-    "conversationId": 2
+    "content": "Voici un message",
+    "authorId": 6,
+    "conversationId": 19
 }
 
 ###
@@ -45,7 +52,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROY
 
 ###
 
-GET http://localhost:3000/conversations/85
+GET http://localhost:3000/conversations/14
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 ###
@@ -60,14 +67,25 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 {
-    "firstUserId": 4,
-    "secondUserId": 7,
-    "maxParticipants": 200,
-    "name": "First conversation"
+    
+    "maxParticipants": 100,
+    "name": "Voici un test"
 }
 
 ###
-PATCH http://localhost:3000/conversations/7
+
+POST http://localhost:3000/rooms
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
+
+{
+    
+    "maxParticipants": 100,
+    "name": "Voici une room"
+}
+
+###
+PATCH http://localhost:3000/conversations/2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
 
@@ -81,6 +99,11 @@ DELETE http://localhost:3000/conversations/7
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
 
 ###
+
+GET http://localhost:3000/participantsOfConversation/19
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
+
+###
 GET http://localhost:3000/participants
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 ###
@@ -91,20 +114,20 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 {
-    "userId": 10,
-    "conversationId": 2
+    "userId": 6,
+    "conversationId": 19
 }
 
 
 ###
-GET http://localhost:3000/participantsOfConversation/8
+GET http://localhost:3000/participantsOfConversation/19
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 ###
-GET http://localhost:3000/users/10
+GET http://localhost:3000/users/40
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 ###
-GET http://localhost:3000/participants
+GET http://localhost:3000/conversations
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
