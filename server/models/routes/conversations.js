@@ -177,6 +177,22 @@ router.put("/conversations/:id", checkAuthentication, async (req, res) => {
 }
 );
 
+router.patch("/conversations/:id", checkAuthentication, async (req, res) => {
+    try {
+        const result = await Conversation.update(req.body, { where: { id: req.params.id } });
+        res.json(result);
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            console.error(error);
+            res.status(422).json(formatError(error));
+        } else {
+            res.sendStatus(500);
+            console.error(error);
+        }
+    }
+}
+);
+
 router.get("/conversations/:id", checkAuthentication, async (req, res) => {
     try {
         const result = await Conversation.findByPk(req.params.id, {

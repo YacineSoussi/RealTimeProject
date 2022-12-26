@@ -6,12 +6,12 @@ const User = inject('ProviderUser');
 const conversations = inject('ProviderConversations');
 const getConversationOfUser = inject('ProviderGetConversationOfUser');
 const selectedConversationId = inject('ProviderSelectedConversationId');
+const setSelectedConversationId = inject('ProviderSetSelectedConversationId');
 
 onMounted(() => {
     getConversationOfUser().then(() =>{
         if (conversations.value.length > 0) {
             selectedConversationId.value = conversations.value[0].id;
-            
         }
     });
     
@@ -22,10 +22,8 @@ onMounted(() => {
      <div class="w-1/3 border flex flex-col">
 
 <!-- Header -->
-<div class="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center">
-    <div>
-        <img class="w-10 h-10 rounded-full" src="http://andressantibanez.com/res/avatar.png"/>
-    </div>
+<div class="py-2 px-3 bg-grey-lighter flex flex-row justify-end items-center">
+  
 
     <div class="flex">
         <div>
@@ -47,7 +45,7 @@ onMounted(() => {
 
 <!-- Contacts -->
 <div class="bg-grey-lighter flex-1 overflow-auto">
-    <div v-for="conversation in conversations" class="px-3 flex items-center bg-grey-light cursor-pointer">
+    <div @click="setSelectedConversationId(conversation.id)" v-for="conversation in conversations" class="px-3 flex items-center bg-grey-light cursor-pointer">
         <div>
             <img class="h-12 w-12 rounded-full"
                  src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"/>
@@ -58,7 +56,7 @@ onMounted(() => {
                     {{conversation.name}}
                 </p>
                 <p class="text-xs text-grey-darkest">
-                    {{moment(conversation.updatedAt).format('hh:mm a')}}
+                    {{moment(conversation.lastMessage.updatedAt).format('hh:mm a')}}
                 </p>
             </div>
             <p class="text-grey-dark mt-1 text-sm">
@@ -66,82 +64,6 @@ onMounted(() => {
             </p>
         </div>
     </div>
-    <!-- <div class="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
-        <div>
-            <img class="h-12 w-12 rounded-full"
-                 src="https://www.biography.com/.image/t_share/MTE5NDg0MDU1MTIyMTE4MTU5/arnold-schwarzenegger-9476355-1-402.jpg"/>
-        </div>
-        <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
-            <div class="flex items-bottom justify-between">
-                <p class="text-grey-darkest">
-                    Arnold Schwarzenegger
-                </p>
-                <p class="text-xs text-grey-darkest">
-                    12:45 pm
-                </p>
-            </div>
-            <p class="text-grey-dark mt-1 text-sm">
-                I'll be back
-            </p>
-        </div>
-    </div>
-    <div class="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
-        <div>
-            <img class="h-12 w-12 rounded-full"
-                 src="https://www.famousbirthdays.com/headshots/russell-crowe-6.jpg"/>
-        </div>
-        <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
-            <div class="flex items-bottom justify-between">
-                <p class="text-grey-darkest">
-                    Russell Crowe
-                </p>
-                <p class="text-xs text-grey-darkest">
-                    12:45 pm
-                </p>
-            </div>
-            <p class="text-grey-dark mt-1 text-sm">
-                Hold the line!
-            </p>
-        </div>
-    </div>
-    <div class="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
-        <div>
-            <img class="h-12 w-12 rounded-full"
-                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGpYTzuO0zLW7yadaq4jpOz2SbsX90okb24Z9GtEvK6Z9x2zS5"/>
-        </div>
-        <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
-            <div class="flex items-bottom justify-between">
-                <p class="text-grey-darkest">
-                    Tom Cruise
-                </p>
-                <p class="text-xs text-grey-darkest">
-                    12:45 pm
-                </p>
-            </div>
-            <p class="text-grey-dark mt-1 text-sm">
-                Show me the money!
-            </p>
-        </div>
-    </div>
-    <div class="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
-        <div>
-            <img class="h-12 w-12 rounded-full"
-                 src="https://www.biography.com/.image/t_share/MTE5NTU2MzE2MjE4MTY0NzQ3/harrison-ford-9298701-1-sized.jpg"/>
-        </div>
-        <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
-            <div class="flex items-bottom justify-between">
-                <p class="text-grey-darkest">
-                    Harrison Ford
-                </p>
-                <p class="text-xs text-grey-darkest">
-                    12:45 pm
-                </p>
-            </div>
-            <p class="text-grey-dark mt-1 text-sm">
-                Tell Java I have the money
-            </p>
-        </div>
-    </div> -->
 </div>
 
 </div>

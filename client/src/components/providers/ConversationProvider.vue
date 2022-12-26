@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, provide, onMounted, watchEffect } from 'vue'
 import ConversationLogic from '../../logics/ConversationLogic';
+import UserLogic from '../../logics/UserLogic';
 import MessageLogic from '../../logics/MessageLogic';
 import LocalStorage from '../../services/LocalStorage';
 
@@ -12,6 +13,15 @@ const selectedConversation = ref(null);
 const selectedConversationId = ref(null);
 const updatedConversation = ref(null);
 const participantsOFConversation = ref(null);
+
+const filterByUpdated = (conversations) => {
+    // return conversations.sort((a, b) => {
+    //     return new Date(b.updatedAt) - new Date(a.updatedAt);
+    // });
+    return conversations.sort((a, b) => {
+        return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
+    });
+};
 
 const getConversations = () => {
     return ConversationLogic.getConversations()
@@ -47,6 +57,7 @@ const getConversationOfUser = () => {
                 }
             });
             conversations.value = myConversations;
+            conversations.value = filterByUpdated(conversations.value);
         })
 };
 
@@ -111,10 +122,32 @@ const deleteConversation = (id) => {
         })
 };
 
-const createMessage = (id, form) => {
-    return MessageLogic.createMessage(id, {...form})
+const createMessage = (form) => {
+    return MessageLogic.createMessage({...form})
         .then((data) => {
-            messages.value.push(data);
+
+            const ConversationMaj = {
+                lastMessage: data,
+                messages: [...selectedConversation.value.messages, data],
+                id: selectedConversation.value.id,
+                name: selectedConversation.value?.name,
+                participants: selectedConversation.value?.participants,
+                updatedAt: data.updatedAt,
+                createdAt: data.createdAt,
+                lastMessageId: data.id,
+                maxParticipants: selectedConversation.value?.maxParticipants,
+                completed: selectedConversation.value?.completed,
+            }
+            selectedConversation.value = ConversationMaj;
+            
+            //  On met à jour la conversation dans la liste des conversations
+            conversations.value = conversations.value.map((conversation) => {
+                if (conversation.id === data.conversationId) {
+                    return ConversationMaj;
+                }
+                return conversation;
+            })
+            return data;
         })
 };
 
@@ -149,7 +182,15 @@ const getParticipants = (id) => {
         })
 };
 
-// Au changement de la conversation selectionnée, on récupère les messages de la conversation
+const getUser = (id) => {
+    return UserLogic.getUser(id)
+        .then((data) => {
+            return data;
+        })
+};
+
+
+// Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
 watchEffect(() => {
     if (selectedConversationId.value) {
         getConversation(selectedConversationId.value);
@@ -157,11 +198,12 @@ watchEffect(() => {
     }
 });
 
-onMounted(() => {
-    getParticipants(8);
+// Au changement de l'utilisateur, on récupère les conversations de l'utilisateur en les triant par date de mise à jour
+watchEffect(() => {
+    if (User.id) {
+        filterByUpdated(conversations.value);
+    }
 });
-
-
 
 provide('ProviderMessages', messages);
 provide('ProviderConversations', conversations);
@@ -184,7 +226,7 @@ provide('ProviderUpdateMessage', updateMessage);
 provide('ProviderDeleteMessage', deleteMessage);
 provide('ProviderSetSelectedConversationId', setSelectedConversationId);
 provide('ProviderCreateRoom', createRoom);
-
+provide('ProviderGetUser', getUser);
 
 </script>
 

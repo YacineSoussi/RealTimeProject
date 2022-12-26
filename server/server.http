@@ -1,6 +1,7 @@
 ###
 
 GET http://localhost:3000/users/users-list
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
 
 ###
 POST http://localhost:3000/register
@@ -27,9 +28,9 @@ POST http://localhost:3000/messages
 Content-Type: application/json
 
 {   
-    "content": "Test date moi",
-    "authorId": 40,
-    "conversationId": 8
+    "content": "Vous êtes tous virés",
+    "authorId": 10,
+    "conversationId": 2
 }
 
 ###
@@ -39,7 +40,7 @@ DELETE http://localhost:3000/messages/1
 
 ###
 
-GET http://localhost:3000/conversations
+GET http://localhost:3000/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 ###
@@ -66,15 +67,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROY
 }
 
 ###
-PUT http://localhost:3000/conversations/1
+PATCH http://localhost:3000/conversations/7
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
 
 {
-    "lastMessageId": 2,
-    "firstUserId": 1,
-    "secondUserId": 2,
-    "maxParticipants": 200
+    "name": "Fast Concepts"
 }
 
 ###
@@ -93,12 +91,20 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 {
-    "userId": 40,
+    "userId": 10,
     "conversationId": 2
 }
 
 
 ###
 GET http://localhost:3000/participantsOfConversation/8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
+
+###
+GET http://localhost:3000/users/10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
+
+###
+GET http://localhost:3000/participants
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
