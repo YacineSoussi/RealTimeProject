@@ -8,6 +8,7 @@ const User = inject('ProviderUser');
 const onSubmit = async (e) => {
     e.preventDefault();
     const content = document.getElementById('textMessage').value;
+    console.log(content)
     const body = {
         content,
         conversationId: selectedConversationId.value,

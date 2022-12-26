@@ -23,6 +23,10 @@ onMounted(() => {
     
 });
 
+const fullName = (authorId) => {
+    const user = getUser(authorId);
+    return `${user.firstName} ${user.lastName}`;
+};
 </script>
 
 <template>
@@ -49,7 +53,7 @@ onMounted(() => {
     <div @click="setSelectedConversationId(conversation.id)" v-for="conversation in conversations" class="px-3 flex items-center bg-grey-light cursor-pointer">
         <div>
             <img class="h-12 w-12 rounded-full"
-                 src="../../../../public/roomLogo.png"/>
+                 src="/roomLogo.png"/>
         </div>
         <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
             <div class="flex items-bottom justify-between">
@@ -61,7 +65,7 @@ onMounted(() => {
                 </p>
             </div>
             <p v-if="conversation.lastMessage" class="text-grey-dark mt-1 text-sm">
-            {{conversation.lastMessage ? conversation.lastMessage.content : ''}}
+            {{conversation.lastMessage.authorId === User.id ? 'Moi : ' : null}} {{conversation.lastMessage ? conversation.lastMessage.content : ''}}
             </p>
         </div>
     </div>

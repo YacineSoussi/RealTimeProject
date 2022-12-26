@@ -24,7 +24,7 @@ router.get("/participantsOfConversation/:idConversation", checkAuthentication, a
             const user = await participant.getUser();
             return { ...participant.dataValues, user };
         }));
-        
+        console.log(result)
         res.json(result);
     } catch (error) {
         res.sendStatus(500);

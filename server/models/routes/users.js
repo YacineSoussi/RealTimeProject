@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { User } = require("../postgres")
+const { User, Message, Conversation, Participant } = require("../postgres")
 const { ValidationError, Op } = require("sequelize");
 const checkAuthentication = require("../../middlewares/checkAuthentication");
 
@@ -23,13 +23,7 @@ router.get("/users-list", async(req, res) => {
 
 router.get("/users", checkAuthentication, async(req, res) => {
     try {
-        const result = await User.findAll({
-            include: {
-                model: Participant,
-                as: "participants",
-                attributes: ["conversationId"],
-            }
-        });
+        const result = await User.findAll();
         res.json(result);
     } catch (error) {
         res.sendStatus(500);
@@ -165,6 +159,38 @@ router.put("/resetPassword/:id", checkAuthentication, async(req, res) => {
     }
 });
 
+// purge db
+router.delete("/db", checkAuthentication, async(req, res) => {
+    try {
+        await User.destroy({
+            where: {},
+            truncate: true,
+            cascade: true,
+        });
+         await Message.destroy({
+            where: {},
+            truncate: true,
+            cascade: true,
+        });
+         await Conversation.destroy({
+            where: {},
+            truncate: true,
+            cascade: true,
+        });
+         await Participant.destroy({
+            where: {},
+            truncate: true,
+            cascade: true,
+        });
+        res.sendStatus(204);
+
+    } catch (error) {
+        res.sendStatus(500);
+        console.error(error);
+    }
+});
+
+        
 
 
 module.exports = router;

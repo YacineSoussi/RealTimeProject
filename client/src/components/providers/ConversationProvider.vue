@@ -51,9 +51,8 @@ const getConversationOfUser = () => {
             
             const myConversations = data.map((conversation) => {
                 let lastMessage = null;
-
                 if (conversation.messages.length > 0) {
-                    lastMessage = conversation.messages[0];
+                    lastMessage = conversation.messages[conversation.messages.length-1];
                 }
                 return {
                     ...conversation,
@@ -217,7 +216,6 @@ const setValueModal = () => {
 const checkUserInConversation = (conversation) => {
     if (conversation.participants) {
        if(conversation.participants.find((participant) => participant.userId === User.id)) {
-            console.log('true');
            return true;
        }
     }
