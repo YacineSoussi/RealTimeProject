@@ -52,10 +52,12 @@ const getConversationOfUser = () => {
         .then((data) => {
             
             const myConversations = data.map((conversation) => {
-                let lastMessage = null;
+                let lastMessage = data.lastMessage ? data.lastMessage : null;
                 if (conversation.messages.length > 0) {
+                    console.log('conversation.messages[0]', conversation.messages[0])
                     lastMessage = conversation.messages[0];
                 }
+
                 return {
                     ...conversation,
                     lastMessage
@@ -63,6 +65,7 @@ const getConversationOfUser = () => {
             });
             conversations.value = myConversations;
             conversations.value = filterByUpdated(conversations.value);
+            console.log('conversations.value', conversations.value);
         })
 };
 
@@ -86,7 +89,7 @@ const getConversation = (id) => {
             let lastMessage = null;
 
             if (data.messages.length > 0) {
-                lastMessage = data.messages[data.messages.length-1];
+                lastMessage = data.messages[0];
             }
             const newConversation = {
                 ...data,

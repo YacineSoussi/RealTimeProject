@@ -1,6 +1,6 @@
 const Conversation = require("../postgres/entities/Conversation");
 const checkAuthentication = require("../../middlewares/checkAuthentication");
-const { Message } = require("../postgres");
+const { Message, User } = require("../postgres");
 const Participant = require("../postgres/entities/Participant");
 const { ValidationError, Op } = require("sequelize");
 const { Router } = require("express");
@@ -61,12 +61,14 @@ router.get("/myconversations/:userId", checkAuthentication, async (req, res) => 
                 { model: Message, as: "messages" }
             ]
         });
-
+        const users = await User.findAll();
         if (conversations.length === 0) {
-           
             res.json([])
-           
         } else {
+            // trier les messages par date decroissante
+            conversations.forEach((conversation) => {
+                conversation.messages.sort((a, b) => b.createdAt - a.createdAt);
+            });
             // trier les conversations par date de dernier message
             conversations.sort((a, b) => {
                 if (a.messages.length === 0) {
@@ -77,7 +79,15 @@ router.get("/myconversations/:userId", checkAuthentication, async (req, res) => 
                 }
                 return b.messages[b.messages.length - 1].createdAt - a.messages[a.messages.length - 1].createdAt;
             });
-            
+            // créer un objet lastMessage pour chaque conversation qui contient le dernier message de la conversation
+            conversations.forEach((conversation) => {
+                if (conversation.messages.length > 0) {
+                    conversation.dataValues.lastMessage = conversation.messages[0];
+                    conversation.dataValues.lastMessage.dataValues.author = users.find((user) => user.id === conversation.dataValues.lastMessage.authorId);
+                }
+
+            });
+            console.log("conversations", conversations)
             res.json(conversations);
         }
     } catch (error) {
