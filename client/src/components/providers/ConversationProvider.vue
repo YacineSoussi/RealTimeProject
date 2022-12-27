@@ -33,7 +33,7 @@ const getConversations = () => {
                 let lastMessage = null;
 
                 if (conversation.messages.length > 0) {
-                    lastMessage = conversation.messages[conversation.messages.length-1];
+                    lastMessage = conversation.messages[0];
                 }
                 return {
                     ...conversation,
@@ -52,7 +52,7 @@ const getConversationOfUser = () => {
             const myConversations = data.map((conversation) => {
                 let lastMessage = null;
                 if (conversation.messages.length > 0) {
-                    lastMessage = conversation.messages[conversation.messages.length-1];
+                    lastMessage = conversation.messages[0];
                 }
                 return {
                     ...conversation,
@@ -96,7 +96,7 @@ const getConversation = (id) => {
 };
 
 const createConversation = (form) => {
-    return ConversationLogic.createConversation({...form, completed: true, maxParticipants: 2})
+    return ConversationLogic.createConversation({...form, completed: true, maxParticipants: 2, type: 'conversation'})
         .then((data) => {
             conversations.value.push(data);
             selectedConversationId.value = data.id;
@@ -104,7 +104,7 @@ const createConversation = (form) => {
 };
 
 const createRoom = (form) => {
-    return ConversationLogic.createRoom({...form})
+    return ConversationLogic.createRoom({...form, type: 'room'})
         .then((data) => {
             conversations.value.push(data);
             selectedConversationId.value = data.id;
@@ -140,6 +140,7 @@ const createMessage = (form) => {
                 lastMessageId: data.id,
                 maxParticipants: selectedConversation.value?.maxParticipants,
                 completed: selectedConversation.value?.completed,
+                type: selectedConversation.value?.type,
             }
             selectedConversation.value = ConversationMaj;
             //  On met à jour la conversation dans la liste des conversations
@@ -222,6 +223,7 @@ const checkUserInConversation = (conversation) => {
     return false;
 };
 
+
 // Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
 watchEffect(() => {
     if (selectedConversationId.value) {
@@ -235,6 +237,7 @@ watchEffect(() => {
     if (User.id) {
         filterByUpdated(conversations.value);
     }
+    
 });
 // Au chargement de la page, on récupère toutes les rooms
 watchEffect(() => {
@@ -249,7 +252,6 @@ provide('ProviderUser', User);
 provide('ProviderParticipantsOFConversation', participantsOFConversation);
 provide('ProviderIsOpenModal', isOpenModal);
 provide('ProviderRooms', rooms);
-
 
 provide('ProviderGetConversations', getConversations);
 provide('ProviderGetConversationOfUser', getConversationOfUser);

@@ -18,15 +18,9 @@ onMounted(() => {
         if (conversations.value.length > 0) {
             selectedConversationId.value = conversations.value[0].id;
         }
-
     });
-    
 });
 
-const fullName = (authorId) => {
-    const user = getUser(authorId);
-    return `${user.firstName} ${user.lastName}`;
-};
 </script>
 
 <template>
@@ -52,8 +46,9 @@ const fullName = (authorId) => {
 <div class="bg-grey-lighter flex-1 overflow-auto">
     <div @click="setSelectedConversationId(conversation.id)" v-for="conversation in conversations" class="px-3 flex items-center bg-grey-light cursor-pointer">
         <div>
-            <img class="h-12 w-12 rounded-full"
+            <img v-if="conversation.type === 'room' " class="h-12 w-12 rounded-full"
                  src="/roomLogo.png"/>
+            <img v-else src="/messengerLogo.png" class="h-12 w-12 rounded-full" >
         </div>
         <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
             <div class="flex items-bottom justify-between">

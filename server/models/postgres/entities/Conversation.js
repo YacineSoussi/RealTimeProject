@@ -17,6 +17,10 @@ Conversation.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     sequelize: connection,
     modelName: "Conversation",
