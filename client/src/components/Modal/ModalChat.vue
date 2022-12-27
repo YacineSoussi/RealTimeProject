@@ -1,4 +1,28 @@
 <script setup>
+import { defineProps, inject } from 'vue';
+
+const props = defineProps({
+   users: {
+       type: Array,
+       required: true
+   }
+});
+const User = inject('ProviderUser');
+const createConversation = inject('ProviderCreateConversation');
+const ProviderCheckIfUserHaveConversationWithOtherUser = inject('ProviderCheckIfUserHaveConversationWithOtherUser');
+const setIsOpenModalChat = inject('ProviderSetValueModalChat');
+
+const startChat = (secondUserId) => {
+    const body = {
+      secondUserId,
+      firstUserId: User.id,
+    }
+    try {
+      createConversation(body);
+    } catch (error) {
+      console.log(error);
+    }
+}
 </script>
 
 <template>
@@ -6,26 +30,28 @@
             <div class="centered">
                 <div class="modal">
                     <div class="modalHeader">
-                        <h5 class="heading">Contacter un administrateur</h5>
+                        <h5 class="heading">Contacter un client</h5>
                     </div>
                     <button class="closeBtn">
-                        <font-awesome-icon icon="xmark" style="margin-bottom: -3px" @click="setIsOpenModal"/>
+                        <font-awesome-icon icon="xmark" style="margin-bottom: -3px" @click="setIsOpenModalChat"/>
                     </button>
                     <div class="modalContent">
                         <ul>
-                            <!-- <template v-for="room in props.rooms">
+                            <template v-for="user in props.users">
                                 <li>
                                     <div class="flex justify-between m-1">
     
-                                     {{ room.name ? room.name : room.id }} : 
+                                     {{ user.firstName }} {{ user.lastName }} : 
+                                     <button v-if="!ProviderCheckIfUserHaveConversationWithOtherUser(user.id)" class="btn_join" @click="startChat(user.id)">Contacter</button>
+                                      <div v-else style="color:seagreen">Déjà en contact</div>
                                      
-                                     <div style="color:seagreen" v-if="ProviderCheckUserInConversation(room)">présent(e)</div>
+                                     <!-- <div style="color:seagreen" v-if="ProviderCheckUserInConversation(room)">présent(e)</div>
                                      <div style="color:red" v-else-if="room.participants.length >= room.maxParticipants && room.maxParticipants">complet</div>
-                                     <button v-else class="btn_join" @click="joinRoom(room.id)">Rejoindre</button>
+                                     <button v-else class="btn_join" @click="joinRoom(room.id)">Rejoindre</button> -->
                                     
                                     </div>
                                 </li>
-                            </template> -->
+                            </template>
                         </ul>
                       
                     </div>

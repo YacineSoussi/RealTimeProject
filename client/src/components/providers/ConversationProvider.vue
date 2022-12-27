@@ -15,6 +15,8 @@ const selectedConversationId = ref(null);
 const updatedConversation = ref(null);
 const participantsOFConversation = ref(null);
 const isOpenModal = ref(false);
+const isOpenModalChat = ref(false);
+const users = ref([]);
 
 const filterByUpdated = (conversations) => {
    
@@ -214,6 +216,10 @@ const setValueModal = () => {
     isOpenModal.value = !isOpenModal.value;
 }
 
+const setValueModalChat = () => {
+    isOpenModalChat.value = !isOpenModalChat.value;
+}
+
 const checkUserInConversation = (conversation) => {
     if (conversation.participants) {
        if(conversation.participants.find((participant) => participant.userId === User.id)) {
@@ -223,9 +229,37 @@ const checkUserInConversation = (conversation) => {
     return false;
 };
 
+const checkIfUserHaveConversationWithOtherUser = (userId) => {
+    if (conversations.value) {
+        const conversation = conversations.value.find((conversation) => {
+            if (conversation.participants) {
+                if (conversation.participants.length === 2) {
+                    if (conversation.participants.find((participant) => participant.userId === userId)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+        if (conversation) {
+            // return conversation.id;
+            return true;
+        }
+    }
+    return false;
+};
 
+const getUsers = () => {
+    return UserLogic.getUsers()
+        .then((data) => {
+            data = data.filter((user) => user.id !== User.id);
+            users.value = data;
+            return data;
+        })
+};
 // Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
 watchEffect(() => {
+    getUsers();
     if (selectedConversationId.value) {
         getConversation(selectedConversationId.value);
         getParticipants(selectedConversationId.value);
@@ -252,6 +286,8 @@ provide('ProviderUser', User);
 provide('ProviderParticipantsOFConversation', participantsOFConversation);
 provide('ProviderIsOpenModal', isOpenModal);
 provide('ProviderRooms', rooms);
+provide('ProviderIsOpenModalChat', isOpenModalChat);
+provide('ProviderUsers', users);
 
 provide('ProviderGetConversations', getConversations);
 provide('ProviderGetConversationOfUser', getConversationOfUser);
@@ -269,7 +305,9 @@ provide('ProviderGetUser', getUser);
 provide('ProviderSetValueModal', setValueModal);
 provide('ProviderCheckUserInConversation', checkUserInConversation);
 provide('ProviderPostParticipant', postParticipant);
-
+provide('ProviderSetValueModalChat', setValueModalChat);
+provide('ProviderGetUsers', getUsers);
+provide ('ProviderCheckIfUserHaveConversationWithOtherUser', checkIfUserHaveConversationWithOtherUser);
 </script>
 
 <template>
