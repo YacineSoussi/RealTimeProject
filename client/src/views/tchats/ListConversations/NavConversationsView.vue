@@ -66,7 +66,7 @@ onMounted(() => {
                 </p>
             </div>
             <p v-if="conversation.lastMessage" class="text-grey-dark mt-1 text-sm">
-            {{conversation.lastMessage.authorId === User.id ? 'Moi : ' : null}} {{conversation.lastMessage ? conversation.lastMessage.content : ''}}
+            {{conversation.lastMessage.authorId === User.id ? 'Moi : ' : conversation.lastMessage.author.firstName + ' ' + conversation.lastMessage.author.lastName +  ':  ' }} {{conversation.lastMessage ? conversation.lastMessage.content : ''}}
             </p>
         </div>
     </div>
