@@ -87,7 +87,6 @@ router.get("/myconversations/:userId", checkAuthentication, async (req, res) => 
                 }
 
             });
-            console.log("conversations", conversations)
             res.json(conversations);
         }
     } catch (error) {

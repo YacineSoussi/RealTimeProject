@@ -4,6 +4,7 @@ import ConversationLogic from '../../logics/ConversationLogic';
 import UserLogic from '../../logics/UserLogic';
 import MessageLogic from '../../logics/MessageLogic';
 import LocalStorage from '../../services/LocalStorage';
+import socket from '../../services/Socket';
 
 const User = LocalStorage.get('user');
 
@@ -17,6 +18,7 @@ const participantsOFConversation = ref(null);
 const isOpenModal = ref(false);
 const isOpenModalChat = ref(false);
 const users = ref([]);
+const socketRef = ref(null);
 
 const filterByUpdated = (conversations) => {
    
@@ -37,6 +39,7 @@ const getConversations = () => {
                 if (conversation.messages.length > 0) {
                     lastMessage = conversation.messages[0];
                 }
+               
                 return {
                     ...conversation,
                     lastMessage
@@ -54,10 +57,8 @@ const getConversationOfUser = () => {
             const myConversations = data.map((conversation) => {
                 let lastMessage = data.lastMessage ? data.lastMessage : null;
                 if (conversation.messages.length > 0) {
-                    console.log('conversation.messages[0]', conversation.messages[0])
                     lastMessage = conversation.messages[0];
                 }
-
                 return {
                     ...conversation,
                     lastMessage
@@ -65,7 +66,6 @@ const getConversationOfUser = () => {
             });
             conversations.value = myConversations;
             conversations.value = filterByUpdated(conversations.value);
-            console.log('conversations.value', conversations.value);
         })
 };
 
@@ -133,7 +133,7 @@ const deleteConversation = (id) => {
 const createMessage = (form) => {
     return MessageLogic.createMessage({...form})
         .then((data) => {
-
+            data.author = User;
             const ConversationMaj = {
                 lastMessage: data,
                 messages: [...selectedConversation.value.messages, data],
@@ -148,6 +148,10 @@ const createMessage = (form) => {
                 type: selectedConversation.value?.type,
             }
             selectedConversation.value = ConversationMaj;
+            // get other participant
+            const otherParticipant = ConversationMaj.participants.find((participant) => participant.userId !== User.id);
+
+            socketRef.current.emit('message:private', {ConversationMaj, to: otherParticipant.userId, content: data.content, data, author: User.id})
             //  On met à jour la conversation dans la liste des conversations
             conversations.value = conversations.value.map((conversation) => {
                 if (conversation.id === data.conversationId) {
@@ -277,9 +281,35 @@ watchEffect(() => {
     
 });
 // Au chargement de la page, on récupère toutes les rooms
-watchEffect(() => {
+watchEffect(() => {  
     getConversations();
-})
+});
+
+onMounted(() => {
+const userId = User.id;
+
+socketRef.current = socket;
+socketRef.current.auth = { userId };
+socketRef.current.connect();
+
+    socketRef.current.on('connect', () => {
+        console.log('connecté');
+    });
+    
+   socketRef.current.on('message:private', ({ConversationMaj, data}) => {
+    // on met à jour la conversation selectionnée
+    selectedConversation.value = ConversationMaj;
+    // on met à jour la conversation dans la liste des conversations
+    conversations.value = conversations.value.map((conversation) => {
+        if (conversation.id === data.conversationId) {
+            return ConversationMaj;
+        }
+        return conversation;
+    })
+   });
+
+
+});
 provide('ProviderMessages', messages);
 provide('ProviderConversations', conversations);
 provide('ProviderSelectedConversation', selectedConversation);
@@ -291,6 +321,7 @@ provide('ProviderIsOpenModal', isOpenModal);
 provide('ProviderRooms', rooms);
 provide('ProviderIsOpenModalChat', isOpenModalChat);
 provide('ProviderUsers', users);
+provide('ProviderSocket', socketRef.current);
 
 provide('ProviderGetConversations', getConversations);
 provide('ProviderGetConversationOfUser', getConversationOfUser);
@@ -311,6 +342,7 @@ provide('ProviderPostParticipant', postParticipant);
 provide('ProviderSetValueModalChat', setValueModalChat);
 provide('ProviderGetUsers', getUsers);
 provide ('ProviderCheckIfUserHaveConversationWithOtherUser', checkIfUserHaveConversationWithOtherUser);
+
 </script>
 
 <template>
