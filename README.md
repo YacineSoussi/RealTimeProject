@@ -22,12 +22,6 @@ Go to the project directory
   cd RealTimeProject
 ```
 
-Run the project
-
-```bash
-  docker-compose up -d --build
-```
-
 Install dependencies for the server
 
 ```bash
@@ -38,6 +32,12 @@ Install dependencies for the client
 
 ```bash
   docker-compose run client npm install
+```
+
+Run the project
+
+```bash
+  docker-compose up -d --build
 ```
 
 ## Authors
