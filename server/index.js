@@ -74,10 +74,21 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message:private', ({content, to, author, ConversationMaj, data}) => {
-        console.log("message:private", content, to, author, ConversationMaj, data);
         
         io.to(userId = to).emit('message:private', {content, to, author, ConversationMaj, data});
     });
+
+    socket.on('message:room', ({content, to, author, ConversationMaj, data}) => {
+    
+        io.to(roomId = to).emit('message:room', {content, to, author, ConversationMaj, data});
+    });
+
+    socket.on('join:room', ({roomId, userId}) => {
+
+        socket.join(roomId);
+        io.to(roomId).emit('join:room', {roomId, userId});
+    });
+
     
     socket.on('disconnect', () => {
         console.log('user disconnected');

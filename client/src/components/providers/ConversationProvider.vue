@@ -58,12 +58,17 @@ const getConversationOfUser = () => {
                 let lastMessage = data.lastMessage ? data.lastMessage : null;
                 if (conversation.messages.length > 0) {
                     lastMessage = conversation.messages[0];
+                };
+                // si c'est une room on l'inscrit dans la socket
+                if(conversation.type === "room") {
+                    socketRef.current.emit('join:room', {roomId: conversation.id, userId: User.id});
                 }
                 return {
                     ...conversation,
                     lastMessage
                 }
             });
+            
             conversations.value = myConversations;
             conversations.value = filterByUpdated(conversations.value);
         })
@@ -148,10 +153,13 @@ const createMessage = (form) => {
                 type: selectedConversation.value?.type,
             }
             selectedConversation.value = ConversationMaj;
-            // get other participant
-            const otherParticipant = ConversationMaj.participants.find((participant) => participant.userId !== User.id);
+            if(selectedConversation.value.type === "conversation") {
+                const otherParticipant = ConversationMaj.participants.find((participant) => participant.userId !== User.id);
+                socketRef.current.emit('message:private', {ConversationMaj, to: otherParticipant.userId, content: data.content, data, author: User.id});
+            } else {
+                socketRef.current.emit('message:room', {content: data.content, to: selectedConversation.value.id, data, author: User.id, ConversationMaj})
+            }
 
-            socketRef.current.emit('message:private', {ConversationMaj, to: otherParticipant.userId, content: data.content, data, author: User.id})
             //  On met à jour la conversation dans la liste des conversations
             conversations.value = conversations.value.map((conversation) => {
                 if (conversation.id === data.conversationId) {
@@ -291,10 +299,6 @@ const userId = User.id;
 socketRef.current = socket;
 socketRef.current.auth = { userId };
 socketRef.current.connect();
-
-    socketRef.current.on('connect', () => {
-        console.log('connecté');
-    });
     
    socketRef.current.on('message:private', ({ConversationMaj, data}) => {
     // on met à jour la conversation selectionnée
@@ -308,6 +312,17 @@ socketRef.current.connect();
     })
    });
 
+   socketRef.current.on('message:room', ({ConversationMaj, data}) => {
+    // on met à jour la conversation selectionnée
+    selectedConversation.value = ConversationMaj;
+    // on met à jour la conversation dans la liste des conversations
+    conversations.value = conversations.value.map((conversation) => {
+        if (conversation.id === data.conversationId) {
+            return ConversationMaj;
+        }
+        return conversation;
+    })
+   });
 
 });
 provide('ProviderMessages', messages);
