@@ -73,7 +73,7 @@ io.on('connection', (socket) => {
         console.log(event, args);
     });
 
-    socket.on('message:private', ({content, to, author, ConversationMaj, data}) => {
+    socket.on('message:private', ({content, to, author, ConversationMaj, data}) =>  {
         
         io.to(userId = to).emit('message:private', {content, to, author, ConversationMaj, data});
     });
