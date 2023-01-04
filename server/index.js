@@ -36,21 +36,6 @@ app.use("/", messageRoutes);
 app.use("/", participantRoutes);
 app.use("/", conversationRoutes);
 
-// ------------------ CHATBOT ------------------ //
-
-io.on("connection", function (socket) {
-	socket.on("message", function (response, message) {
-		if (response === 0) {
-			socket.emit(
-				"message_bot",
-				"Veuillez sélectionner une option dans la liste proposée."
-			);
-		} else {
-			// TODO
-		}
-	});
-});
-
 // ------------------ SERVER ------------------ //
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));

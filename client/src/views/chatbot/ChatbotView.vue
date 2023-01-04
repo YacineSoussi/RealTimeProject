@@ -28,7 +28,12 @@
 							required
 							disabled
 						/>
-						<button type="button" id="sendButton" @click="setUserMessage">
+						<button
+							type="button"
+							id="sendButton"
+							@click="setUserMessage(event)"
+							class="disabled"
+						>
 							<svg
 								class="w-5 h-5 text-gray-500 origin-center transform rotate-90"
 								xmlns="http://www.w3.org/2000/svg"
@@ -49,10 +54,17 @@
 
 <script setup>
 import io from "socket.io-client";
-import { onMounted } from "vue";
+import { onMounted, ref, reactive } from "vue";
 
 // ------------------ INITIALIZATION ------------------ //
 
+let initialChoice = ref("");
+let deepResponse = ref(0);
+let questionsAnswered = ref([]);
+let questionPending = reactive({
+	question: "",
+	answer: "",
+});
 const socket = io("http://localhost:3000");
 const initialHelpChoices = [
 	"Vérifier l'entretien de mon véhicule",
@@ -60,6 +72,61 @@ const initialHelpChoices = [
 	"Des informations de contact",
 	"Stopper la conversation",
 ];
+const data = {
+	response1: {
+		question: "Vérifier l'entretien de mon véhicule",
+		choices: [
+			{
+				question: "Quel est l'année de votre véhicule ?",
+			},
+			{
+				question: "Quel est la date du dernier entretien de la moto ?",
+				choices: [
+					{
+						condition1: {},
+					},
+					{
+						condition2: {},
+					},
+				],
+			},
+		],
+	},
+	response2: {
+		question: "Informations sur les véhicules",
+		choices: [
+			{
+				question: "Quel est le type d'usage de votre véhicule ?",
+				choices: [
+					{
+						condition1: {},
+					},
+					{
+						condition2: {},
+					},
+					{
+						condition3: {},
+					},
+				],
+			},
+		],
+	},
+	response3: {
+		question: "Informations de contact",
+		choices: [
+			{
+				question: "Souhaitez-vous une adresse email de contact ?",
+			},
+			{
+				question: "Souhaitez-vous un numéro de téléphone de contact ?",
+			},
+		],
+	},
+	response4: {
+		question: "Stopper la conversation",
+		choices: [],
+	},
+};
 
 // ------------------ SOCKET ------------------ //
 
@@ -68,18 +135,12 @@ socket.on("connect", () => {
 	document.getElementById("chat").innerHTML = "";
 
 	const status = document.getElementById("status");
-	const message = document.getElementById("message");
 
 	status.classList.remove("bg-red-600");
 	status.classList.add("bg-green-600");
 
-	message.removeAttribute("disabled");
-
 	initChatBotWelcomeMessage();
 });
-
-// Event to catch the message from the chatbot
-socket.on("message_bot", (message) => setChatBotMessage(message));
 
 // ------------------ METHODS ------------------ //
 
@@ -89,21 +150,16 @@ socket.on("message_bot", (message) => setChatBotMessage(message));
 onMounted(() => {
 	document.getElementById("message").addEventListener("keyup", function (e) {
 		if (e && e.key === "Enter" && e.target.value !== "") {
-			setUserMessage();
+			setUserMessage(e.target.value);
 		}
 	});
 });
 
 /**
  * Set the user message
- * @param { number } response The response number to send to the chatbot
  * @param { string } message The message to send to the chatbot
  */
-function setUserMessage(response = 0, message = null) {
-	if (!message) {
-		message = document.getElementById("message").value;
-	}
-
+function setUserMessage(message) {
 	if (message && message !== "") {
 		const li = document.createElement("li");
 		const div = document.createElement("div");
@@ -129,8 +185,68 @@ function setUserMessage(response = 0, message = null) {
 
 		document.getElementById("chat").appendChild(li);
 		document.getElementById("message").value = "";
+	}
 
-		socket.emit("message", response, message);
+	// First question of the first initial choice
+	if (data.response1.question === initialChoice.value) {
+		if (deepResponse.value === 0) {
+			setQuestion();
+			setAnswer(message);
+			setAnswered(true);
+		} else if (deepResponse.value === 1) {
+			setQuestion();
+			setAnswer(message);
+			setAnswered();
+		}
+	} else if (message === data.response2.question) {
+	} else if (message === data.response3.question) {
+	} else if (message === data.response4.question) {
+	} else {
+	}
+}
+
+/**
+ * Set the question
+ */
+function setQuestion() {
+	if (questionPending.question === "") {
+		questionPending.question =
+			data.response1.choices[deepResponse.value].question;
+		setChatBotMessage(data.response1.choices[deepResponse.value].question);
+	}
+}
+
+/**
+ * Set the answer
+ * @param { string } message The message of user
+ */
+function setAnswer(message) {
+	if (questionPending.answer === "") {
+		if (message && message !== "" && initialChoice.value !== message) {
+			questionPending.answer = message;
+			document.getElementById("message").setAttribute("disabled", true);
+		}
+	}
+}
+
+/*
+ * Set the question and answer as answered
+ */
+function setAnswered(nextQuestion = false) {
+	if (questionPending.question !== "" && questionPending.answer !== "") {
+		const response = {
+			question: questionPending.question,
+			answer: questionPending.answer,
+		};
+
+		deepResponse.value++;
+		questionsAnswered.value.push(response);
+		questionPending.question = "";
+		questionPending.answer = "";
+
+		if (nextQuestion) {
+			setQuestion();
+		}
 	}
 }
 
@@ -179,6 +295,7 @@ function setChatBotMessage(message) {
 	setTimeout(() => {
 		document.getElementById("chat").removeChild(spinnerParent);
 		setChatBotContent(message);
+		document.getElementById("message").removeAttribute("disabled");
 	}, 1500);
 }
 
@@ -241,6 +358,7 @@ function setChatBotContent(message) {
 	div.classList.add("relative");
 	div.classList.add("max-w-xl");
 	div.classList.add("px-4");
+	div.classList.add("mt-4");
 	div.classList.add("py-2");
 	div.classList.add("text-gray-700");
 	div.classList.add("rounded");
@@ -265,7 +383,8 @@ function handleSelectHelpChoice(choice) {
 
 	if (choice === initialHelpChoices[0]) {
 		chat.removeChild(helpChoices);
-		setUserMessage(1, choice);
+		initialChoice.value = choice;
+		setUserMessage(choice);
 	} else if (choice === initialHelpChoices[1]) {
 		// TODO: Handle the second choice
 	} else if (choice === initialHelpChoices[2]) {
