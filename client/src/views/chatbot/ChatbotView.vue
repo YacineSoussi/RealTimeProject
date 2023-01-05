@@ -155,8 +155,11 @@ function setUserMessage(message) {
 	if (data.response1.question === initialChoice.value) {
 		manageFirstChoiceOfSelection(message);
 	} else if (message === data.response2.question) {
+		// TODO
 	} else if (message === data.response3.question) {
+		// TODO
 	} else if (message === data.response4.question) {
+		// TODO
 	} else {
 		throw new Error("Question not managed");
 	}
@@ -379,11 +382,11 @@ function getDateConvertedToGoodFormat(date) {
  * PS: This is just an example waiting for the API
  */
 function setDisponibilitiesForCurrentWeek() {
-	// const datesForCurrentWeek = getDatesOfCurrentWeek();
-	const datesForCurrentWeek = [];
+	const datesForCurrentWeek = getDatesOfCurrentWeek(); // First case
+	// const datesForCurrentWeek = []; // Second case
 
-	const datesForNextWeek = getDatesOfNextWeek();
-	// const datesForNextWeek = [];
+	// const datesForNextWeek = getDatesOfNextWeek(); // Second case
+	const datesForNextWeek = []; // First case
 
 	// CASE 1 : There are no disponibilities for the current week
 	if (datesForCurrentWeek.length === 0) {
@@ -391,13 +394,13 @@ function setDisponibilitiesForCurrentWeek() {
 			"Il n'y a pas de disponibilités pour la semaine en cours"
 		);
 		setChatBotContent(
-			"Voici ci-dessous les disponibilités pour la semaine suivante"
+			"Quel date vous conviendrait le mieux pour l'entretien de la moto ?"
 		);
 		displayDisponibilities(datesForNextWeek);
 	} else {
 		// CASE 2 : There are disponibilities for the current week
 		setChatBotContent(
-			"Voici ci-dessous les disponibilités pour la semaine en cours"
+			"Quel date vous conviendrait le mieux pour l'entretien de la moto ?"
 		);
 		displayDisponibilities(datesForCurrentWeek);
 	}
@@ -414,6 +417,7 @@ function displayDisponibilities(data) {
 	div.classList.add("flex");
 	div.classList.add("items-center");
 	div.classList.add("space-x-2");
+	div.id = "dates-for-current-or-next-week";
 
 	for (let i = 0; i < data.length; i++) {
 		const button = document.createElement("button");
@@ -458,7 +462,15 @@ function getDatesOfCurrentWeek() {
 		week.splice(week.indexOf(today), 1);
 	}
 
-	return week;
+	const weekFormatted = [];
+
+	// Format the dates into format dd/mm/yyyy
+	week.forEach((day) => {
+		const daySplit = day.split("-");
+		weekFormatted.push(`${daySplit[2]}/${daySplit[1]}/${daySplit[0]}`);
+	});
+
+	return weekFormatted;
 }
 
 /**
@@ -475,6 +487,14 @@ function getDatesOfNextWeek() {
 		let day = new Date(currentDay.setDate(first)).toISOString().slice(0, 10);
 		week.push(day);
 	}
+
+	const weekFormatted = [];
+
+	// Format the dates into format dd/mm/yyyy
+	week.forEach((day) => {
+		const daySplit = day.split("-");
+		weekFormatted.push(`${daySplit[2]}/${daySplit[1]}/${daySplit[0]}`);
+	});
 
 	return week;
 }
@@ -522,36 +542,36 @@ function manageFirstChoiceOfSelection(message) {
 	}
 
 	// Two questions of first choice selected are asked and validated
-	if (questionsAnswered.value.length === 2) {
+	if (questionsAnswered.value.length === 2 && deepResponse.value < 3) {
 		const years = getNumberOfYears(
 			getDateConvertedToGoodFormat(questionsAnswered.value[1].answer)
 		);
 
 		// --- CASE : If date if greater than 1 year --- //
 		if (years > 1) {
-			// -- CASE 1 : Set disponibilites for the current week -- //
 			setDisponibilitiesForCurrentWeek();
-
-			// -- CASE 2 -- //s
-			// If there have disponibilities for the current week
-			// Give user to select a date for maintenance
-			// Register the date in the database
-			// End and restart workflow
 		}
 
 		// --- CASE : If date if less than 1 year --- //
 		if (years < 1) {
 			// TODO
 		}
+
+		deepResponse.value++;
 	}
 }
 
 /**
  * Handle the selected date for the first choice
  * @param { string } date The selected date
+ * PS: waiting for API to set date in the database
  */
 function handleSelectedDateForFirstChoice(date) {
-	console.log("Date", date);
+	document.getElementById("dates-for-current-or-next-week").remove();
+	setUserMessage(date);
+	// TODO registry date selected in the database
+	setChatBotContent("Votre rendez-vous a bien été pris en compte");
+	setChatBotContent("Fin de la conversation");
 }
 </script>
 
