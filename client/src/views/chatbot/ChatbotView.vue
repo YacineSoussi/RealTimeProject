@@ -28,23 +28,6 @@
 							required
 							disabled
 						/>
-						<button
-							type="button"
-							id="sendButton"
-							@click="setUserMessage(event)"
-							class="disabled"
-						>
-							<svg
-								class="w-5 h-5 text-gray-500 origin-center transform rotate-90"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-							>
-								<path
-									d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
-								/>
-							</svg>
-						</button>
 					</div>
 				</div>
 			</div>
@@ -56,15 +39,8 @@
 import io from "socket.io-client";
 import { onMounted, ref, reactive } from "vue";
 
-// ------------------ INITIALIZATION ------------------ //
+// ------------------ INITIALIZATION VARIABLES ------------------ //
 
-let initialChoice = ref("");
-let deepResponse = ref(0);
-let questionsAnswered = ref([]);
-let questionPending = reactive({
-	question: "",
-	answer: "",
-});
 const socket = io("http://localhost:3000");
 const initialHelpChoices = [
 	"Vérifier l'entretien de mon véhicule",
@@ -109,6 +85,14 @@ const data = {
 	},
 };
 
+let initialChoice = ref("");
+let deepResponse = ref(0);
+let questionsAnswered = ref([]);
+let questionPending = reactive({
+	question: "",
+	answer: "",
+});
+
 // ------------------ SOCKET ------------------ //
 
 // Manage input availability and status color
@@ -123,7 +107,7 @@ socket.on("connect", () => {
 	initChatBotWelcomeMessage();
 });
 
-// ------------------ METHODS ------------------ //
+// ------------------ GLOBAL METHODS ------------------ //
 
 /**
  * Define the event listener on the input message
@@ -168,43 +152,8 @@ function setUserMessage(message) {
 		document.getElementById("message").value = "";
 	}
 
-	// First question of the first initial choice
 	if (data.response1.question === initialChoice.value) {
-		// 1950 - 2023
-		const yearRegex = /^(19[5-9]\d|20[0-4]\d|2023)$/;
-
-		if (deepResponse.value === 0) {
-			setQuestion();
-
-			if (message && message !== "" && initialChoice.value !== message) {
-				setAnswer(message);
-
-				// Check if the year is valid
-				if (yearRegex.test(message)) {
-					setAnswered(true);
-				} else {
-					setChatBotMessage(
-						"L'année n'est pas valide, veuillez rentrer une année comprise entre 1950 et 2023"
-					);
-				}
-			}
-		} else if (deepResponse.value === 1) {
-			// 10/10/2020 ==> day/month/year OR 10-10-2020 ==> day-month-year
-			const dateRegex =
-				/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
-
-			setQuestion();
-			setAnswer(message);
-
-			// Check if the date is valid
-			if (dateRegex.test(message)) {
-				setAnswered();
-			} else {
-				setChatBotMessage(
-					"La date n'est pas valide, veuillez rentrer une date au format jj/mm/aaaa ou jj-mm-aaaa"
-				);
-			}
-		}
+		manageFirstChoiceOfSelection();
 	} else if (message === data.response2.question) {
 	} else if (message === data.response3.question) {
 	} else if (message === data.response4.question) {
@@ -228,10 +177,8 @@ function setQuestion() {
  * @param { string } message The message of user
  */
 function setAnswer(message) {
-	// if (questionPending.answer === "") {
 	questionPending.answer = message;
 	document.getElementById("message").setAttribute("disabled", true);
-	// }
 }
 
 /**
@@ -397,6 +344,148 @@ function handleSelectHelpChoice(choice) {
 		// TODO: Handle the third choice
 	} else {
 		// TODO: Handle the fourth choice
+	}
+}
+
+// ------------------ METHODS FOR FIRST CHOICE ------------------ //
+
+/**
+ * Get the number of years between a date and now
+ * @param { Date } date The date to calculate the years
+ */
+function getNumberOfYears(date) {
+	return new Date(new Date() - new Date(date)).getFullYear() - 1970;
+}
+
+/**
+ * Get the date converted to a good format
+ * @param { string } date The date to convert
+ */
+function getDateConvertedToGoodFormat(date) {
+	let dateSplit;
+
+	if (date.indexOf("/") !== -1) {
+		dateSplit = date.split("/");
+	} else if (date.indexOf("-") !== -1) {
+		dateSplit = date.split("-");
+	}
+
+	return `${dateSplit[1]}/${dateSplit[0]}/${dateSplit[2]}`;
+}
+
+/**
+ * Set disponibilities for the current week
+ * PS: This is just an example waiting for the API
+ */
+function setDisponibilitiesForCurrentWeek() {
+	setChatBotContent(
+		"Voici ci-dessous les disponibilités pour la semaine en cours"
+	);
+
+	const datesForCurrentWeek = [
+		"10/10/2020",
+		"11/10/2020",
+		"12/10/2020",
+		"13/10/2020",
+		"14/10/2020",
+		"15/10/2020",
+		"16/10/2020",
+	];
+
+	const chat = document.getElementById("chat");
+	const div = document.createElement("div");
+
+	div.classList.add("flex");
+	div.classList.add("items-center");
+	div.classList.add("space-x-2");
+
+	for (let i = 0; i < datesForCurrentWeek.length; i++) {
+		const button = document.createElement("button");
+
+		button.classList.add("bg-violet-500");
+		button.classList.add("hover:bg-violet-700");
+		button.classList.add("text-white");
+		button.classList.add("px-4");
+		button.classList.add("rounded");
+		button.classList.add("shadow");
+		button.classList.add("dark:bg-violet-400");
+		button.classList.add("dark:hover:bg-violet-600");
+		button.classList.add("mt-4");
+		button.classList.add("mb-4");
+		button.innerText = datesForCurrentWeek[i];
+
+		div.appendChild(button);
+	}
+
+	chat.appendChild(div);
+}
+
+/**
+ * Manage the first choice of the selection
+ * PS: Vérfier l'entretien de la voiture
+ */
+function manageFirstChoiceOfSelection() {
+	// 1950 - 2023
+	const yearRegex = /^(19[5-9]\d|20[0-4]\d|2023)$/;
+
+	if (deepResponse.value === 0) {
+		setQuestion();
+
+		if (message && message !== "" && initialChoice.value !== message) {
+			setAnswer(message);
+
+			// Check if the year is valid
+			if (yearRegex.test(message)) {
+				setAnswered(true);
+			} else {
+				setChatBotMessage(
+					"L'année n'est pas valide, veuillez rentrer une année comprise entre 1950 et 2023"
+				);
+			}
+		}
+	} else if (deepResponse.value === 1) {
+		// 10/10/2020 ==> day/month/year OR 10-10-2020 ==> day-month-year
+		const dateRegex =
+			/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
+
+		setQuestion();
+		setAnswer(message);
+
+		// Check if the date is valid
+		if (dateRegex.test(message)) {
+			setAnswered();
+		} else {
+			setChatBotMessage(
+				"La date n'est pas valide, veuillez rentrer une date au format jj/mm/aaaa ou jj-mm-aaaa"
+			);
+		}
+	}
+
+	// Two questions of first choice selected are asked and validated
+	if (questionsAnswered.value.length === 2) {
+		const years = getNumberOfYears(
+			getDateConvertedToGoodFormat(questionsAnswered.value[1].answer)
+		);
+
+		// --- CASE : If date if greater than 1 year --- //
+		if (years > 1) {
+			setDisponibilitiesForCurrentWeek();
+
+			// -- CASE 1 -- //
+			// If there have no disponibilities for the current week
+			// Set a list of disponibilities for the next week
+
+			// -- CASE 2 -- //s
+			// If there have disponibilities for the current week
+			// Give user to select a date for maintenance
+			// Register the date in the database
+			// End and restart workflow
+		}
+
+		// --- CASE : If date if less than 1 year --- //
+		if (years < 1) {
+			// TODO
+		}
 	}
 }
 </script>
