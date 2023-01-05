@@ -81,14 +81,6 @@ const data = {
 			},
 			{
 				question: "Quel est la date du dernier entretien de la moto ?",
-				choices: [
-					{
-						condition1: {},
-					},
-					{
-						condition2: {},
-					},
-				],
 			},
 		],
 	},
@@ -97,17 +89,6 @@ const data = {
 		choices: [
 			{
 				question: "Quel est le type d'usage de votre véhicule ?",
-				choices: [
-					{
-						condition1: {},
-					},
-					{
-						condition2: {},
-					},
-					{
-						condition3: {},
-					},
-				],
 			},
 		],
 	},
@@ -189,14 +170,38 @@ function setUserMessage(message) {
 
 	// First question of the first initial choice
 	if (data.response1.question === initialChoice.value) {
+		// 1950 - 2023
+		const yearRegex = /^(19[5-9]\d|20[0-4]\d|2023)$/;
+
 		if (deepResponse.value === 0) {
 			setQuestion();
-			setAnswer(message);
-			setAnswered(true);
+
+			if (message && message !== "" && initialChoice.value !== message) {
+				setAnswer(message);
+
+				if (yearRegex.test(message)) {
+					setAnswered(true);
+				} else {
+					setChatBotMessage(
+						"L'année n'est pas valide, veuillez rentrer une année comprise entre 1950 et 2023"
+					);
+				}
+			}
 		} else if (deepResponse.value === 1) {
+			// 10/10/2020 ==> day/month/year OR 10-10-2020 ==> day-month-year
+			const dateRegex =
+				/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
+
 			setQuestion();
 			setAnswer(message);
-			setAnswered();
+
+			if (dateRegex.test(message)) {
+				setAnswered();
+			} else {
+				setChatBotMessage(
+					"La date n'est pas valide, veuillez rentrer une date au format jj/mm/aaaa ou jj-mm-aaaa"
+				);
+			}
 		}
 	} else if (message === data.response2.question) {
 	} else if (message === data.response3.question) {
@@ -221,16 +226,13 @@ function setQuestion() {
  * @param { string } message The message of user
  */
 function setAnswer(message) {
-	if (questionPending.answer === "") {
-		if (message && message !== "" && initialChoice.value !== message) {
-			questionPending.answer = message;
-			document.getElementById("message").setAttribute("disabled", true);
-		}
-	}
+	questionPending.answer = message;
+	document.getElementById("message").setAttribute("disabled", true);
 }
 
-/*
+/**
  * Set the question and answer as answered
+ * @param { boolean } nextQuestion Call next question or not
  */
 function setAnswered(nextQuestion = false) {
 	if (questionPending.question !== "" && questionPending.answer !== "") {
