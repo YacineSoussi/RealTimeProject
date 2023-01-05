@@ -153,7 +153,7 @@ function setUserMessage(message) {
 	}
 
 	if (data.response1.question === initialChoice.value) {
-		manageFirstChoiceOfSelection();
+		manageFirstChoiceOfSelection(message);
 	} else if (message === data.response2.question) {
 	} else if (message === data.response3.question) {
 	} else if (message === data.response4.question) {
@@ -398,6 +398,7 @@ function setDisponibilitiesForCurrentWeek() {
 	div.classList.add("flex");
 	div.classList.add("items-center");
 	div.classList.add("space-x-2");
+	div.id = "disponibilities-for-current-week";
 
 	for (let i = 0; i < datesForCurrentWeek.length; i++) {
 		const button = document.createElement("button");
@@ -413,6 +414,9 @@ function setDisponibilitiesForCurrentWeek() {
 		button.classList.add("mt-4");
 		button.classList.add("mb-4");
 		button.innerText = datesForCurrentWeek[i];
+		button.addEventListener("click", () =>
+			handleSelectedDateForFirstChoice(datesForCurrentWeek[i])
+		);
 
 		div.appendChild(button);
 	}
@@ -423,8 +427,9 @@ function setDisponibilitiesForCurrentWeek() {
 /**
  * Manage the first choice of the selection
  * PS: Vérfier l'entretien de la voiture
+ * @param { string } message The message of the user
  */
-function manageFirstChoiceOfSelection() {
+function manageFirstChoiceOfSelection(message) {
 	// 1950 - 2023
 	const yearRegex = /^(19[5-9]\d|20[0-4]\d|2023)$/;
 
@@ -487,6 +492,14 @@ function manageFirstChoiceOfSelection() {
 			// TODO
 		}
 	}
+}
+
+/**
+ * TODO
+ * @param {*} date
+ */
+function handleSelectedDateForFirstChoice(date) {
+	console.log("Date", data);
 }
 </script>
 
