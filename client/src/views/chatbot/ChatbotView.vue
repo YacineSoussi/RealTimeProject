@@ -179,6 +179,7 @@ function setUserMessage(message) {
 			if (message && message !== "" && initialChoice.value !== message) {
 				setAnswer(message);
 
+				// Check if the year is valid
 				if (yearRegex.test(message)) {
 					setAnswered(true);
 				} else {
@@ -195,6 +196,7 @@ function setUserMessage(message) {
 			setQuestion();
 			setAnswer(message);
 
+			// Check if the date is valid
 			if (dateRegex.test(message)) {
 				setAnswered();
 			} else {
@@ -226,8 +228,10 @@ function setQuestion() {
  * @param { string } message The message of user
  */
 function setAnswer(message) {
+	// if (questionPending.answer === "") {
 	questionPending.answer = message;
 	document.getElementById("message").setAttribute("disabled", true);
+	// }
 }
 
 /**
