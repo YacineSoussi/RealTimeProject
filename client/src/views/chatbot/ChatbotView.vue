@@ -158,6 +158,7 @@ function setUserMessage(message) {
 	} else if (message === data.response3.question) {
 	} else if (message === data.response4.question) {
 	} else {
+		throw new Error("Question not managed");
 	}
 }
 
@@ -378,29 +379,43 @@ function getDateConvertedToGoodFormat(date) {
  * PS: This is just an example waiting for the API
  */
 function setDisponibilitiesForCurrentWeek() {
-	setChatBotContent(
-		"Voici ci-dessous les disponibilités pour la semaine en cours"
-	);
+	// const datesForCurrentWeek = getDatesOfCurrentWeek();
+	const datesForCurrentWeek = [];
 
-	const datesForCurrentWeek = [
-		"10/10/2020",
-		"11/10/2020",
-		"12/10/2020",
-		"13/10/2020",
-		"14/10/2020",
-		"15/10/2020",
-		"16/10/2020",
-	];
+	const datesForNextWeek = getDatesOfNextWeek();
+	// const datesForNextWeek = [];
 
+	// CASE 1 : There are no disponibilities for the current week
+	if (datesForCurrentWeek.length === 0) {
+		setChatBotContent(
+			"Il n'y a pas de disponibilités pour la semaine en cours"
+		);
+		setChatBotContent(
+			"Voici ci-dessous les disponibilités pour la semaine suivante"
+		);
+		displayDisponibilities(datesForNextWeek);
+	} else {
+		// CASE 2 : There are disponibilities for the current week
+		setChatBotContent(
+			"Voici ci-dessous les disponibilités pour la semaine en cours"
+		);
+		displayDisponibilities(datesForCurrentWeek);
+	}
+}
+
+/**
+ * Display disponibilities on the chat
+ * @param { Array } data The disponibilities to display
+ */
+function displayDisponibilities(data) {
 	const chat = document.getElementById("chat");
 	const div = document.createElement("div");
 
 	div.classList.add("flex");
 	div.classList.add("items-center");
 	div.classList.add("space-x-2");
-	div.id = "disponibilities-for-current-week";
 
-	for (let i = 0; i < datesForCurrentWeek.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		const button = document.createElement("button");
 
 		button.classList.add("bg-violet-500");
@@ -413,15 +428,55 @@ function setDisponibilitiesForCurrentWeek() {
 		button.classList.add("dark:hover:bg-violet-600");
 		button.classList.add("mt-4");
 		button.classList.add("mb-4");
-		button.innerText = datesForCurrentWeek[i];
+		button.innerText = data[i];
 		button.addEventListener("click", () =>
-			handleSelectedDateForFirstChoice(datesForCurrentWeek[i])
+			handleSelectedDateForFirstChoice(data[i])
 		);
 
 		div.appendChild(button);
 	}
 
 	chat.appendChild(div);
+}
+
+/**
+ * Get the dates of the current week without the current day
+ */
+function getDatesOfCurrentWeek() {
+	let currentDay = new Date();
+	let week = [];
+	const today = currentDay.toISOString().slice(0, 10);
+
+	for (let i = 1; i <= 7; i++) {
+		let first = currentDay.getDate() - currentDay.getDay() + i;
+		let day = new Date(currentDay.setDate(first)).toISOString().slice(0, 10);
+		week.push(day);
+	}
+
+	// Remove the current day form the array
+	if (week.includes(today)) {
+		week.splice(week.indexOf(today), 1);
+	}
+
+	return week;
+}
+
+/**
+ * Get the dates of the next week
+ */
+function getDatesOfNextWeek() {
+	let currentDay = new Date();
+	const diffToLastDay = 7 - currentDay.getDay();
+	let lastDay = currentDay.getDate() + diffToLastDay;
+	let week = [];
+
+	for (let i = 1; i <= 7; i++) {
+		let first = lastDay + i;
+		let day = new Date(currentDay.setDate(first)).toISOString().slice(0, 10);
+		week.push(day);
+	}
+
+	return week;
 }
 
 /**
@@ -474,11 +529,8 @@ function manageFirstChoiceOfSelection(message) {
 
 		// --- CASE : If date if greater than 1 year --- //
 		if (years > 1) {
+			// -- CASE 1 : Set disponibilites for the current week -- //
 			setDisponibilitiesForCurrentWeek();
-
-			// -- CASE 1 -- //
-			// If there have no disponibilities for the current week
-			// Set a list of disponibilities for the next week
 
 			// -- CASE 2 -- //s
 			// If there have disponibilities for the current week
@@ -495,11 +547,11 @@ function manageFirstChoiceOfSelection(message) {
 }
 
 /**
- * TODO
- * @param {*} date
+ * Handle the selected date for the first choice
+ * @param { string } date The selected date
  */
 function handleSelectedDateForFirstChoice(date) {
-	console.log("Date", data);
+	console.log("Date", date);
 }
 </script>
 
