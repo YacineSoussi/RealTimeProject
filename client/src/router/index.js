@@ -23,14 +23,26 @@ const router = createRouter({
       path: '/conversation',
       name: 'conversation',
       component: () => import('../views/tchats/GlobalView.vue'),
-
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/help',
+      name: 'help',
+      component: () => import('../views/HelpView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      component: () => import('../views/admin/DashboardView.vue'),
+      meta: { requiresAuth: true }
     },
   ]
 
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('app-user')
   if (to.matched.some(record => record.meta.requiresAuth) && !token) {
     next({ name: 'login' })
   } else {

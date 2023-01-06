@@ -45,7 +45,7 @@ const getConversations = () => {
                     lastMessage
                 }
             });
-            rooms.value = conversations;
+            rooms.value = conversations.filter((room) => room.type === 'room');
             
         })
 };
@@ -118,6 +118,7 @@ const createRoom = (form) => {
         .then((data) => {
             conversations.value.push(data);
             selectedConversationId.value = data.id;
+            return data;
         })
 };
 

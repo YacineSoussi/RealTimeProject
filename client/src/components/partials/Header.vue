@@ -4,13 +4,14 @@ import LocalStorage from '../../services/LocalStorage';
 import {computed, onMounted, inject } from 'vue';
 import router from '../../router';
 import UserProviderVue from '../providers/UserProvider.vue';
-
+import ConversationProvider from '../providers/ConversationProvider.vue';
 
 
 </script>
 
 <template>
   <UserProviderVue v-slot="{logout, isAuth}" >
+    <ConversationProvider>
 <nav class="bg-gray-800">
   <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
@@ -35,11 +36,10 @@ import UserProviderVue from '../providers/UserProvider.vue';
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
-
-        
-
             <RouterLink to="/" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</RouterLink>
             <RouterLink to="/conversation" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Discussions</RouterLink>
+            <RouterLink to="/help" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Aide</RouterLink>
+            <RouterLink to="/admin/dashboard" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</RouterLink>
           </div>
         </div>
       </div>
@@ -82,6 +82,7 @@ import UserProviderVue from '../providers/UserProvider.vue';
   </div>
 </nav>
 <RouterView />
+</ConversationProvider>
 </UserProviderVue>
 </template>
 
