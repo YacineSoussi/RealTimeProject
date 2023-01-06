@@ -14,16 +14,24 @@ const props = defineProps({
         type: Function,
         required: false
     },
+    editRoom: {
+        type: Function,
+        required: false
+    }
 });
 
 const form = reactive({
-    name: '',
-    maxParticipants: 0
+    name: props.room.name,
+    maxParticipants: props.room.maxParticipants
 });
 
 const submit = (e) => {
      e.preventDefault();
-     props.addRoom(form);
+     if(props.room.id) {
+        props.editRoom({form, id: props.room.id});
+     } else {
+        props.addRoom(form);
+     }
 
     form.name = '';
     form.maxParticipants = 0;
@@ -38,7 +46,7 @@ const submit = (e) => {
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
                 <!-- centrer un titre -->
-                <h1 class="text-center text-2xl font-bold text-gray-700">Création d'un salon de discussion</h1>
+                <h1 class="text-center text-2xl font-bold text-gray-700">{{form.name === '' && form.maxParticipants === 0 ? 'Création' : 'Édition' }} d'un salon de discussion</h1>
                 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
                 Nom
@@ -53,7 +61,7 @@ const submit = (e) => {
             </div>
             <div class="flex items-center justify-between">
                 <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                Créer
+                    {{form.name === '' && form.maxParticipants === 0 ? 'Créer' : 'Éditer' }}
                 </button>
             </div>
         </form>

@@ -125,7 +125,9 @@ const createRoom = (form) => {
 const updateConversation = (id, form) => {
     return ConversationLogic.updateConversation(id, {...form})
         .then((data) => {
+            console.log(data)
             updatedConversation.value = data;
+            return data;
         })
 };
 

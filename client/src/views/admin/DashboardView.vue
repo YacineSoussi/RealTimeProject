@@ -6,6 +6,8 @@ import RoomCard from '../../components/admin/RoomCard.vue';
 const users = inject('ProviderUsers');
 const rooms = inject('ProviderRooms');
 const createRoom = inject('ProviderCreateRoom');
+const updateRoom = inject('ProviderUpdateConversation')
+const deleteRoom = inject('ProviderDeleteConversation');
 const isEditing = ref(false);
 const current_room = ref(null);
 
@@ -14,10 +16,41 @@ const changeIsEditing = () => {
     isEditing.value = !isEditing.value;
 };
 
-const addRoom = async (room) => {
+const fetchAddRoom = async (room) => {
     await createRoom(room).then((result) => {
         rooms.value.push(result);
     });
+};
+
+const fetchDeleteRoom = async (id) => {
+    await deleteRoom(id).then(() => {
+        rooms.value = rooms.value.filter((r) => r.id !== id);
+    });
+};
+
+const editRoom = (room) => {
+    current_room.value = room;
+    isEditing.value = true;
+};
+
+const fetchUpdateRoom = async (room) => {
+    await updateRoom(room.id, room.form).then((result) => {
+        rooms.value = rooms.value.map((r) => {
+            if (r.id === result.id) {
+                return result;
+            }
+            return r;
+        });
+    });
+};
+
+// Au click de l'icon d'ajout de room
+const onAddRoom = () => {
+    current_room.value = {
+        name: '',
+        maxParticipants: 0
+    };
+    changeIsEditing();
 };
 
 </script>
@@ -84,7 +117,7 @@ const addRoom = async (room) => {
     <div class="flex flex-row flex-wrap flex-grow mt-2">
 
         <div class="w-full md:w-1/2 p-3">
-            <RoomCard v-if="isEditing" :room="current_room" :addRoom="addRoom" :changeIsEditing="changeIsEditing" />
+            <RoomCard v-if="isEditing" :room="current_room" :addRoom="fetchAddRoom" :changeIsEditing="changeIsEditing" :editRoom="fetchUpdateRoom" />
             <div v-else class="bg-white border rounded shadow">
                 <div class="border-b p-3">
                     <h5 class="font-bold uppercase text-gray-600">Users</h5>
@@ -117,7 +150,7 @@ const addRoom = async (room) => {
                         <h5 class="font-bold uppercase text-gray-600">Rooms</h5>
                     </div>
                     <div>
-                            <font-awesome-icon icon="circle-plus" style="cursor: pointer" @click="changeIsEditing" />
+                            <font-awesome-icon icon="circle-plus" style="cursor: pointer" @click="onAddRoom" />
                     </div>
                 </div>
                 <div class="p-5">
@@ -134,8 +167,8 @@ const addRoom = async (room) => {
                                 <td>{{room.name}}</td>
                                 <td>{{room.maxParticipants}}</td>
                                 <td>{{room.participants.length}}</td>
-                                <td> <font-awesome-icon icon="pen-to-square" style="color: blue;" />
-                                <font-awesome-icon icon="trash" style="color: #d71a1a; margin-left: 5px;" />
+                                <td> <font-awesome-icon icon="pen-to-square" style="color: blue; cursor: pointer" @click="editRoom(room)" />
+                                <font-awesome-icon icon="trash" style="color: #d71a1a; margin-left: 5px; cursor: pointer;" @click="fetchDeleteRoom(room.id)"/>
                             </td>
                             </tr>
                         </tbody>
