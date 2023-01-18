@@ -1,16 +1,17 @@
 import "./index.css";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
 	faEye,
-	faMessage,
-	faPaperPlane,
 	faRightFromBracket,
-	faRobot,
-	faUsers,
+	faPaperPlane,
 	faXmark,
+	faUsers,
+	faMessage,
+	faPenToSquare,
+	faTrash,
+	faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
-
-import App from "./App.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { createApp } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -21,9 +22,11 @@ library.add(
 	faRightFromBracket,
 	faPaperPlane,
 	faXmark,
-	faRobot,
 	faUsers,
-	faMessage
+	faMessage,
+	faPenToSquare,
+	faTrash,
+	faCirclePlus
 );
 
 const app = createApp(App).component("font-awesome-icon", FontAwesomeIcon);

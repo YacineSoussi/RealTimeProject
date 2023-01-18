@@ -25,6 +25,16 @@ onMounted(() => {
     });
 });
 
+const getUserOfOtherParticipant = (participants) => {
+    const participant = participants.find((participant) => {
+        return participant.userId !== User.id;
+    });
+    if(participant) {
+        return users.value.find((user) => {
+            return user.id === participant.userId;
+        });
+    }
+}
 </script>
 
 <template>
@@ -59,7 +69,7 @@ onMounted(() => {
         <div class="ml-4 flex-1 border-b border-grey-lighter py-4">
             <div class="flex items-bottom justify-between">
                 <p class="text-grey-darkest">
-                    {{conversation.name}}
+                    {{conversation.type === 'room' ? conversation.name : getUserOfOtherParticipant(conversation.participants).firstName + ' ' + getUserOfOtherParticipant(conversation.participants).lastName }}
                 </p>
                 <p class="text-xs text-grey-darkest">
                     {{ conversation.lastMessage ? moment(conversation.lastMessage.updatedAt).format('hh:mm a') : ''}}

@@ -18,7 +18,7 @@ export default class ConversationRepository {
         return await Request.make('post', '/rooms', {...body});
     }
     static async updateConversation(id, body) {
-        return await Request.make('put', `/conversations/${id}`, {...body});
+        return await Request.make('patch', `/conversations/${id}`, {...body});
     }
     static async deleteConversation(id) {
         return await Request.make('delete', `/conversations/${id}`);

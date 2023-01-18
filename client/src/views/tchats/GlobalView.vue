@@ -8,7 +8,7 @@ import ConversationProvider from '../../components/providers/ConversationProvide
 </script>
 
 <template>
-<ConversationProvider>
+
 <div>
         <div class="w-full h-32" ></div>
 
@@ -25,5 +25,5 @@ import ConversationProvider from '../../components/providers/ConversationProvide
             </div>
         </div>
     </div>
-</ConversationProvider>
+
 </template>

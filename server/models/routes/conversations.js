@@ -87,7 +87,6 @@ router.get("/myconversations/:userId", checkAuthentication, async (req, res) => 
                 }
 
             });
-            console.log("conversations", conversations)
             res.json(conversations);
         }
     } catch (error) {
@@ -191,8 +190,20 @@ router.put("/conversations/:id", checkAuthentication, async (req, res) => {
 
 router.patch("/conversations/:id", checkAuthentication, async (req, res) => {
     try {
-        const result = await Conversation.update(req.body, { where: { id: req.params.id } });
-        res.json(result);
+        let conversation;
+        const result = await Conversation.update(req.body, { where: { id: req.params.id } }).then(
+            async () => {
+                 conversation = await Conversation.findByPk(req.params.id, {
+                    include: [
+                        { model: Message, as: "messages"},
+                        { model: Participant, as: "participants" }
+                    ]
+                });
+                return conversation;
+            }
+        )
+       
+        res.json(conversation);
     } catch (error) {
         if (error instanceof ValidationError) {
             console.error(error);
