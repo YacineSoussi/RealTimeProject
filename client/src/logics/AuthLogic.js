@@ -20,7 +20,7 @@ export default class AuthLogic {
 
         if (result.response.status === 401) {
             throw new Error(result.response.data?.message);
-        }
+        } 
             const res = {}
             res.userData = result.response.data.userData[0];
             res.token = result.response.data.token;

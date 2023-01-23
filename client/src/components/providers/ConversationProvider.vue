@@ -125,7 +125,6 @@ const createRoom = (form) => {
 const updateConversation = (id, form) => {
     return ConversationLogic.updateConversation(id, {...form})
         .then((data) => {
-            console.log(data)
             updatedConversation.value = data;
             return data;
         })
@@ -275,6 +274,14 @@ const getUsers = () => {
             return data;
         })
 };
+
+const updateUser = (id, body) => {
+    return UserLogic.updateUser(id, body)
+        .then((data) => {
+            User.status = data.status;
+            return data;
+        })
+};
 // Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
 watchEffect(() => {
     getUsers();
@@ -360,6 +367,7 @@ provide('ProviderPostParticipant', postParticipant);
 provide('ProviderSetValueModalChat', setValueModalChat);
 provide('ProviderGetUsers', getUsers);
 provide ('ProviderCheckIfUserHaveConversationWithOtherUser', checkIfUserHaveConversationWithOtherUser);
+provide('ProviderUpdateUser', updateUser);
 
 </script>
 

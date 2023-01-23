@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted, inject, reactive } from 'vue';
-import UserLogic from '../../logics/UserLogic';
+import { ref, onMounted, inject, computed } from 'vue';
 import RoomCard from '../../components/admin/RoomCard.vue';
+import UserLogic from '../../logics/UserLogic';
 
 const users = inject('ProviderUsers');
 const rooms = inject('ProviderRooms');
@@ -10,6 +10,8 @@ const updateRoom = inject('ProviderUpdateConversation')
 const deleteRoom = inject('ProviderDeleteConversation');
 const isEditing = ref(false);
 const current_room = ref(null);
+const updateUserStatus = inject('ProviderUpdateUser');
+const User = inject('ProviderUser');
 
 
 const changeIsEditing = () => {
@@ -53,11 +55,57 @@ const onAddRoom = () => {
     changeIsEditing();
 };
 
+const me = ref(null);
+const status = ref(null);
+
+onMounted(() => {
+    UserLogic.getUser(User.id).then((data) => {
+        me.value = data;
+        status.value = data.status;
+    });
+});
+
+const colorStatus = computed(() => {
+    if (status.value === 1) {
+        updateUserStatus(me.value.id, { status: 1 })
+        return 'bg-green-500';
+    }
+    if (status.value === 0) {
+        updateUserStatus(me.value.id, { status: 0 });
+       return 'bg-red-500';
+    }
+    return 'bg-yellow-500';
+});
+
+const changeStatus = () => {
+    if (status.value === 1) {
+        status.value = 0;
+    } else {
+        status.value = 1;
+    }
+};
+
 </script>
 
 <template>
 
 <div class="container w-full mx-auto pt-20">
+   
+   
+   <div class="flex justify-end">
+    <div class="flex flex-col items-end">
+        <div class="mb-2">
+            <button @click="changeStatus" class="text-sm bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+  Changer de statut
+</button>
+        </div>
+        <div>
+            <span> Disponibilité pour les clients </span>
+            <span :class="colorStatus" class="ml-3  rounded-full w-3 h-3 inline-block"></span>
+        </div>
+    </div>
+
+   </div>
 
 <div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
 

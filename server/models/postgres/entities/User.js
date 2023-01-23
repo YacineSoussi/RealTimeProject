@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize");
+const { Model, DataTypes,  Sequelize } = require("sequelize");
 const connection = require("../db");
 const bcryptjs = require("bcryptjs");
 
@@ -44,7 +44,13 @@ User.init(
         },
         role: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            defaultValue: "user",
+        },
+        status: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
         },
     },
     {
@@ -66,5 +72,6 @@ User.addHook("beforeUpdate", async(user, { fields }) => {
         await hashPassword(user);
     }
 });
+
 
 module.exports = User;
