@@ -1,7 +1,7 @@
 <script setup>
-import RegisterCard from '../../components/RegisterCard/RegisterCard.vue';
+import RegisterCard from "../../components/RegisterCard/RegisterCard.vue";
 </script>
 
 <template>
-<RegisterCard />
+	<RegisterCard />
 </template>
