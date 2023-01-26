@@ -11,14 +11,13 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 				<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 					<div class="relative flex h-16 items-center justify-between">
 						<div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-							<!-- Mobile menu button -->
 							<button
 								type="button"
 								class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
 								aria-controls="mobile-menu"
 								aria-expanded="false"
 							>
-								<span class="sr-only">Open main menu</span>
+								<span class="sr-only">Ouvrir le menu principal</span>
 
 								<svg
 									class="block h-6 w-6"
@@ -73,7 +72,7 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 									<RouterLink
 										to="/"
 										class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-										>Home</RouterLink
+										>Accueil</RouterLink
 									>
 									<RouterLink
 										to="/conversation"
@@ -105,7 +104,7 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 								type="button"
 								class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
 							>
-								<span class="sr-only">View notifications</span>
+								<span class="sr-only">Notifications</span>
 								<svg
 									class="h-6 w-6"
 									xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +121,6 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 									/>
 								</svg>
 							</button>
-							<!-- Profile dropdown -->
 							<div class="relative ml-3">
 								<div>
 									<button
@@ -132,7 +130,7 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 										aria-expanded="false"
 										aria-haspopup="true"
 									>
-										<span class="sr-only">Open user menu</span>
+										<span class="sr-only">Ouvrir le menu utilisateur</span>
 
 										<RouterLink
 											v-if="!isAuth"
@@ -140,7 +138,7 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 											class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
 											aria-current="page"
 										>
-											Login / Register</RouterLink
+											Se connecter / S'enregistrer</RouterLink
 										>
 
 										<font-awesome-icon
@@ -156,33 +154,31 @@ import ConversationProvider from "../providers/ConversationProvider.vue";
 					</div>
 				</div>
 
-				<!-- Mobile menu, show/hide based on menu state. -->
 				<div class="sm:hidden" id="mobile-menu">
 					<div class="space-y-1 px-2 pt-2 pb-3">
-						<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
 						<a
 							href="#"
 							class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
 							aria-current="page"
-							>Dashboard</a
+							>Tableau de bord</a
 						>
 
 						<a
 							href="#"
 							class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-							>Team</a
+							>Équipe</a
 						>
 
 						<a
 							href="#"
 							class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-							>Projects</a
+							>Projets</a
 						>
 
 						<a
 							href="#"
 							class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-							>Calendar</a
+							>Calendrier</a
 						>
 					</div>
 				</div>

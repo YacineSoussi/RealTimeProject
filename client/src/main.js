@@ -1,17 +1,18 @@
 import "./index.css";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-	faEye,
-	faRightFromBracket,
-	faPaperPlane,
-	faXmark,
-	faUsers,
-	faMessage,
-	faPenToSquare,
-	faTrash,
 	faCirclePlus,
+	faEye,
+	faMessage,
+	faPaperPlane,
+	faPenToSquare,
+	faRightFromBracket,
+	faTrash,
+	faUsers,
+	faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+
+import App from "./App.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { createApp } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
