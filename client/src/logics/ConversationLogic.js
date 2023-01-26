@@ -5,7 +5,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.getConversations();
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -15,7 +15,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.getConversationOfUser(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -25,7 +25,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.getConversation(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -35,7 +35,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.createConversation(body);
 
 		if (result.response.status !== 201) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -45,7 +45,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.updateConversation(id, body);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -55,7 +55,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.deleteConversation(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -68,7 +68,7 @@ export default class ConversationLogic {
 		});
 
 		if (result.response.status !== 201) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -78,7 +78,7 @@ export default class ConversationLogic {
 		const result = await ConversationRepository.createRoom(body);
 
 		if (result.response.status !== 201) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;

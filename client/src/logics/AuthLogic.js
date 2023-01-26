@@ -18,7 +18,7 @@ export default class AuthLogic {
 		const result = await AuthRepository.login({ ...body });
 
 		if (result.response.status === 401) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		const res = {};

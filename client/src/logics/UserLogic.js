@@ -5,7 +5,7 @@ export default class UserLogic {
 		const result = await UserRepository.getUsers();
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -15,7 +15,7 @@ export default class UserLogic {
 		const result = await UserRepository.getUser(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -25,7 +25,7 @@ export default class UserLogic {
 		const result = await UserRepository.createUser(body);
 
 		if (result.response.status !== 201) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -35,7 +35,7 @@ export default class UserLogic {
 		const result = await UserRepository.updateUser(id, body);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -45,7 +45,7 @@ export default class UserLogic {
 		const result = await UserRepository.deleteUser(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;

@@ -5,7 +5,7 @@ export default class MessageLogic {
 		const result = await MessageRepository.getMessages();
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -15,7 +15,7 @@ export default class MessageLogic {
 		const result = await MessageRepository.getMessage(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -25,7 +25,7 @@ export default class MessageLogic {
 		const result = await MessageRepository.createMessage(body);
 
 		if (result.response.status !== 201) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -35,7 +35,7 @@ export default class MessageLogic {
 		const result = await MessageRepository.updateMessage(id, body);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
@@ -45,7 +45,7 @@ export default class MessageLogic {
 		const result = await MessageRepository.deleteMessage(id);
 
 		if (result.response.status !== 200) {
-			throw new Error(result.response.data?.message);
+			throw new Error(result.response.data.message);
 		}
 
 		return result.response.data;
