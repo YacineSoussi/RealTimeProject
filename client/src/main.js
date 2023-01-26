@@ -1,11 +1,13 @@
 import "./index.css";
 
 import {
+	faCirclePlus,
 	faEye,
 	faMessage,
 	faPaperPlane,
+	faPenToSquare,
 	faRightFromBracket,
-	faRobot,
+	faTrash,
 	faUsers,
 	faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -21,9 +23,11 @@ library.add(
 	faRightFromBracket,
 	faPaperPlane,
 	faXmark,
-	faRobot,
 	faUsers,
-	faMessage
+	faMessage,
+	faPenToSquare,
+	faTrash,
+	faCirclePlus
 );
 
 const app = createApp(App).component("font-awesome-icon", FontAwesomeIcon);
