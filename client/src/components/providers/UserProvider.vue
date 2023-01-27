@@ -4,9 +4,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, provide } from 'vue'
+import { ref, reactive, provide, watchEffect } from 'vue'
 import AuthLogic from '../../logics/AuthLogic';
 import router from '../../router';
+import UserLogic from '../../logics/UserLogic';
+import LocalStorage from '../../services/LocalStorage';
+
+const User = LocalStorage.get('user');
+const users = ref([]);
 
 
 const login =  (form) => {
@@ -26,14 +31,28 @@ const  logout = () => {
 const register = (form) => {
     return AuthLogic.register({...form});
     };
+ const updateUser = (id, body) => {
+    return UserLogic.updateUser(id, body)
+        .then((data) => {
+            User.status = data.status;
+            return data;
+        });
+};
 
 let isAuth = ref(AuthLogic.isAuth());
 const user = reactive({});
+
+watchEffect( async() => {
+    users.value = await UserLogic.getUsers();
+});
 
     provide('Providerlogout', logout);
     provide('ProviderisAuth', isAuth);
     provide('ProviderLogin', login);
     provide('ProviderRegister', register);
+    provide('ProviderUpdateUser', updateUser);
+    provide('ProviderUsers', users);
+
 
 
 </script>

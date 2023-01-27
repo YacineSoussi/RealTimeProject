@@ -11,7 +11,7 @@ import ConversationProvider from '../providers/ConversationProvider.vue';
 
 <template>
   <UserProviderVue v-slot="{logout, isAuth}" >
-    <ConversationProvider>
+
 <nav class="bg-gray-800">
   <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
@@ -82,7 +82,7 @@ import ConversationProvider from '../providers/ConversationProvider.vue';
   </div>
 </nav>
 <RouterView />
-</ConversationProvider>
+
 </UserProviderVue>
 </template>
 

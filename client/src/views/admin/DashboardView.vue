@@ -1,33 +1,42 @@
 <script setup>
-import { ref, onMounted, inject, computed } from 'vue';
+import { ref, onMounted, inject, computed, watchEffect } from 'vue';
 import RoomCard from '../../components/admin/RoomCard.vue';
 import UserLogic from '../../logics/UserLogic';
+import LocalStorage from '../../services/LocalStorage';
+import ConversationLogic from '../../logics/ConversationLogic';
+import { useConversationStore } from '../../stores/ConversationStore';
 
 const users = inject('ProviderUsers');
-const rooms = inject('ProviderRooms');
-const createRoom = inject('ProviderCreateRoom');
+const conversationsStore = useConversationStore();
+const rooms = computed(() => conversationsStore.getterRooms);
 const updateRoom = inject('ProviderUpdateConversation')
 const deleteRoom = inject('ProviderDeleteConversation');
 const isEditing = ref(false);
 const current_room = ref(null);
 const updateUserStatus = inject('ProviderUpdateUser');
-const User = inject('ProviderUser');
+const User = LocalStorage.get('user');
 
 
 const changeIsEditing = () => {
     isEditing.value = !isEditing.value;
 };
 
+const createRoom = (form) => {
+    return ConversationLogic.createRoom({...form, type: 'room'})
+        .then((data) => {
+            conversations.value.push(data);
+            selectedConversationId.value = data.id;
+            return data;
+        })
+};
+
 const fetchAddRoom = async (room) => {
-    await createRoom(room).then((result) => {
-        rooms.value.push(result);
-    });
+    await conversationsStore.createRoom(room);
 };
 
 const fetchDeleteRoom = async (id) => {
-    await deleteRoom(id).then(() => {
-        rooms.value = rooms.value.filter((r) => r.id !== id);
-    });
+    await conversationsStore.deleteConversation(id);
+    rooms.value = rooms.value.filter((r) => r.id !== id);
 };
 
 const editRoom = (room) => {
@@ -35,8 +44,8 @@ const editRoom = (room) => {
     isEditing.value = true;
 };
 
-const fetchUpdateRoom = async (room) => {
-    await updateRoom(room.id, room.form).then((result) => {
+const fetchUpdateRoom = async (room, id) => {
+    await conversationsStore.updateRoom(room, id).then((result) => {
         rooms.value = rooms.value.map((r) => {
             if (r.id === result.id) {
                 return result;
@@ -59,6 +68,10 @@ const me = ref(null);
 const status = ref(null);
 
 onMounted(() => {
+
+    UserLogic.getUsers().then((data) => {
+        users.value = data.filter((u) => u.id !== User.id);
+    });
     UserLogic.getUser(User.id).then((data) => {
         me.value = data;
         status.value = data.status;
@@ -85,6 +98,13 @@ const changeStatus = () => {
     }
 };
 
+// watchEffect(async () => {
+//    await conversationsStore.getConversations().then((result) => {
+//         conversationsStore.rooms = result;
+//         rooms.value = conversationsStore.rooms;
+//     });
+
+// });
 </script>
 
 <template>

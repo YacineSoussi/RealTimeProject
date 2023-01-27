@@ -1,13 +1,15 @@
 <script setup>
-import { ref, reactive, provide, onMounted, watchEffect } from 'vue'
+import { ref, reactive, provide, onMounted, watchEffect, inject } from 'vue'
 import ConversationLogic from '../../logics/ConversationLogic';
 import UserLogic from '../../logics/UserLogic';
 import MessageLogic from '../../logics/MessageLogic';
 import LocalStorage from '../../services/LocalStorage';
 import socket from '../../services/Socket';
+import { useConversationStore } from '../../stores/ConversationStore';
 
+const conversationsStore = useConversationStore();
 const User = LocalStorage.get('user');
-
+const users = inject('ProviderUsers');
 const messages = ref([]);
 const conversations = ref([]);
 const rooms = ref([]);
@@ -17,7 +19,6 @@ const updatedConversation = ref(null);
 const participantsOFConversation = ref(null);
 const isOpenModal = ref(false);
 const isOpenModalChat = ref(false);
-const users = ref([]);
 const socketRef = ref(null);
 
 const filterByUpdated = (conversations) => {
@@ -45,8 +46,7 @@ const getConversations = () => {
                     lastMessage
                 }
             });
-            rooms.value = conversations.filter((room) => room.type === 'room');
-            
+            conversationsStore.rooms = conversations.filter((room) => room.type === 'room');
         })
 };
 
@@ -69,8 +69,8 @@ const getConversationOfUser = () => {
                 }
             });
             
-            conversations.value = myConversations;
-            conversations.value = filterByUpdated(conversations.value);
+            conversationsStore.conversations = myConversations;
+            conversationsStore.conversations = filterByUpdated(conversationsStore.conversations);
         })
 };
 
@@ -80,7 +80,14 @@ const getMessages = (id) => {
             messages.value = data;
         })
 };
-
+const getUsers = () => {
+    return UserLogic.getUsers()
+        .then((data) => {
+            data = data.filter((user) => user.id !== User.id);
+            users.value = data;
+            return data;
+        })
+};
 const getConversation = (id) => {
     return ConversationLogic.getConversation(id)
         .then((data) => {
@@ -100,7 +107,7 @@ const getConversation = (id) => {
                 ...data,
                 lastMessage
             }
-            selectedConversation.value = newConversation;
+            conversationsStore.selectedConversation = newConversation;
             return newConversation;
         })
 };
@@ -108,16 +115,16 @@ const getConversation = (id) => {
 const createConversation = (form) => {
     return ConversationLogic.createConversation({...form, completed: true, maxParticipants: 2, type: 'conversation'})
         .then((data) => {
-            conversations.value.push(data);
-            selectedConversationId.value = data.id;
+            conversationsStore.conversations.push(data);
+            conversationsStore.selectedConversationId = data.id;
         })
 };
 
 const createRoom = (form) => {
     return ConversationLogic.createRoom({...form, type: 'room'})
         .then((data) => {
-            conversations.value.push(data);
-            selectedConversationId.value = data.id;
+            conversationsStore.conversations.push(data);
+            conversationsStore.selectedConversationId = data.id;
             return data;
         })
 };
@@ -125,15 +132,15 @@ const createRoom = (form) => {
 const updateConversation = (id, form) => {
     return ConversationLogic.updateConversation(id, {...form})
         .then((data) => {
-            updatedConversation.value = data;
+            conversationsStore.updatedConversation = data;
             return data;
         })
 };
 
 const deleteConversation = (id) => {
     return ConversationLogic.deleteConversation(id)
-        .then((data) => {
-            conversations.value = conversations.value.filter((conversation) => conversation.id !== id);
+        .then(() => {
+            conversationsStore.conversations = conversationsStore.conversations.filter((conversation) => conversation.id !== id);
         })
 };
 
@@ -143,33 +150,33 @@ const createMessage = (form) => {
             data.author = User;
             const ConversationMaj = {
                 lastMessage: data,
-                messages: [...selectedConversation.value.messages, data],
-                id: selectedConversation.value.id,
-                name: selectedConversation.value?.name,
-                participants: selectedConversation.value?.participants,
+                messages: [...conversationsStore.selectedConversation.messages, data],
+                id: conversationsStore.selectedConversation.id,
+                name: conversationsStore.selectedConversation?.name,
+                participants: conversationsStore.selectedConversation?.participants,
                 updatedAt: data.updatedAt,
                 createdAt: data.createdAt,
                 lastMessageId: data.id,
-                maxParticipants: selectedConversation.value?.maxParticipants,
-                completed: selectedConversation.value?.completed,
-                type: selectedConversation.value?.type,
+                maxParticipants: conversationsStore.selectedConversation?.maxParticipants,
+                completed: conversationsStore.selectedConversation?.completed,
+                type: conversationsStore.selectedConversation?.type,
             }
-            selectedConversation.value = ConversationMaj;
-            if(selectedConversation.value.type === "conversation") {
+            conversationsStore.selectedConversation = ConversationMaj;
+            if(conversationsStore.selectedConversation.type === "conversation") {
                 const otherParticipant = ConversationMaj.participants.find((participant) => participant.userId !== User.id);
                 socketRef.current.emit('message:private', {ConversationMaj, to: otherParticipant.userId, content: data.content, data, author: User.id});
             } else {
-                socketRef.current.emit('message:room', {content: data.content, to: selectedConversation.value.id, data, author: User.id, ConversationMaj})
+                socketRef.current.emit('message:room', {content: data.content, to: conversationsStore.selectedConversation.id, data, author: User.id, ConversationMaj})
             }
 
             //  On met à jour la conversation dans la liste des conversations
-            conversations.value = conversations.value.map((conversation) => {
+            conversationsStore.conversations = conversationsStore.conversations.map((conversation) => {
                 if (conversation.id === data.conversationId) {
                     return ConversationMaj;
                 }
                 return conversation;
             })
-            filterByUpdated(conversations.value);
+            filterByUpdated(conversationsStore.conversations);
             return data;
         })
 };
@@ -194,7 +201,7 @@ const deleteMessage = (id) => {
 };
 
 const setSelectedConversationId = (id) => {
-    selectedConversationId.value = id;
+    conversationsStore.selectedConversationId = id;
 };
 
 const getParticipants = (id) => {
@@ -208,8 +215,8 @@ const getParticipants = (id) => {
 const postParticipant = (form) => {
     return ConversationLogic.postParticipant({...form})
         .then((data) => {
-            conversations.value.push(data.conversation);
-            rooms.value = rooms.value.map((room) => {
+            conversationsStore.conversations.push(data.conversation);
+            conversationsStore.rooms = conversationsStore.rooms.map((room) => {
                 if (room.id === data.conversationId) {
                     return {
                         ...room,
@@ -247,8 +254,8 @@ const checkUserInConversation = (conversation) => {
 };
 
 const checkIfUserHaveConversationWithOtherUser = (userId) => {
-    if (conversations.value) {
-        const conversation = conversations.value.find((conversation) => {
+    if (conversationsStore.conversations) {
+        const conversation = conversationsStore.conversations.find((conversation) => {
             if (conversation.participants) {
                 if (conversation.participants.length === 2) {
                     if (conversation.participants.find((participant) => participant.userId === userId)) {
@@ -266,35 +273,20 @@ const checkIfUserHaveConversationWithOtherUser = (userId) => {
     return false;
 };
 
-const getUsers = () => {
-    return UserLogic.getUsers()
-        .then((data) => {
-            data = data.filter((user) => user.id !== User.id);
-            users.value = data;
-            return data;
-        })
-};
 
-const updateUser = (id, body) => {
-    return UserLogic.updateUser(id, body)
-        .then((data) => {
-            User.status = data.status;
-            return data;
-        })
-};
 // Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
 watchEffect(() => {
     getUsers();
-    if (selectedConversationId.value) {
-        getConversation(selectedConversationId.value);
-        getParticipants(selectedConversationId.value);
+    if (conversationsStore.selectedConversationId) {
+        getConversation(conversationsStore.selectedConversationId);
+        getParticipants(conversationsStore.selectedConversationId);
     }
 });
 
 // Au changement de l'utilisateur, on récupère les conversations de l'utilisateur en les triant par date de mise à jour
 watchEffect(() => {
     if (User.id) {
-        filterByUpdated(conversations.value);
+        filterByUpdated(conversationsStore.conversations);
     }
     
 });
@@ -312,9 +304,9 @@ socketRef.current.connect();
     
    socketRef.current.on('message:private', ({ConversationMaj, data}) => {
     // on met à jour la conversation selectionnée
-    selectedConversation.value = ConversationMaj;
+    conversationsStore.selectedConversation = ConversationMaj;
     // on met à jour la conversation dans la liste des conversations
-    conversations.value = conversations.value.map((conversation) => {
+    conversationsStore.conversations = conversationsStore.conversations.map((conversation) => {
         if (conversation.id === data.conversationId) {
             return ConversationMaj;
         }
@@ -324,9 +316,9 @@ socketRef.current.connect();
 
    socketRef.current.on('message:room', ({ConversationMaj, data}) => {
     // on met à jour la conversation selectionnée
-    selectedConversation.value = ConversationMaj;
+    conversationsStore.selectedConversation = ConversationMaj;
     // on met à jour la conversation dans la liste des conversations
-    conversations.value = conversations.value.map((conversation) => {
+    conversationsStore.conversations = conversationsStore.conversations.map((conversation) => {
         if (conversation.id === data.conversationId) {
             return ConversationMaj;
         }
@@ -345,7 +337,7 @@ provide('ProviderParticipantsOFConversation', participantsOFConversation);
 provide('ProviderIsOpenModal', isOpenModal);
 provide('ProviderRooms', rooms);
 provide('ProviderIsOpenModalChat', isOpenModalChat);
-provide('ProviderUsers', users);
+
 provide('ProviderSocket', socketRef.current);
 
 provide('ProviderGetConversations', getConversations);
@@ -367,7 +359,7 @@ provide('ProviderPostParticipant', postParticipant);
 provide('ProviderSetValueModalChat', setValueModalChat);
 provide('ProviderGetUsers', getUsers);
 provide ('ProviderCheckIfUserHaveConversationWithOtherUser', checkIfUserHaveConversationWithOtherUser);
-provide('ProviderUpdateUser', updateUser);
+
 
 </script>
 
