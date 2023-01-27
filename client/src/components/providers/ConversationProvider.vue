@@ -309,7 +309,7 @@ watchEffect(() => {
 
 // When the user changes, we retrieve the user's conversations by sorting them by date of update
 watchEffect(() => {
-	if (User.id) {
+	if (User?.id) {
 		filterByUpdated(conversationsStore.conversations);
 	}
 });
@@ -320,7 +320,7 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-	const userId = User.id;
+	const userId = User?.id;
 
 	socketRef.current = socket;
 	socketRef.current.auth = { userId };
