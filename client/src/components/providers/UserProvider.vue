@@ -35,7 +35,9 @@ const register = () => {
 let isAuth = ref(AuthLogic.isAuth());
 
 watchEffect(async () => {
-	users.value = await UserLogic.getUsers();
+	if (isAuth.value) {
+		users.value = await UserLogic.getUsers();
+	}
 });
 
 const updateUser = (id, body) => {
