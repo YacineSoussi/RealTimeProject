@@ -14,7 +14,9 @@
     "dotenv": "^16.0.3",
     "esbuild": "^0.15.14",
     "moment": "^2.29.4",
+    "pinia": "^2.0.29",
     "process": "^0.11.10",
+    "sequelize": "^6.28.0",
     "socket.io-client": "^4.5.4",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5"

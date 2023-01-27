@@ -17,6 +17,10 @@ export default class UserRepository {
 		return await Request.make("put", `/users/${id}`, { ...body });
 	}
 
+	static async updateUser(id, body) {
+		return await Request.make("patch", `/users/${id}`, { ...body });
+	}
+
 	static async deleteUser(id) {
 		return await Request.make("delete", `/users/${id}`);
 	}

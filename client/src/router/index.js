@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import { initialFetchConversations } from "../stores/ConversationStore";
+
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
@@ -22,6 +24,7 @@ const router = createRouter({
 			path: "/conversation",
 			name: "conversation",
 			component: () => import("../views/tchats/GlobalView.vue"),
+			beforeEnter: [initialFetchConversations],
 			meta: { requiresAuth: true },
 		},
 		{
@@ -39,6 +42,7 @@ const router = createRouter({
 			path: "/admin/dashboard",
 			name: "admin-dashboard",
 			component: () => import("../views/admin/DashboardView.vue"),
+			beforeEnter: [initialFetchConversations],
 			meta: { requiresAuth: true },
 		},
 	],

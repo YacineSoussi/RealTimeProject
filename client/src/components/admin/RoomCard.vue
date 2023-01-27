@@ -27,9 +27,8 @@ const form = reactive({
 
 const submit = (e) => {
 	e.preventDefault();
-
 	if (props.room.id) {
-		props.editRoom({ form, id: props.room.id });
+		props.editRoom({ ...form }, props.room.id);
 	} else {
 		props.addRoom(form);
 	}

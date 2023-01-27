@@ -111,6 +111,29 @@ router.put("/users/:id", checkAuthentication, async (req, res) => {
 	}
 });
 
+router.patch("/users/:id", checkAuthentication, async (req, res) => {
+	try {
+		const [, rows] = await User.update(req.body, {
+			where: { id: parseInt(req.params.id, 10) },
+			returning: true,
+			individualHooks: true,
+		});
+		if (!rows[0]) {
+			res.sendStatus(404);
+		} else {
+			res.json(rows[0]);
+			res.status = 200;
+		}
+	} catch (error) {
+		if (error instanceof ValidationError) {
+			res.status(422).json(formatError(error));
+		} else {
+			res.sendStatus(500);
+			console.error(error);
+		}
+	}
+});
+
 router.get("/users/:id", checkAuthentication, async (req, res) => {
 	try {
 		const result = await User.findByPk(req.params.id);

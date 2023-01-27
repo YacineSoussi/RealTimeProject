@@ -1,19 +1,22 @@
 <script setup>
-import { inject } from "vue";
+import { inject, computed } from "vue";
+import { useConversationStore } from "../../stores/ConversationStore";
 
+const conversationStore = useConversationStore();
 const createMessage = inject("ProviderCreateMessage");
-const selectedConversationId = inject("ProviderSelectedConversationId");
+const selectedConversationId = computed(
+	() => conversationStore.selectedConversationId
+);
 const User = inject("ProviderUser");
+
 const onSubmit = async (e) => {
 	e.preventDefault();
-
 	const content = document.getElementById("textMessage").value;
 	const body = {
 		content,
 		conversationId: selectedConversationId.value,
 		authorId: User.id,
 	};
-
 	try {
 		await createMessage(body);
 		document.getElementById("textMessage").value = "";

@@ -1,14 +1,16 @@
 <script setup>
-import { inject, onMounted } from "vue";
+import { inject, onMounted, computed } from "vue";
 import moment from "moment";
 import ModalRoomsVue from "../../../components/Modal/ModalRooms.vue";
 import ModalChatVue from "../../../components/Modal/ModalChat.vue";
+import { useConversationStore } from "../../../stores/ConversationStore";
 
-const rooms = inject("ProviderRooms");
-const conversations = inject("ProviderConversations");
+const conversationStore = useConversationStore();
+const rooms = computed(() => conversationStore.rooms);
+const conversations = computed(() => conversationStore.conversations);
 const getConversationOfUser = inject("ProviderGetConversationOfUser");
 const selectedConversationId = inject("ProviderSelectedConversationId");
-const setSelectedConversationId = inject("ProviderSetSelectedConversationId");
+const setSelectedConversationId = conversationStore.setSelectConversationId;
 const isOpenModal = inject("ProviderIsOpenModal");
 const setIsOpenModal = inject("ProviderSetValueModal");
 const isOpenModalChat = inject("ProviderIsOpenModalChat");
@@ -18,8 +20,8 @@ const users = inject("ProviderUsers");
 
 onMounted(() => {
 	getConversationOfUser().then(() => {
-		if (conversations.value.length > 0) {
-			selectedConversationId.value = conversations.value[0].id;
+		if (conversations.length > 0) {
+			selectedConversationId.value = conversations[0].id;
 		}
 	});
 });
