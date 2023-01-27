@@ -1,10 +1,12 @@
 <script setup>
-import { inject, ref, onMounted } from 'vue'
+import { inject, ref, onMounted, computed } from 'vue'
 import moment from 'moment';
 import InputMessage from '../../../components/Input/InputMessage.vue';
+import { useConversationStore } from '../../../stores/ConversationStore';
 
+const conversationStore = useConversationStore();
 const User = inject('ProviderUser');
-const selectedConversation = inject('ProviderSelectedConversation');
+const selectedConversation = computed(() => conversationStore.selectedConversation);
 const participantsOFConversation = inject('ProviderParticipantsOFConversation');
 
 const input = ref(null);

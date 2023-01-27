@@ -53,7 +53,6 @@ const getConversations = () => {
 const getConversationOfUser = () => {
     return ConversationLogic.getConversationOfUser(User.id)
         .then((data) => {
-            
             const myConversations = data.map((conversation) => {
                 let lastMessage = data.lastMessage ? data.lastMessage : null;
                 if (conversation.messages.length > 0) {
@@ -161,6 +160,7 @@ const createMessage = (form) => {
                 completed: conversationsStore.selectedConversation?.completed,
                 type: conversationsStore.selectedConversation?.type,
             }
+            // On met à jour la conversation sélectionnée
             conversationsStore.selectedConversation = ConversationMaj;
             if(conversationsStore.selectedConversation.type === "conversation") {
                 const otherParticipant = ConversationMaj.participants.find((participant) => participant.userId !== User.id);

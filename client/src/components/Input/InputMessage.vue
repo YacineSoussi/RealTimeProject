@@ -1,8 +1,10 @@
 <script setup>
-import { ref, reactive, inject, onMounted, watchEffect } from 'vue'
+import { ref, reactive, inject, onMounted, watchEffect, computed } from 'vue'
+import { useConversationStore } from '../../stores/ConversationStore';
 
+const conversationStore = useConversationStore();
 const createMessage = inject('ProviderCreateMessage');
-const selectedConversationId = inject('ProviderSelectedConversationId');
+const selectedConversationId = computed(() => conversationStore.selectedConversationId);
 const User = inject('ProviderUser');
 
 const onSubmit = async (e) => {
@@ -21,6 +23,7 @@ const onSubmit = async (e) => {
         console.log(error);
     }
 }
+
 </script>
 <template>
     <form @submit="onSubmit">
