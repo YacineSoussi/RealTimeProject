@@ -1,7 +1,7 @@
 class JsonApiResponse {
 	constructor(data) {
 		this.response = data;
-		this.status_code = data.status;
+		this.status_code = data?.status;
 	}
 
 	/**

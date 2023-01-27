@@ -7,6 +7,7 @@ import {
 	faPaperPlane,
 	faPenToSquare,
 	faRightFromBracket,
+	faRobot,
 	faTrash,
 	faUsers,
 	faXmark,
@@ -20,6 +21,7 @@ import router from "./router";
 
 library.add(
 	faEye,
+	faRobot,
 	faRightFromBracket,
 	faPaperPlane,
 	faXmark,
