@@ -38,6 +38,13 @@ watchEffect(async () => {
 	users.value = await UserLogic.getUsers();
 });
 
+const updateUser = (id, body) => {
+	return UserLogic.updateUser(id, body).then((data) => {
+		User.status = data.status;
+		return data;
+	});
+};
+
 provide("ProviderLogout", logout);
 provide("ProviderIsAuth", isAuth);
 provide("ProviderLogin", login);
