@@ -1,9 +1,8 @@
-import {io} from 'socket.io-client';
+import { io } from "socket.io-client";
 
-const url = io('http://localhost:3000');
+const url = "http://localhost:3000";
 const socket = io(url, {
-    autoConnect: false
+	autoConnect: false,
 });
 
 export default socket;
-
