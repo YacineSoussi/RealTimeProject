@@ -36,12 +36,12 @@
 </template>
 
 <script setup>
-import io from "socket.io-client";
 import { onMounted, ref, reactive } from "vue";
+import socket from "../../services/socket";
+import LocalStorage from "../../services/LocalStorage";
 
 // ------------------ INITIALIZATION VARIABLES ------------------ //
 
-const socket = io("http://localhost:3000");
 const initialHelpChoices = [
 	"Vérifier l'entretien de mon véhicule",
 	"Des informations sur les véhicules",
@@ -84,6 +84,7 @@ const data = {
 		choices: [],
 	},
 };
+const socketRef = ref(null);
 
 let initialChoice = ref("");
 let deepResponse = ref(0);
@@ -93,26 +94,25 @@ let questionPending = reactive({
 	answer: "",
 });
 
-// ------------------ SOCKET ------------------ //
-
-// Manage input availability and status color
-socket.on("connect", () => {
-	document.getElementById("chat").innerHTML = "";
-
-	const status = document.getElementById("status");
-
-	status.classList.remove("bg-red-600");
-	status.classList.add("bg-green-600");
-
-	initChatBotWelcomeMessage();
-});
-
-// ------------------ GLOBAL METHODS ------------------ //
-
 /**
  * Define the event listener on the input message
  */
 onMounted(() => {
+	socketRef.current = socket;
+	socketRef.current.auth = { userId: LocalStorage.get("user").id };
+	socketRef.current.connect();
+
+	// Manage input availability and status color
+	socketRef.current.on("connect", () => {
+		document.getElementById("chat").innerHTML = "";
+
+		const status = document.getElementById("status");
+
+		status.classList.remove("bg-red-600");
+		status.classList.add("bg-green-600");
+
+		initChatBotWelcomeMessage();
+	});
 	document.getElementById("message").addEventListener("keyup", function (e) {
 		if (e && e.key === "Enter" && e.target.value !== "") {
 			setUserMessage(e.target.value);
