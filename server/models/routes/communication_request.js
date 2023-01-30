@@ -1,11 +1,11 @@
 const { Message, User } = require("../postgres");
 const { ValidationError, Op } = require("sequelize");
 const { Router } = require("express");
-
+const checkAuthentication = require("../../middlewares/checkAuthentication");
 const request = require("../postgres/entities/CommunicationRequest");
 const router = new Router();
 
-router.get("/communication_request", async (req, res) => {
+router.get("/communication_request", checkAuthentication, async (req, res) => {
     try {
         const result = await request.findAll();
         res.json(result);
@@ -33,7 +33,7 @@ router.post("/communication_request", async (req, res) => {
 }
 );
 
-router.get("/communication_request/:id", async (req, res) => {
+router.get("/communication_request/:id", checkAuthentication, async (req, res) => {
     try {
         const result = await request.findByPk(req.params.id);
         if (result) {
@@ -49,7 +49,7 @@ router.get("/communication_request/:id", async (req, res) => {
     }
 });
 
-router.patch("/communication_request/:id", async (req, res) => {
+router.patch("/communication_request/:id", checkAuthentication, async (req, res) => {
     try {
         const result = await request.update(req.body, {
             where: { id: req.params.id },
@@ -67,7 +67,7 @@ router.patch("/communication_request/:id", async (req, res) => {
     }
 });
 
-router.delete("/communication_request/:id", async (req, res) => {
+router.delete("/communication_request/:id", checkAuthentication, async (req, res) => {
     try {
         const result = await request.destroy({
             where: { id: req.params.id },
