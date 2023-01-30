@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require("sequelize");
-
 const connection = require("../db");
 
 class Conversation extends Model {}

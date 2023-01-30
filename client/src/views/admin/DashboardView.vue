@@ -6,6 +6,7 @@ import UserLogic from "../../logics/UserLogic";
 import LocalStorage from "../../services/LocalStorage";
 import CommunicationRequestLogic from "../../logics/CommunicationRequestLogic";
 import moment from "moment";
+import NotificationForm from "../../components/admin/NotificationForm.vue";
 
 const users = inject("ProviderUsers");
 const conversationsStore = useConversationStore();
@@ -335,6 +336,19 @@ const changeStatus = () => {
 									</tr>
 								</tbody>
 							</table>
+						</div>
+					</div>
+				</div>
+				
+				<div class="w-full md:w-1/2 p-3">
+					<div class="bg-white border rounded shadow">
+						<div class="border-b p-3 flex justify-between">
+							<div>
+								<h5 class="font-bold uppercase text-gray-600">Créer une notification commerciale</h5>
+							</div>
+						</div>
+						<div class="p-5">
+							<NotificationForm />
 						</div>
 					</div>
 				</div>
