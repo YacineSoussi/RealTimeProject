@@ -326,6 +326,7 @@ function initHelpChoices() {
 	for (let i = 0; i < initialHelpChoices.length; i++) {
 		const button = document.createElement("button");
 
+		button.style.height = "40px";
 		button.classList.add("bg-violet-500");
 		button.classList.add("hover:bg-violet-700");
 		button.classList.add("text-white");
@@ -468,6 +469,7 @@ function displayDisponibilities(data) {
 	for (let i = 0; i < data.length; i++) {
 		const button = document.createElement("button");
 
+		button.style.height = "40px";
 		button.classList.add("bg-violet-500");
 		button.classList.add("hover:bg-violet-700");
 		button.classList.add("text-white");
