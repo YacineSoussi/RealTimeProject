@@ -437,7 +437,7 @@ function setDisponibilitiesForCurrentWeek() {
 		// Wait 1.5 seconds to display the disponibilities for the next week
 		// 1.5 seconds is defined in the setQuestion method
 		setTimeout(() => {
-			displayDisponibilities(datesForNextWeek);
+			displayDatesDisponibilities(datesForNextWeek);
 		}, 1500);
 	}
 
@@ -448,16 +448,16 @@ function setDisponibilitiesForCurrentWeek() {
 		// Wait 1.5 seconds to display the disponibilities for the next week
 		// 1.5 seconds is defined in the setQuestion method
 		setTimeout(() => {
-			displayDisponibilities(datesForCurrentWeek);
+			displayDatesDisponibilities(datesForCurrentWeek);
 		}, 1500);
 	}
 }
 
 /**
- * Display disponibilities on the chat
+ * Display date disponibilities on the chat
  * @param { Array } data The disponibilities to display
  */
-function displayDisponibilities(data) {
+function displayDatesDisponibilities(data) {
 	const chat = document.getElementById("chat");
 	const div = document.createElement("div");
 
