@@ -4,6 +4,8 @@ import { useConversationStore } from "../../stores/ConversationStore";
 import RoomCard from "../../components/admin/RoomCard.vue";
 import UserLogic from "../../logics/UserLogic";
 import LocalStorage from "../../services/LocalStorage";
+import CommunicationRequestLogic from "../../logics/CommunicationRequestLogic";
+import moment from "moment";
 
 const users = inject("ProviderUsers");
 const conversationsStore = useConversationStore();
@@ -12,6 +14,7 @@ const isEditing = ref(false);
 const current_room = ref(null);
 const updateUserStatus = inject("ProviderUpdateUser");
 const User = LocalStorage.get("user");
+const requestsPending = ref([]);
 
 const changeIsEditing = () => (isEditing.value = !isEditing.value);
 
@@ -46,23 +49,45 @@ const onClickAddRoom = () => {
 	changeIsEditing();
 };
 
-const me = ref(null);
-const status = ref(null);
+const getRequestsPending = async () => {
+	const requests = await CommunicationRequestLogic.getCommunicationRequests();
+	requestsPending.value = requests.filter((r) => r.status === "pending");
+};
 
-onMounted(() => {
+const onClickAcceptRequest = async (id) => {
+	await CommunicationRequestLogic.updateCommunicationRequest(id, {
+		status: "accepted",
+	});
+	await getRequestsPending();
+};
+
+const onClickRejectRequest = async (id) => {
+	await CommunicationRequestLogic.updateCommunicationRequest(id, {
+		status: "rejected",
+	});
+	await getRequestsPending();
+};
+
+
+onMounted(async () => {
 	UserLogic.getUsers().then(
 		(data) => (users.value = data.filter((u) => u.id !== User.id))
-	);
-
-	UserLogic.getUser(User.id).then((data) => {
-		me.value = data;
-		status.value = data.status;
+		);
+		
+		UserLogic.getUser(User.id).then((data) => {
+			me.value = data;
+			status.value = data.status;
+		});
+		
+		await getRequestsPending();
 	});
-});
+	
+	const me = ref(null);
+	const status = ref(null);
 
-const colorStatus = computed(() => {
-	if (status.value === 1) {
-		updateUserStatus(me.value.id, { status: 1 });
+	const colorStatus = computed(() => {
+		if (status.value === 1) {
+			updateUserStatus(me.value.id, { status: 1 });
 		return "bg-green-500";
 	}
 
@@ -73,6 +98,11 @@ const colorStatus = computed(() => {
 
 	return "bg-yellow-500";
 });
+const fullName = (id) => {
+	const user = users.value.find((u) => u.id === id);
+
+	return user ? user.firstName + " " + user.lastName : "";
+};
 
 const changeStatus = () => {
 	if (status.value === 1) {
@@ -81,6 +111,7 @@ const changeStatus = () => {
 		status.value = 1;
 	}
 };
+
 </script>
 
 <template>
@@ -119,7 +150,7 @@ const changeStatus = () => {
 									Communications en attente
 								</h5>
 								<h3 class="font-bold text-3xl">
-									$3249
+									{{requestsPending ? requestsPending.length : 0}}
 									<span class="text-green-500"
 										><i class="fas fa-caret-up"></i
 									></span>
@@ -255,7 +286,58 @@ const changeStatus = () => {
 						</div>
 					</div>
 				</div>
+				<div class="w-full md:w-1/2 p-3">
+					<div class="bg-white border rounded shadow">
+						<div class="border-b p-3 flex justify-between">
+							<div>
+								<h5 class="font-bold uppercase text-gray-600">Demande de communication</h5>
+							</div>
+							<div>
+								<font-awesome-icon
+									icon="circle-plus"
+									style="cursor: pointer"
+									@click="onClickAddRoom"
+								/>
+							</div>
+						</div>
+						<div class="p-5">
+							<table class="w-full p-5 text-gray-700">
+								<thead>
+									<tr>
+										<th class="text-left text-blue-900">Utilisateur</th>
+										<th class="text-left text-blue-900">Date</th>
+										
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="request in requestsPending" :key="requestsPending.id">
+										<td>{{ fullName(request.clientId)}}</td>
+										<td>{{ moment(request.createdAt).startOf('minute').fromNow() }}</td>
+										
+										<td>
+											<font-awesome-icon
+												icon="check"
+												style="color: blue; cursor: pointer"
+												@click="onClickAcceptRequest(request.id)"
+											/>
+											<font-awesome-icon
+												icon="xmark"
+												style="
+													color: #d71a1a;
+													margin-left: 5px;
+													cursor: pointer;
+												"
+												@click="onClickRejectRequest(request.id)"
+											/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div>
+			
 		</div>
 	</div>
 </template>

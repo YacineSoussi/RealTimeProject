@@ -1,21 +1,84 @@
 <script setup>
-import { ref } from "vue";
+import { ref, inject, onMounted } from "vue";
+import CommunicationRequestLogic from "../logics/CommunicationRequestLogic";
+import LocalStorage from "../services/LocalStorage";
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
+const users = inject("ProviderUsers");
 const message = ref("");
+const isjoignable = ref(false);
 const submitRequest = () => {
-	console.log(message.value);
+	try {
+		CommunicationRequestLogic.createCommunicationRequest({
+		message: message.value,
+		clientId: LocalStorage.get("user").id,
+		status: "pending",
+	}).then(() => {
+			message.value = "";
+			createToast("Votre demande a bien été envoyée", {
+				type: 'success',
+				position: 'top-right',
+				timeout: 3000,
+				dismissible: true,
+				pauseOnFocusLoss: true,
+				pauseOnHover: true,
+				draggable: true,
+				draggablePercent: 0.6,
+				showCloseButtonOnHover: false,
+				hideProgressBar: false,
+				closeButton: 'button',
+				icon: true,
+				rtl: false,
+			});
+		
+		});
+		
+	} catch (error) {
+		createToast("Une erreur est survenue", {
+			type: 'error',
+			position: 'top-right',
+			timeout: 3000,
+			dismissible: true,
+			pauseOnFocusLoss: true,
+			pauseOnHover: true,
+			draggable: true,
+			draggablePercent: 0.6,
+			showCloseButtonOnHover: false,
+			hideProgressBar: false,
+			closeButton: 'button',
+			icon: true,
+			rtl: false,
+		});
+		return;
 };
+};
+
+onMounted(async () => {
+	// if one of the users status is 1, the user is joignable
+	users.value.forEach((user) => {
+		if (user.status === 1) {
+			isjoignable.value = true;
+		}
+	});
+
+});
+
 </script>
 
 <template>
 	<div>
-		<form @submit.prevent="submitRequest">
+		<h1 style="text-align: center; margin-top: 30px;">Contacter un conseiller de vente </h1>
+		<form v-if="isjoignable" @submit.prevent="submitRequest">
 			<label>
 				Message :
 				<textarea v-model="message"></textarea>
 			</label>
 			<button type="submit">Envoyer la demande</button>
 		</form>
+		<div v-else>
+			<p style="text-align: center; margin-top: 30px;">Aucun conseiller de vente n'est joignable pour le moment</p>
+		</div>
 	</div>
 </template>
 
