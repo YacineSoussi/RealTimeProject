@@ -1,11 +1,9 @@
 <script setup>
-import HeaderVue from './components/partials/Header.vue';
+import HeaderVue from "./components/partials/Header.vue";
 </script>
 
 <template>
-<HeaderVue />
+	<HeaderVue />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
