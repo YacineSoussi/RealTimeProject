@@ -13,7 +13,6 @@ const ProviderCheckUserInConversation = inject(
 );
 const ProviderPostParticipant = inject("ProviderPostParticipant");
 const ProviderUser = inject("ProviderUser");
-
 const joinRoom = (conversationId) => {
 	const body = { conversationId, userId: ProviderUser.id };
 	ProviderPostParticipant(body);
