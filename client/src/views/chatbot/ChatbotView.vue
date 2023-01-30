@@ -654,9 +654,6 @@ function manageFirstChoiceOfSelection(message) {
 			}
 		}
 	}
-
-	console.log("deepResponse.value FINAL >>>", deepResponse.value);
-	console.log("questionsAnswered.value FINAL >>>", questionsAnswered.value);
 }
 
 /**
