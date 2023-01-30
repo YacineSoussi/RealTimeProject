@@ -66,6 +66,9 @@ const data = {
 				question:
 					"Donnez moi le nombre de kilomètres parcourus depuis votre dernier entretien",
 			},
+			{
+				question: "Souhaitez-vous une révision de votre véhicule ?",
+			},
 		],
 	},
 	response2: {
@@ -132,8 +135,9 @@ onMounted(() => {
 /**
  * Set the user message
  * @param { string } message The message to send to the chatbot
+ * @param { boolean } force Force the message to be sent
  */
-function setUserMessage(message) {
+function setUserMessage(message, force = true) {
 	if (message && message !== "") {
 		const li = document.createElement("li");
 		const div = document.createElement("div");
@@ -162,7 +166,9 @@ function setUserMessage(message) {
 	}
 
 	if (data.response1.question === initialChoice.value) {
-		manageFirstChoiceOfSelection(message);
+		if (force) {
+			manageFirstChoiceOfSelection(message);
+		}
 	} else if (message === data.response2.question) {
 		// TODO
 	} else if (message === data.response3.question) {
@@ -580,6 +586,7 @@ function manageFirstChoiceOfSelection(message) {
 			setTimeout(() => {
 				document.getElementById("message").setAttribute("disabled", true);
 			}, 1500);
+
 			deepResponse.value++;
 		}
 
@@ -594,7 +601,7 @@ function manageFirstChoiceOfSelection(message) {
 	// 3 questions of first choice selected are asked and validated
 	if (
 		questionsAnswered.value.length === 2 &&
-		(deepResponse.value === 4 || deepResponse.value === 5)
+		(deepResponse.value === 3 || deepResponse.value === 4)
 	) {
 		const numberRegex = /^[0-9]+$/;
 
@@ -602,14 +609,11 @@ function manageFirstChoiceOfSelection(message) {
 			deepResponse.value++;
 		} else {
 			if (numberRegex.test(message)) {
-				// To have 3 questions asked and
-				// For setDisponibilitiesForCurrentWeek method also
-				deepResponse.value -= 2;
-				setAnswer(message);
-				setAnswered();
-
 				// --- CASE : If the number of kilometers is greater or equal to 10000 --- //
 				if (message >= 10000) {
+					deepResponse.value -= 3;
+					setAnswer(message);
+					setAnswered();
 					setDisponibilitiesForCurrentWeek();
 					deepResponse.value++;
 				}
@@ -619,7 +623,8 @@ function manageFirstChoiceOfSelection(message) {
 					// TODO ...
 				}
 			} else {
-				setChatBotMessage("Veuillez rentrer un nombre de kilomètres valide");
+				document.getElementById("message").setAttribute("disabled", true);
+				setChatBotMessage("Veuillez entrer un nombre de kilomètres valide");
 			}
 		}
 	}
@@ -632,7 +637,9 @@ function manageFirstChoiceOfSelection(message) {
  */
 function handleSelectedDateForFirstChoice(date) {
 	document.getElementById("dates-for-current-or-next-week").remove();
-	setUserMessage(date);
+	document.getElementById("message").setAttribute("disabled", true);
+
+	setUserMessage(date, false);
 	setAnswer(date);
 	setAnswered();
 	// TODO registry date selected in the database
@@ -640,7 +647,6 @@ function handleSelectedDateForFirstChoice(date) {
 	setChatBotContent("Fin de la conversation");
 	setChatBotContent("Le workflow va être réinitialisé dans 5 secondes");
 
-	// Timer is the default in all chatbot
 	setTimeout(() => {
 		resetWorkflow();
 	}, 5000);
