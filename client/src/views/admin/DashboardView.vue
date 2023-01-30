@@ -306,6 +306,7 @@ const changeStatus = () => {
 									<tr>
 										<th class="text-left text-blue-900">Utilisateur</th>
 										<th class="text-left text-blue-900">Date</th>
+										<th class="text-left text-blue-900">Message</th>
 										
 									</tr>
 								</thead>
@@ -313,6 +314,7 @@ const changeStatus = () => {
 									<tr v-for="request in requestsPending" :key="requestsPending.id">
 										<td>{{ fullName(request.clientId)}}</td>
 										<td>{{ moment(request.createdAt).startOf('minute').fromNow() }}</td>
+										<td>{{ request.message.substring(0, 30) }}...</td>
 										
 										<td>
 											<font-awesome-icon
