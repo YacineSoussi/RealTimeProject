@@ -10,7 +10,7 @@ Platform with instant exchange system with its customers.
 
 **Others:** Docker
 
-## Project Installation
+## Project installation
 
 Clone the project
 
@@ -64,7 +64,7 @@ Go to the project directory
   docker compose down --remove-orphans --volumes --timeout 0
 ```
 
-## Project Url
+## Project access
 
 ⏳ http://localhost:3001/ ⏳
 
