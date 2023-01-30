@@ -1,34 +1,19 @@
 <script setup>
 import { ref, onMounted, inject, computed } from "vue";
+import { useConversationStore } from "../../stores/ConversationStore";
 import RoomCard from "../../components/admin/RoomCard.vue";
 import UserLogic from "../../logics/UserLogic";
 import LocalStorage from "../../services/LocalStorage";
-import ConversationLogic from "../../logics/ConversationLogic";
-import { useConversationStore } from "../../stores/ConversationStore";
 
 const users = inject("ProviderUsers");
 const conversationsStore = useConversationStore();
 const rooms = computed(() => conversationsStore.getterRooms);
-const updateRoom = inject("ProviderUpdateConversation");
-const deleteRoom = inject("ProviderDeleteConversation");
 const isEditing = ref(false);
 const current_room = ref(null);
 const updateUserStatus = inject("ProviderUpdateUser");
 const User = LocalStorage.get("user");
 
-const changeIsEditing = () => {
-	isEditing.value = !isEditing.value;
-};
-
-const createRoom = (form) => {
-	return ConversationLogic.createRoom({ ...form, type: "room" }).then(
-		(data) => {
-			conversations.value.push(data);
-			selectedConversationId.value = data.id;
-			return data;
-		}
-	);
-};
+const changeIsEditing = () => (isEditing.value = !isEditing.value);
 
 const fetchAddRoom = async (room) => {
 	await conversationsStore.createRoom(room);
@@ -50,17 +35,14 @@ const fetchUpdateRoom = async (room, id) => {
 			if (r.id === result.id) {
 				return result;
 			}
+
 			return r;
 		});
 	});
 };
 
-// Au click de l'icon d'ajout de room
-const onAddRoom = () => {
-	current_room.value = {
-		name: "",
-		maxParticipants: 0,
-	};
+const onClickAddRoom = () => {
+	current_room.value = { name: "", maxParticipants: 0 };
 	changeIsEditing();
 };
 
@@ -68,9 +50,10 @@ const me = ref(null);
 const status = ref(null);
 
 onMounted(() => {
-	UserLogic.getUsers().then((data) => {
-		users.value = data.filter((u) => u.id !== User.id);
-	});
+	UserLogic.getUsers().then(
+		(data) => (users.value = data.filter((u) => u.id !== User.id))
+	);
+
 	UserLogic.getUser(User.id).then((data) => {
 		me.value = data;
 		status.value = data.status;
@@ -82,10 +65,12 @@ const colorStatus = computed(() => {
 		updateUserStatus(me.value.id, { status: 1 });
 		return "bg-green-500";
 	}
+
 	if (status.value === 0) {
 		updateUserStatus(me.value.id, { status: 0 });
 		return "bg-red-500";
 	}
+
 	return "bg-yellow-500";
 });
 
@@ -96,14 +81,6 @@ const changeStatus = () => {
 		status.value = 1;
 	}
 };
-
-// watchEffect(async () => {
-//    await conversationsStore.getConversations().then((result) => {
-//         conversationsStore.rooms = result;
-//         rooms.value = conversationsStore.rooms;
-//     });
-
-// });
 </script>
 
 <template>
@@ -119,7 +96,7 @@ const changeStatus = () => {
 					</button>
 				</div>
 				<div>
-					<span> Disponibilité pour les clients </span>
+					<span>Disponibilité pour les clients</span>
 					<span
 						:class="colorStatus"
 						class="ml-3 rounded-full w-3 h-3 inline-block"
@@ -127,13 +104,9 @@ const changeStatus = () => {
 				</div>
 			</div>
 		</div>
-
 		<div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
-			<!--Console Content-->
-
 			<div class="flex flex-wrap">
 				<div class="w-full md:w-1/2 xl:w-1/3 p-3">
-					<!--Metric Card-->
 					<div class="bg-white border rounded shadow p-2">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
@@ -156,7 +129,6 @@ const changeStatus = () => {
 					</div>
 				</div>
 				<div class="w-full md:w-1/2 xl:w-1/3 p-3">
-					<!--Metric Card-->
 					<div class="bg-white border rounded shadow p-2">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
@@ -165,7 +137,9 @@ const changeStatus = () => {
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
-								<h5 class="font-bold uppercase text-gray-500">Total Users</h5>
+								<h5 class="font-bold uppercase text-gray-500">
+									Nombre d'utilisateur(s)
+								</h5>
 								<h3 class="font-bold text-3xl">
 									{{ users ? users.length : null }}
 									<span class="text-pink-500"
@@ -177,7 +151,6 @@ const changeStatus = () => {
 					</div>
 				</div>
 				<div class="w-full md:w-1/2 xl:w-1/3 p-3">
-					<!--Metric Card-->
 					<div class="bg-white border rounded shadow p-2">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
@@ -186,7 +159,9 @@ const changeStatus = () => {
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
-								<h5 class="font-bold uppercase text-gray-500">Total rooms</h5>
+								<h5 class="font-bold uppercase text-gray-500">
+									Nombre de salon(s)
+								</h5>
 								<h3 class="font-bold text-3xl">
 									{{ rooms ? rooms.length : null }}
 									<span class="text-yellow-600"
@@ -198,10 +173,7 @@ const changeStatus = () => {
 					</div>
 				</div>
 			</div>
-
-			<!--Divider-->
 			<hr class="border-b-2 border-gray-400 my-8 mx-4" />
-
 			<div class="flex flex-row flex-wrap flex-grow mt-2">
 				<div class="w-full md:w-1/2 p-3">
 					<RoomCard
@@ -213,14 +185,14 @@ const changeStatus = () => {
 					/>
 					<div v-else class="bg-white border rounded shadow">
 						<div class="border-b p-3">
-							<h5 class="font-bold uppercase text-gray-600">Users</h5>
+							<h5 class="font-bold uppercase text-gray-600">Utilisateurs</h5>
 						</div>
 						<div class="p-5">
 							<table class="w-full p-5 text-gray-700">
 								<thead>
 									<tr>
 										<th class="text-left text-blue-900">Nom</th>
-										<th class="text-left text-blue-900">Email</th>
+										<th class="text-left text-blue-900">Adresse mail</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -233,18 +205,17 @@ const changeStatus = () => {
 						</div>
 					</div>
 				</div>
-
 				<div class="w-full md:w-1/2 p-3">
 					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
-								<h5 class="font-bold uppercase text-gray-600">Rooms</h5>
+								<h5 class="font-bold uppercase text-gray-600">Salons</h5>
 							</div>
 							<div>
 								<font-awesome-icon
 									icon="circle-plus"
 									style="cursor: pointer"
-									@click="onAddRoom"
+									@click="onClickAddRoom"
 								/>
 							</div>
 						</div>
@@ -284,87 +255,6 @@ const changeStatus = () => {
 						</div>
 					</div>
 				</div>
-
-				<!-- <div class="w-full md:w-1/2 xl:w-1/3 p-3">
-
-            <div class="bg-white border rounded shadow">
-                <div class="border-b p-3">
-                    <h5 class="font-bold uppercase text-gray-600">Graph</h5>
-                </div>
-                <div class="p-5">
-                    <canvas id="chartjs-1" class="chartjs" width="undefined" height="undefined"></canvas>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="w-full md:w-1/2 xl:w-1/3 p-3">
-
-            <div class="bg-white border rounded shadow">
-                <div class="border-b p-3">
-                    <h5 class="font-bold uppercase text-gray-600">Graph</h5>
-                </div>
-                <div class="p-5"><canvas id="chartjs-4" class="chartjs" width="undefined" height="undefined"></canvas>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="w-full md:w-1/2 xl:w-1/3 p-3">
-
-            <div class="bg-white border rounded shadow">
-                <div class="border-b p-3">
-                    <h5 class="font-bold uppercase text-gray-600">Template</h5>
-                </div>
-                <div class="p-5">
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="w-full p-3">
-            <div class="bg-white border rounded shadow">
-                <div class="border-b p-3">
-                    <h5 class="font-bold uppercase text-gray-600">Table</h5>
-                </div>
-                <div class="p-5">
-                    <table class="w-full p-5 text-gray-700">
-                        <thead>
-                            <tr>
-                                <th class="text-left text-blue-900">Name</th>
-                                <th class="text-left text-blue-900">Side</th>
-                                <th class="text-left text-blue-900">Role</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>Obi Wan Kenobi</td>
-                                <td>Light</td>
-                                <td>Jedi</td>
-                            </tr>
-                            <tr>
-                                <td>Greedo</td>
-                                <td>South</td>
-                                <td>Scumbag</td>
-                            </tr>
-                            <tr>
-                                <td>Darth Vader</td>
-                                <td>Dark</td>
-                                <td>Sith</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <p class="py-2"><a href="#">See More issues...</a></p>
-
-                </div>
-            </div>
-
-        </div> -->
 			</div>
 		</div>
 	</div>
