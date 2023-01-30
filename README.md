@@ -1,6 +1,6 @@
 # Web application RealTimeProject
 
-Social network imitation of twitter.
+Platform with instant exchange system with its customers.
 
 ## Tech Stack
 
