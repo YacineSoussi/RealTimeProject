@@ -58,6 +58,14 @@ const data = {
 			{
 				question: "Quel est la date du dernier entretien de la moto ?",
 			},
+			{
+				question:
+					"Quel date vous conviendrait le mieux pour l'entretien de la moto ?",
+			},
+			{
+				question:
+					"Donnez moi le nombre de kilomètres parcourus depuis votre dernier entretien",
+			},
 		],
 	},
 	response2: {
@@ -113,6 +121,7 @@ onMounted(() => {
 
 		initChatBotWelcomeMessage();
 	});
+
 	document.getElementById("message").addEventListener("keyup", function (e) {
 		if (e && e.key === "Enter" && e.target.value !== "") {
 			setUserMessage(e.target.value);
@@ -393,16 +402,22 @@ function setDisponibilitiesForCurrentWeek() {
 		setChatBotContent(
 			"Il n'y a pas de disponibilités pour la semaine en cours"
 		);
-		setChatBotContent(
-			"Quel date vous conviendrait le mieux pour l'entretien de la moto ?"
-		);
-		displayDisponibilities(datesForNextWeek);
+		setQuestion();
+
+		// Wait 1.5 seconds to display the disponibilities for the next week
+		// 1.5 seconds is defined in the setQuestion method
+		setTimeout(() => {
+			displayDisponibilities(datesForNextWeek);
+		}, 1500);
 	} else {
 		// CASE 2 : There are disponibilities for the current week
-		setChatBotContent(
-			"Quel date vous conviendrait le mieux pour l'entretien de la moto ?"
-		);
-		displayDisponibilities(datesForCurrentWeek);
+		setQuestion();
+
+		// Wait 1.5 seconds to display the disponibilities for the next week
+		// 1.5 seconds is defined in the setQuestion method
+		setTimeout(() => {
+			displayDisponibilities(datesForCurrentWeek);
+		}, 1500);
 	}
 }
 
@@ -496,7 +511,7 @@ function getDatesOfNextWeek() {
 		weekFormatted.push(`${daySplit[2]}/${daySplit[1]}/${daySplit[0]}`);
 	});
 
-	return week;
+	return weekFormatted;
 }
 
 /**
@@ -554,10 +569,43 @@ function manageFirstChoiceOfSelection(message) {
 
 		// --- CASE : If date if less than 1 year --- //
 		if (years < 1) {
-			// TODO
+			deepResponse.value++;
+			setQuestion();
+			setAnswer(message);
 		}
+	}
 
-		deepResponse.value++;
+	// 3 questions of first choice selected are asked and validated
+	if (
+		questionsAnswered.value.length === 2 &&
+		(deepResponse.value === 3 || deepResponse.value === 4)
+	) {
+		const numberRegex = /^[0-9]+$/;
+
+		if (deepResponse.value === 3) {
+			deepResponse.value++;
+		} else {
+			if (numberRegex.test(message)) {
+				// To have 3 questions asked and
+				// For setDisponibilitiesForCurrentWeek method also
+				deepResponse.value -= 2;
+				setAnswer(message);
+				setAnswered();
+
+				// --- CASE : If the number of kilometers is greater or equal to 10000 --- //
+				if (message >= 10000) {
+					setDisponibilitiesForCurrentWeek();
+					deepResponse.value++;
+				}
+
+				// --- CASE : If the number of kilometers is less than 10000 --- //
+				if (message < 10000) {
+					// TODO ...
+				}
+			} else {
+				setChatBotMessage("Veuillez rentrer un nombre de kilomètres valide");
+			}
+		}
 	}
 }
 
@@ -569,9 +617,12 @@ function manageFirstChoiceOfSelection(message) {
 function handleSelectedDateForFirstChoice(date) {
 	document.getElementById("dates-for-current-or-next-week").remove();
 	setUserMessage(date);
+	setAnswer(date);
+	setAnswered();
 	// TODO registry date selected in the database
 	setChatBotContent("Votre rendez-vous a bien été pris en compte");
 	setChatBotContent("Fin de la conversation");
+	document.getElementById("message").setAttribute("disabled", true);
 }
 </script>
 
