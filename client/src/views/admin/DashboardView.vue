@@ -17,6 +17,7 @@ const updateUserStatus = inject("ProviderUpdateUser");
 const User = LocalStorage.get("user");
 const requestsPending = ref([]);
 
+
 const changeIsEditing = () => (isEditing.value = !isEditing.value);
 
 const fetchAddRoom = async (room) => {
@@ -39,7 +40,6 @@ const fetchUpdateRoom = async (room, id) => {
 			if (r.id === result.id) {
 				return result;
 			}
-
 			return r;
 		});
 	});
@@ -58,6 +58,9 @@ const getRequestsPending = async () => {
 const onClickAcceptRequest = async (id) => {
 	await CommunicationRequestLogic.updateCommunicationRequest(id, {
 		status: "accepted",
+	});
+	await UserLogic.updateUser(User.id, { status: 0 }).then(() => {
+		changeStatus();
 	});
 	await getRequestsPending();
 };
