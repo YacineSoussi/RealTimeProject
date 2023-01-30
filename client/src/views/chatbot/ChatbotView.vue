@@ -620,7 +620,10 @@ function manageFirstChoiceOfSelection(message) {
 
 				// --- CASE : If the number of kilometers is less than 10000 --- //
 				if (message < 10000) {
-					// TODO ...
+					setAnswer(message);
+					setAnswered();
+					deepResponse.value--;
+					setQuestion();
 				}
 			} else {
 				document.getElementById("message").setAttribute("disabled", true);
@@ -628,6 +631,32 @@ function manageFirstChoiceOfSelection(message) {
 			}
 		}
 	}
+
+	// 4 questions of first choice selected are asked and validated
+	if (
+		questionsAnswered.value.length === 3 &&
+		(deepResponse.value === 4 || deepResponse.value === 5)
+	) {
+		if (deepResponse.value === 4) {
+			deepResponse.value++;
+		} else {
+			// --- CASE : Client accept revision of the vehicle --- //
+			if (message.toLowerCase() === "oui") {
+				document.getElementById("message").setAttribute("disabled", true);
+				deepResponse.value -= 4;
+				setAnswer(message);
+				setAnswered();
+				setDisponibilitiesForCurrentWeek();
+			} else if (message.toLowerCase() === "non") {
+				resetConversation();
+			} else {
+				setChatBotMessage("Veuillez répondre oui ou non");
+			}
+		}
+	}
+
+	console.log("deepResponse.value FINAL >>>", deepResponse.value);
+	console.log("questionsAnswered.value FINAL >>>", questionsAnswered.value);
 }
 
 /**
@@ -644,9 +673,15 @@ function handleSelectedDateForFirstChoice(date) {
 	setAnswered();
 	// TODO registry date selected in the database
 	setChatBotContent("Votre rendez-vous a bien été pris en compte");
-	setChatBotContent("Fin de la conversation");
-	setChatBotContent("Le workflow va être réinitialisé dans 5 secondes");
+	resetConversation();
+}
 
+/**
+ * Reset the conversation of the chatbot
+ */
+function resetConversation() {
+	setChatBotContent("Fin de la conversation");
+	setChatBotContent("Le workflow va redémarré dans 5 secondes");
 	setTimeout(() => {
 		resetWorkflow();
 	}, 5000);
