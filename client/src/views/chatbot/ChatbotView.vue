@@ -40,8 +40,6 @@ import { onMounted, ref, reactive } from "vue";
 import socket from "../../services/socket";
 import LocalStorage from "../../services/LocalStorage";
 
-// ------------------ INITIALIZATION VARIABLES ------------------ //
-
 const initialHelpChoices = [
 	"Vérifier l'entretien de mon véhicule",
 	"Informations sur les véhicules",
@@ -76,6 +74,18 @@ const data = {
 		choices: [
 			{
 				question: "Quel est le type d'usage de votre véhicule ?",
+			},
+			{
+				question:
+					"Quel date vous conviendrait le mieux pour un essai routier ?",
+			},
+			{
+				question:
+					"Quel date vous conviendrait le mieux pour un essai tout-terrain ?",
+			},
+			{
+				question:
+					"Quel date vous conviendrait le mieux pour un essai sur piste ?",
 			},
 		],
 	},
@@ -164,32 +174,35 @@ function setUserMessage(message, force = true) {
 		document.getElementById("chat").appendChild(li);
 		document.getElementById("message").value = "";
 	}
-
-	console.log("data", data.response2.question);
-	console.log("initialChoice", initialChoice.value);
-
 	if (data.response1.question === initialChoice.value) {
 		if (force) {
 			manageFirstChoiceOfSelection(message);
 		}
 	} else if (data.response2.question === initialChoice.value) {
-		manageSecondChoiceOfSelection(message);
+		if (force) {
+			manageSecondChoiceOfSelection(message);
+		}
 	} else if (data.response3.question === initialChoice.value) {
-		manageThirdChoiceOfSelection(message);
+		// TODO work without force ?
+		// manageThirdChoiceOfSelection(message);
 	} else if (data.response4.question === initialChoice.value) {
 		manageFourthChoiceOfSelection(message);
 	} else {
-		throw new Error("Choice selected not managed, contact the administrator");
+		throw new Error("Choice not managed");
 	}
 }
 
 /**
  * Manage the second choice of the selection
  * PS: Informations sur les véhicules
- * @param { string } message The message of the user
  */
-function manageSecondChoiceOfSelection(message) {
-	console.log("manageSecondChoiceOfSelection", message); // TODO remove ...
+function manageSecondChoiceOfSelection() {
+	setQuestion();
+	setTimeout(() => {
+		document.getElementById("message").setAttribute("disabled", true);
+		displayTypesOfUseCase();
+	}, 1500);
+	deepResponse.value++;
 }
 
 /**
@@ -197,9 +210,7 @@ function manageSecondChoiceOfSelection(message) {
  * PS: Informations de contact
  * @param { string } message The message of the user
  */
-function manageThirdChoiceOfSelection(message) {
-	console.log("manageThirdChoiceOfSelection", message); // TODO remove ...
-}
+function manageThirdChoiceOfSelection(message) {}
 
 /**
  * Manage the fourth choice of the selection
@@ -213,13 +224,25 @@ function manageFourthChoiceOfSelection() {
 }
 
 /**
- * Set the question
+ * Set the question according to user choice
  */
 function setQuestion() {
 	if (questionPending.question === "") {
-		questionPending.question =
-			data.response1.choices[deepResponse.value].question;
-		setChatBotMessage(data.response1.choices[deepResponse.value].question);
+		if (initialChoice.value === data.response1.question) {
+			questionPending.question =
+				data.response1.choices[deepResponse.value].question;
+			setChatBotMessage(data.response1.choices[deepResponse.value].question);
+		} else if (initialChoice.value === data.response2.question) {
+			questionPending.question =
+				data.response2.choices[deepResponse.value].question;
+			setChatBotMessage(data.response2.choices[deepResponse.value].question);
+		} else if (initialChoice.value === data.response3.question) {
+			questionPending.question =
+				data.response3.choices[deepResponse.value].question;
+			setChatBotMessage(data.response3.choices[deepResponse.value].question);
+		} else {
+			throw new Error("Question not managed");
+		}
 	}
 }
 
@@ -390,8 +413,6 @@ function handleSelectHelpChoice(choice) {
 	setUserMessage(choice);
 }
 
-// ------------------ METHODS FOR FIRST CHOICE ------------------ //
-
 /**
  * Get the number of years between a date and now
  * @param { Date } date The date to calculate the years
@@ -417,10 +438,10 @@ function getDateConvertedToGoodFormat(date) {
 }
 
 /**
- * Set disponibilities for the current week
+ * Set disponibilities of week
  * PS: This is just an example waiting for the API
  */
-function setDisponibilitiesForCurrentWeek() {
+function setDisponibilitiesOfWeek() {
 	const datesForCurrentWeek = getDatesOfCurrentWeek(); // First case
 	// const datesForCurrentWeek = []; // Second case
 
@@ -481,9 +502,44 @@ function displayDatesDisponibilities(data) {
 		button.classList.add("mt-4");
 		button.classList.add("mb-4");
 		button.innerText = data[i];
-		button.addEventListener("click", () =>
-			handleSelectedDateForFirstChoice(data[i])
-		);
+		button.addEventListener("click", () => handleSelectedDate(data[i]));
+
+		div.appendChild(button);
+	}
+
+	chat.appendChild(div);
+}
+
+/**
+ * Display types of use case on the chat
+ */
+function displayTypesOfUseCase() {
+	const chat = document.getElementById("chat");
+	const div = document.createElement("div");
+
+	div.classList.add("flex");
+	div.classList.add("items-center");
+	div.classList.add("space-x-2");
+	div.id = "type-of-use-case";
+
+	const data = ["Routier", "Tout-terrain", "Sportif"];
+
+	for (let i = 0; i < data.length; i++) {
+		const button = document.createElement("button");
+
+		button.style.height = "40px";
+		button.classList.add("bg-violet-500");
+		button.classList.add("hover:bg-violet-700");
+		button.classList.add("text-white");
+		button.classList.add("px-4");
+		button.classList.add("rounded");
+		button.classList.add("shadow");
+		button.classList.add("dark:bg-violet-400");
+		button.classList.add("dark:hover:bg-violet-600");
+		button.classList.add("mt-4");
+		button.classList.add("mb-4");
+		button.innerText = data[i];
+		button.addEventListener("click", () => handleSelectedUseCaseType(data[i]));
 
 		div.appendChild(button);
 	}
@@ -597,7 +653,7 @@ function manageFirstChoiceOfSelection(message) {
 
 		// --- CASE : If date if greater than 1 year --- //
 		if (years > 1) {
-			setDisponibilitiesForCurrentWeek();
+			setDisponibilitiesOfWeek();
 
 			// Timer is the default in the chatbot
 			setTimeout(() => {
@@ -631,7 +687,7 @@ function manageFirstChoiceOfSelection(message) {
 					deepResponse.value -= 3;
 					setAnswer(message);
 					setAnswered();
-					setDisponibilitiesForCurrentWeek();
+					setDisponibilitiesOfWeek();
 					deepResponse.value++;
 				}
 
@@ -663,7 +719,7 @@ function manageFirstChoiceOfSelection(message) {
 				deepResponse.value -= 4;
 				setAnswer(message);
 				setAnswered();
-				setDisponibilitiesForCurrentWeek();
+				setDisponibilitiesOfWeek();
 			} else if (message.toLowerCase() === "non") {
 				resetConversation();
 			} else {
@@ -678,7 +734,7 @@ function manageFirstChoiceOfSelection(message) {
  * @param { string } date The selected date
  * PS: waiting for API to set date in the database
  */
-function handleSelectedDateForFirstChoice(date) {
+function handleSelectedDate(date) {
 	document.getElementById("dates-for-current-or-next-week").remove();
 	document.getElementById("message").setAttribute("disabled", true);
 
@@ -686,8 +742,39 @@ function handleSelectedDateForFirstChoice(date) {
 	setAnswer(date);
 	setAnswered();
 	// TODO registry date selected in the database
-	setChatBotContent("Votre rendez-vous a bien été pris en compte");
+	setChatBotContent(
+		"Votre réservation a bien été pris en compte pour le " + date
+	);
 	resetConversation();
+}
+
+/**
+ * Handle the selected use case for the second choice
+ * @param { string } type The selected use case
+ * PS: waiting for API to set the selected date of schedule in the database
+ */
+function handleSelectedUseCaseType(type) {
+	document.getElementById("type-of-use-case").remove();
+
+	setUserMessage(type, false);
+	setAnswer(type);
+	setAnswered();
+
+	if (type === "Routier") {
+		deepResponse.value--;
+	} else if (type === "Tout-terrain") {
+	} else if (type === "Sportif") {
+		deepResponse.value++;
+	} else {
+		throw new Error("Type of use case not managed");
+	}
+
+	setQuestion();
+	setDisponibilitiesOfWeek();
+
+	setTimeout(() => {
+		document.getElementById("message").setAttribute("disabled", true);
+	}, 1500);
 }
 
 /**
@@ -695,10 +782,10 @@ function handleSelectedDateForFirstChoice(date) {
  */
 function resetConversation() {
 	setChatBotContent("Fin de la conversation");
-	setChatBotContent("Le workflow va redémarré dans 5 secondes");
+	setChatBotContent("Le workflow va redémarré dans 10 secondes");
 	setTimeout(() => {
 		resetWorkflow();
-	}, 5000);
+	}, 10000);
 }
 
 /**
