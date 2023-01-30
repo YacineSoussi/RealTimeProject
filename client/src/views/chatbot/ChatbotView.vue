@@ -93,10 +93,7 @@ const data = {
 		question: "Informations de contact",
 		choices: [
 			{
-				question: "Souhaitez-vous une adresse email de contact ?",
-			},
-			{
-				question: "Souhaitez-vous un numéro de téléphone de contact ?",
+				question: "Que souhaitez-vous comme information ?",
 			},
 		],
 	},
@@ -183,8 +180,9 @@ function setUserMessage(message, force = true) {
 			manageSecondChoiceOfSelection(message);
 		}
 	} else if (data.response3.question === initialChoice.value) {
-		// TODO work without force ?
-		// manageThirdChoiceOfSelection(message);
+		if (force) {
+			manageThirdChoiceOfSelection(message);
+		}
 	} else if (data.response4.question === initialChoice.value) {
 		manageFourthChoiceOfSelection(message);
 	} else {
@@ -208,9 +206,14 @@ function manageSecondChoiceOfSelection() {
 /**
  * Manage the third choice of the selection
  * PS: Informations de contact
- * @param { string } message The message of the user
  */
-function manageThirdChoiceOfSelection(message) {}
+function manageThirdChoiceOfSelection() {
+	setQuestion();
+	setTimeout(() => {
+		displayContactInformation();
+		document.getElementById("message").setAttribute("disabled", true);
+	}, 1500);
+}
 
 /**
  * Manage the fourth choice of the selection
@@ -548,6 +551,45 @@ function displayTypesOfUseCase() {
 }
 
 /**
+ * Display contact information on the chat
+ */
+function displayContactInformation() {
+	const chat = document.getElementById("chat");
+	const div = document.createElement("div");
+
+	div.classList.add("flex");
+	div.classList.add("items-center");
+	div.classList.add("space-x-2");
+	div.id = "contact-information";
+
+	const data = ["Adresse mail", "Téléphone"];
+
+	for (let i = 0; i < data.length; i++) {
+		const button = document.createElement("button");
+
+		button.style.height = "40px";
+		button.classList.add("bg-violet-500");
+		button.classList.add("hover:bg-violet-700");
+		button.classList.add("text-white");
+		button.classList.add("px-4");
+		button.classList.add("rounded");
+		button.classList.add("shadow");
+		button.classList.add("dark:bg-violet-400");
+		button.classList.add("dark:hover:bg-violet-600");
+		button.classList.add("mt-4");
+		button.classList.add("mb-4");
+		button.innerText = data[i];
+		button.addEventListener("click", () =>
+			handleSelectedContactInformation(data[i])
+		);
+
+		div.appendChild(button);
+	}
+
+	chat.appendChild(div);
+}
+
+/**
  * Get the dates of the current week without the current day
  */
 function getDatesOfCurrentWeek() {
@@ -743,7 +785,7 @@ function handleSelectedDate(date) {
 	setAnswered();
 	// TODO registry date selected in the database
 	setChatBotContent(
-		"Votre réservation a bien été pris en compte pour le " + date
+		`Votre réservation a bien été pris en compte pour le ${date}`
 	);
 	resetConversation();
 }
@@ -774,6 +816,37 @@ function handleSelectedUseCaseType(type) {
 
 	setTimeout(() => {
 		document.getElementById("message").setAttribute("disabled", true);
+	}, 1500);
+}
+
+/**
+ * Handle the selected contact information for the third choice
+ * @param { string } information The selected contact information
+ */
+function handleSelectedContactInformation(information) {
+	const email = "contact@moto-mania.fr";
+	const phone = "01 23 45 67 89";
+
+	document.getElementById("contact-information").remove();
+
+	setUserMessage(information, false);
+	setAnswer(information);
+	setAnswered();
+
+	if (information === "Adresse mail") {
+		setChatBotMessage(
+			`Si vous souhaitez nous contacter par mail, voici notre adresse mail : ${email}`
+		);
+	} else if (information === "Téléphone") {
+		setChatBotMessage(
+			`Si vous souhaitez nous contacter par téléphone, voici notre numéro : ${phone}`
+		);
+	} else {
+		throw new Error("Contact information not managed");
+	}
+
+	setTimeout(() => {
+		setChatBotContent("Fin de la conversation");
 	}, 1500);
 }
 
