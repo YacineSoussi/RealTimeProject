@@ -169,15 +169,44 @@ function setUserMessage(message, force = true) {
 		if (force) {
 			manageFirstChoiceOfSelection(message);
 		}
-	} else if (message === data.response2.question) {
-		// TODO
-	} else if (message === data.response3.question) {
-		// TODO
-	} else if (message === data.response4.question) {
-		// TODO
+	} else if (data.response2.question === initialChoice.value) {
+		manageSecondChoiceOfSelection(message);
+	} else if (data.response3.question === initialChoice.value) {
+		manageThirdChoiceOfSelection(message);
+	} else if (data.response4.question === initialChoice.value) {
+		manageFourthChoiceOfSelection(message);
 	} else {
-		throw new Error("Question not managed");
+		throw new Error("Choice selected not managed, contact the administrator");
 	}
+}
+
+/**
+ * Manage the second choice of the selection
+ * PS: Informations sur les véhicules
+ * @param { string } message The message of the user
+ */
+function manageSecondChoiceOfSelection(message) {
+	console.log("manageSecondChoiceOfSelection", message); // TODO remove ...
+}
+
+/**
+ * Manage the third choice of the selection
+ * PS: Informations de contact
+ * @param { string } message The message of the user
+ */
+function manageThirdChoiceOfSelection(message) {
+	console.log("manageThirdChoiceOfSelection", message); // TODO remove ...
+}
+
+/**
+ * Manage the fourth choice of the selection
+ * PS: Stopper le workflow
+ */
+function manageFourthChoiceOfSelection() {
+	setChatBotMessage("Fin de la conversation");
+	setTimeout(() => {
+		document.getElementById("message").setAttribute("disabled", true);
+	}, 1500);
 }
 
 /**
@@ -346,32 +375,15 @@ function setChatBotContent(message) {
 }
 
 /**
- * Handle the help choices
- * @param { string } choice The choice
+ * Handle the help choices selection
+ * @param { string } choice The choice selected
  */
 function handleSelectHelpChoice(choice) {
-	const chat = document.getElementById("chat");
-	const helpChoices = document.getElementById("help-choices");
-
-	if (choice === initialHelpChoices[0]) {
-		chat.removeChild(helpChoices);
-		initialChoice.value = choice;
-		setUserMessage(choice);
-	} else if (choice === initialHelpChoices[1]) {
-		// TODO: Handle the second choice
-	} else if (choice === initialHelpChoices[2]) {
-		// TODO: Handle the third choice
-	} else {
-		chat.removeChild(helpChoices);
-		setUserMessage(choice);
-
-		setChatBotMessage("Fin de la conversation");
-
-		// Timer here is default of whole application
-		setTimeout(() => {
-			document.getElementById("message").setAttribute("disabled", true);
-		}, 1500);
-	}
+	document
+		.getElementById("chat")
+		.removeChild(document.getElementById("help-choices"));
+	initialChoice.value = choice;
+	setUserMessage(choice);
 }
 
 // ------------------ METHODS FOR FIRST CHOICE ------------------ //
