@@ -356,7 +356,15 @@ function handleSelectHelpChoice(choice) {
 	} else if (choice === initialHelpChoices[2]) {
 		// TODO: Handle the third choice
 	} else {
-		// TODO: Handle the fourth choice
+		chat.removeChild(helpChoices);
+		setUserMessage(choice);
+
+		setChatBotMessage("Fin de la conversation");
+
+		// Timer here is default of whole application
+		setTimeout(() => {
+			document.getElementById("message").setAttribute("disabled", true);
+		}, 1500);
 	}
 }
 
@@ -409,7 +417,9 @@ function setDisponibilitiesForCurrentWeek() {
 		setTimeout(() => {
 			displayDisponibilities(datesForNextWeek);
 		}, 1500);
-	} else {
+	}
+
+	if (datesForCurrentWeek.length > 0) {
 		// CASE 2 : There are disponibilities for the current week
 		setQuestion();
 
@@ -565,6 +575,13 @@ function manageFirstChoiceOfSelection(message) {
 		// --- CASE : If date if greater than 1 year --- //
 		if (years > 1) {
 			setDisponibilitiesForCurrentWeek();
+
+			// Timer is the default in the chatbot
+			setTimeout(() => {
+				document.getElementById("message").setAttribute("disabled", true);
+			}, 1500);
+
+			deepResponse.value++;
 		}
 
 		// --- CASE : If date if less than 1 year --- //
@@ -578,7 +595,7 @@ function manageFirstChoiceOfSelection(message) {
 	// 3 questions of first choice selected are asked and validated
 	if (
 		questionsAnswered.value.length === 2 &&
-		(deepResponse.value === 3 || deepResponse.value === 4)
+		(deepResponse.value === 4 || deepResponse.value === 5)
 	) {
 		const numberRegex = /^[0-9]+$/;
 
@@ -622,7 +639,26 @@ function handleSelectedDateForFirstChoice(date) {
 	// TODO registry date selected in the database
 	setChatBotContent("Votre rendez-vous a bien été pris en compte");
 	setChatBotContent("Fin de la conversation");
-	document.getElementById("message").setAttribute("disabled", true);
+
+	// Timer is the default in all chatbot
+	setTimeout(() => {
+		resetWorkflow();
+	}, 1500);
+}
+
+/**
+ * Reset the workflow of the chatbot
+ */
+function resetWorkflow() {
+	document.getElementById("chat").innerHTML = "";
+	initialChoice.value = "";
+	deepResponse.value = 0;
+	questionsAnswered.value = [];
+	questionPending.value = {
+		question: "",
+		answer: "",
+	};
+	initChatBotWelcomeMessage();
 }
 </script>
 
