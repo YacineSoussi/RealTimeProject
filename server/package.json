@@ -6,16 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -L index.js",
-    "migrate": "node migrate.js"
+    "migrate": "node migrate.js",
+    "db:migrate": "sequelize db:migrate"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "faker": "^6.6.6",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
-    "sequelize": "^6.25.8",
+    "sequelize": "^6.28.0",
     "socket.io": "^4.5.4"
   }
 }

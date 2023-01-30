@@ -3,6 +3,7 @@ exports.User = require("./entities/User");
 exports.Message = require("./entities/Message");
 exports.Conversation = require("../postgres/entities/Conversation");
 exports.Participant = require("./entities/Participant");
+exports.CommunicationRequest = require("./entities/CommunicationRequest");
 
 exports.User.hasMany(exports.Participant, {
 	foreignKey: "userId",
@@ -41,3 +42,11 @@ exports.Conversation.belongsTo(exports.Message, {
 });
 
 exports.Message.belongsTo(exports.Conversation);
+
+exports.User.hasMany(exports.CommunicationRequest, {
+    foreignKey: "clientId",
+});
+
+exports.CommunicationRequest.belongsTo(exports.User, {
+    foreignKey: "clientId",
+});

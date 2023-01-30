@@ -15,10 +15,10 @@ POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-    "email": "AliRaid@gmail.com",
+    "email": "Ali@Raid.com",
     "password": "azertyuiop",
     "firstName": "Ali",
-    "lastName": "RAID"
+    "lastName": "Raid"
 }
 
 ###
@@ -168,4 +168,31 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROY
 
 {
     "status": 1
+}
+
+###
+
+POST http://localhost:3000/communication_request
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
+
+{
+    "status": "pending",
+    "clientId": 38,
+    "message": "Hello, I would like to join your site."
+}
+
+###
+
+GET http://localhost:3000/communication_request
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ 
+
+###
+
+PATCH http://localhost:3000/communication_request/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
+
+{
+    "status": "accepted"
 }

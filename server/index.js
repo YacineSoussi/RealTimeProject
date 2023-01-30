@@ -4,6 +4,7 @@ const securityRoutes = require("./models/routes/security");
 const messageRoutes = require("./models/routes/messages");
 const participantRoutes = require("./models/routes/participants");
 const conversationRoutes = require("./models/routes/conversations");
+const communication_requestRoutes = require("./models/routes/communication_request");
 const cors = require("cors");
 const app = express();
 const port = 3000;
@@ -27,6 +28,7 @@ app.use("/", securityRoutes);
 app.use("/", messageRoutes);
 app.use("/", participantRoutes);
 app.use("/", conversationRoutes);
+app.use("/", communication_requestRoutes);
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));
 

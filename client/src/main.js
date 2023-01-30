@@ -11,6 +11,7 @@ import {
 	faTrash,
 	faUsers,
 	faXmark,
+	faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 import App from "./App.vue";
@@ -30,7 +31,8 @@ library.add(
 	faMessage,
 	faPenToSquare,
 	faTrash,
-	faCirclePlus
+	faCirclePlus,
+	faCheck,
 );
 
 const app = createApp(App).component("font-awesome-icon", FontAwesomeIcon);
