@@ -1,4 +1,3 @@
-<!-- Gestion des données de l'application -->
 <template>
 	<slot :logout="logout" :isAuth="isAuth"></slot>
 </template>
@@ -26,9 +25,8 @@ const logout = () => {
 	router.push({ name: "home" });
 };
 
-const register = (form) => {
-	return AuthLogic.register({ ...form });
-};
+const register = (form) => AuthLogic.register({ ...form });
+
 const updateUser = (id, body) => {
 	return UserLogic.updateUser(id, body).then((data) => {
 		User.status = data.status;
@@ -45,8 +43,8 @@ watchEffect(async () => {
 	}
 });
 
-provide("Providerlogout", logout);
-provide("ProviderisAuth", isAuth);
+provide("ProviderLogout", logout);
+provide("ProviderIsAuth", isAuth);
 provide("ProviderLogin", login);
 provide("ProviderRegister", register);
 provide("ProviderUpdateUser", updateUser);
