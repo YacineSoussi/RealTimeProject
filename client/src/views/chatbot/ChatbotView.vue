@@ -580,7 +580,6 @@ function manageFirstChoiceOfSelection(message) {
 			setTimeout(() => {
 				document.getElementById("message").setAttribute("disabled", true);
 			}, 1500);
-
 			deepResponse.value++;
 		}
 
@@ -639,11 +638,12 @@ function handleSelectedDateForFirstChoice(date) {
 	// TODO registry date selected in the database
 	setChatBotContent("Votre rendez-vous a bien été pris en compte");
 	setChatBotContent("Fin de la conversation");
+	setChatBotContent("Le workflow va être réinitialisé dans 5 secondes");
 
 	// Timer is the default in all chatbot
 	setTimeout(() => {
 		resetWorkflow();
-	}, 1500);
+	}, 5000);
 }
 
 /**
