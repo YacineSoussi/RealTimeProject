@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
 	<div class="container">
-		<h1>Page d'accueil</h1>
+		<h1>Accueil</h1>
 	</div>
 </template>
 
