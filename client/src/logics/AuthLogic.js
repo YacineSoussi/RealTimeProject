@@ -1,76 +1,75 @@
-import LocalStorage from "../services/LocalStorage";
 import AuthRepository from "../repositories/AuthRepository";
+import LocalStorage from "../services/LocalStorage";
 
 export default class AuthLogic {
+	static async register(body) {
+		const result = await AuthRepository.register(body);
 
-    static async register(body) {
-        const result = await AuthRepository.register(body);
-        if (result.response.status === 422) {
-            
-            const errors = result.response.data;
-            const errorsArray = Object.values(errors);
-            throw new Error(errorsArray);
-        }
-        return result.response.data;
-    }
+		if (result.response.status === 422) {
+			const errors = result.response.data;
+			const errorsArray = Object.values(errors);
+			throw new Error(errorsArray);
+		}
 
-    static async login(body) {
-        
-        const result = await AuthRepository.login({...body});
+		return result.response.data;
+	}
 
-        if (result.response.status === 401) {
-            throw new Error(result.response.data?.message);
-        } 
-            const res = {}
-            res.userData = result.response.data.userData[0];
-            res.token = result.response.data.token;
-            AuthLogic.setTokens(res);
-            AuthLogic.setStorageUser();
+	static async login(body) {
+		const result = await AuthRepository.login({ ...body });
+		const res = {};
 
-            return res.userData;
-        
-    }
+		if (result.response.status === 401) {
+			throw new Error(result.response.data?.message);
+		}
 
-    static logout() {
-        this.clear();
-    }
+		res.userData = result.response.data.userData[0];
+		res.token = result.response.data.token;
 
-    static isAuth() {
-        return !!this.getTokens();
-    }
+		AuthLogic.setTokens(res);
+		AuthLogic.setStorageUser();
 
-        
-    static getTokens() {
-        return LocalStorage.get("tokens");
-    }
-    
-    static setTokens(tokens) {
-        LocalStorage.set("tokens", tokens);
-    }
-    
-    static removeTokens() {
-        LocalStorage.remove("tokens");
-    }
-    
-    static clear() {
-        LocalStorage.clear();
-    }
-    static async refreshToken(refreshToken) {
-        this.deleteRefreshToken();
-        const response = await AuthRepository.refresh(refreshToken);
-        AuthLogic.setTokens(response.responseObject());
-        return response.responseObject();
-    }
+		return res.userData;
+	}
 
-    static deleteRefreshToken() {
-        let token = LocalStorage.get("tokens")
-        delete token.refresh_token
-        AuthLogic.setTokens(token)
-      }
+	static logout() {
+		this.clear();
+	}
 
-    static setStorageUser() {
-        const user = AuthLogic.getTokens().userData
-        ;
-        LocalStorage.set("user", user);
-    }
-    }
+	static isAuth() {
+		return !!this.getTokens();
+	}
+
+	static getTokens() {
+		return LocalStorage.get("tokens");
+	}
+
+	static setTokens(tokens) {
+		LocalStorage.set("tokens", tokens);
+	}
+
+	static removeTokens() {
+		LocalStorage.remove("tokens");
+	}
+
+	static clear() {
+		LocalStorage.clear();
+	}
+
+	static async refreshToken(refreshToken) {
+		this.deleteRefreshToken();
+		const response = await AuthRepository.refresh(refreshToken);
+		AuthLogic.setTokens(response.responseObject());
+		return response.responseObject();
+	}
+
+	static deleteRefreshToken() {
+		let token = LocalStorage.get("tokens");
+		delete token.refresh_token;
+		AuthLogic.setTokens(token);
+	}
+
+	static setStorageUser() {
+		const user = AuthLogic.getTokens().userData;
+		LocalStorage.set("user", user);
+	}
+}
