@@ -44,8 +44,8 @@ import LocalStorage from "../../services/LocalStorage";
 
 const initialHelpChoices = [
 	"Vérifier l'entretien de mon véhicule",
-	"Des informations sur les véhicules",
-	"Des informations de contact",
+	"Informations sur les véhicules",
+	"Informations de contact",
 	"Stopper la conversation",
 ];
 const data = {
@@ -164,6 +164,9 @@ function setUserMessage(message, force = true) {
 		document.getElementById("chat").appendChild(li);
 		document.getElementById("message").value = "";
 	}
+
+	console.log("data", data.response2.question);
+	console.log("initialChoice", initialChoice.value);
 
 	if (data.response1.question === initialChoice.value) {
 		if (force) {
