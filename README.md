@@ -1,4 +1,4 @@
-# Web application RealTimeProject
+# RealTimeProject
 
 Platform with instant exchange system with its customers.
 
@@ -6,9 +6,11 @@ Platform with instant exchange system with its customers.
 
 **Client:** VueJs, Bootstrap, Vite
 
-**Server:** Node JS, Express, MongoDB (mongoose)
+**Server:** Node JS, Express
 
-## Run Locally
+**Others:** Docker
+
+## Project Installation
 
 Clone the project
 
@@ -22,23 +24,49 @@ Go to the project directory
   cd RealTimeProject
 ```
 
-Install dependencies for the server
+### Linux and macOS
+
+- Run the project
+
+```bash
+  make build
+```
+
+- Stop the project
+
+```bash
+  docker compose down --remove-orphans --volumes --timeout 0
+```
+
+### Windows
+
+- Install dependencies for the server
 
 ```bash
   docker-compose run server npm install
 ```
 
-Install dependencies for the client
+- Install dependencies for the client
 
 ```bash
   docker-compose run client npm install
 ```
 
-Run the project
+- Run the project
 
 ```bash
-  docker-compose up -d --build
+  docker-compose up -d
 ```
+
+- Stop the project
+
+```bash
+  docker compose down --remove-orphans --volumes --timeout 0
+```
+
+## Project Url
+
+⏳ http://localhost:3001/ ⏳
 
 ## Authors
 
