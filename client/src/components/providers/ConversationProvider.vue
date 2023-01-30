@@ -26,6 +26,7 @@ const filterByUpdated = (conversations) => {
 		if (!a.lastMessage || !b.lastMessage) {
 			return 0;
 		}
+
 		return (
 			new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt)
 		);
@@ -46,6 +47,7 @@ const getConversations = () => {
 				lastMessage,
 			};
 		});
+
 		conversationsStore.rooms = conversations.filter(
 			(room) => room.type === "room"
 		);
@@ -56,16 +58,19 @@ const getConversationOfUser = () => {
 	return ConversationLogic.getConversationOfUser(User.id).then((data) => {
 		const myConversations = data.map((conversation) => {
 			let lastMessage = data.lastMessage ? data.lastMessage : null;
+
 			if (conversation.messages.length > 0) {
 				lastMessage = conversation.messages[0];
 			}
-			// si c'est une room on l'inscrit dans la socket
+
+			// If it is a room, it is written in the socket
 			if (conversation.type === "room") {
 				socketRef.current.emit("join:room", {
 					roomId: conversation.id,
 					userId: User.id,
 				});
 			}
+
 			return {
 				...conversation,
 				lastMessage,
@@ -79,11 +84,9 @@ const getConversationOfUser = () => {
 	});
 };
 
-const getMessages = (id) => {
-	return MessageLogic.getMessages(id).then((data) => {
-		messages.value = data;
-	});
-};
+const getMessages = (id) =>
+	MessageLogic.getMessages(id).then((data) => (messages.value = data));
+
 const getUsers = () => {
 	return UserLogic.getUsers().then((data) => {
 		data = data.filter((user) => user.id !== User.id);
@@ -91,9 +94,10 @@ const getUsers = () => {
 		return data;
 	});
 };
+
 const getConversation = (id) => {
 	return ConversationLogic.getConversation(id).then((data) => {
-		// On trie les messages par date de creation pour eviter de changer l'ordre des messages quand ils sont modifié
+		// We sort messages by creation date to avoid changing the order of messages when they are modified
 		const sortedConversation = data.messages.sort((a, b) => {
 			return new Date(a.createdAt) - new Date(b.createdAt);
 		});
@@ -105,11 +109,11 @@ const getConversation = (id) => {
 		if (data.messages.length > 0) {
 			lastMessage = data.messages[0];
 		}
-		const newConversation = {
-			...data,
-			lastMessage,
-		};
+
+		const newConversation = { ...data, lastMessage };
+
 		conversationsStore.selectedConversation = newConversation;
+
 		return newConversation;
 	});
 };
@@ -154,6 +158,7 @@ const deleteConversation = (id) => {
 const createMessage = (form) => {
 	return MessageLogic.createMessage({ ...form }).then((data) => {
 		data.author = User;
+
 		const ConversationMaj = {
 			lastMessage: data,
 			messages: [...conversationsStore.selectedConversation.messages, data],
@@ -167,12 +172,15 @@ const createMessage = (form) => {
 			completed: conversationsStore.selectedConversation?.completed,
 			type: conversationsStore.selectedConversation?.type,
 		};
-		// On met à jour la conversation sélectionnée
+
+		// We update the selected conversation
 		conversationsStore.selectedConversation = ConversationMaj;
+
 		if (conversationsStore.selectedConversation.type === "conversation") {
 			const otherParticipant = ConversationMaj.participants.find(
 				(participant) => participant.userId !== User.id
 			);
+
 			socketRef.current.emit("message:private", {
 				ConversationMaj,
 				to: otherParticipant.userId,
@@ -190,7 +198,7 @@ const createMessage = (form) => {
 			});
 		}
 
-		//  On met à jour la conversation dans la liste des conversations
+		// We update the conversation in the list of conversations
 		conversationsStore.conversations = conversationsStore.conversations.map(
 			(conversation) => {
 				if (conversation.id === data.conversationId) {
@@ -199,7 +207,9 @@ const createMessage = (form) => {
 				return conversation;
 			}
 		);
+
 		filterByUpdated(conversationsStore.conversations);
+
 		return data;
 	});
 };
@@ -210,20 +220,20 @@ const updateMessage = (id, form) => {
 			if (message.id === id) {
 				return data;
 			}
+
 			return message;
 		});
 	});
 };
 
-const deleteMessage = (id) => {
-	return MessageLogic.deleteMessage(id).then((data) => {
-		messages.value = messages.value.filter((message) => message.id !== id);
-	});
-};
+const deleteMessage = (id) =>
+	MessageLogic.deleteMessage(id).then(
+		() =>
+			(messages.value = messages.value.filter((message) => message.id !== id))
+	);
 
-const setSelectedConversationId = (id) => {
-	conversationsStore.selectedConversationId = id;
-};
+const setSelectedConversationId = (id) =>
+	(conversationsStore.selectedConversationId = id);
 
 const getParticipants = (id) => {
 	return ConversationLogic.getParticipants(id).then((data) => {
@@ -247,19 +257,12 @@ const postParticipant = (form) => {
 	});
 };
 
-const getUser = (id) => {
-	return UserLogic.getUser(id).then((data) => {
-		return data;
-	});
-};
+const getUser = (id) => UserLogic.getUser(id).then((data) => data);
 
-const setValueModal = () => {
-	isOpenModal.value = !isOpenModal.value;
-};
+const setValueModal = () => (isOpenModal.value = !isOpenModal.value);
 
-const setValueModalChat = () => {
-	isOpenModalChat.value = !isOpenModalChat.value;
-};
+const setValueModalChat = () =>
+	(isOpenModalChat.value = !isOpenModalChat.value);
 
 const checkUserInConversation = (conversation) => {
 	if (conversation.participants) {
@@ -292,33 +295,34 @@ const checkIfUserHaveConversationWithOtherUser = (userId) => {
 				return false;
 			}
 		);
+
 		if (conversation) {
-			// return conversation.id;
 			return true;
 		}
 	}
+
 	return false;
 };
 
-// Au changement de la conversation selectionnée, on récupère les messages de la conversation & les participants de la conversation
+// When changing the selected conversation, we retrieve the messages of the conversation & the participants of the conversation
 watchEffect(() => {
 	getUsers();
+
 	if (conversationsStore.selectedConversationId) {
 		getConversation(conversationsStore.selectedConversationId);
 		getParticipants(conversationsStore.selectedConversationId);
 	}
 });
 
-// Au changement de l'utilisateur, on récupère les conversations de l'utilisateur en les triant par date de mise à jour
+// When the user changes, we retrieve the user's conversations by sorting them by date of update
 watchEffect(() => {
 	if (User.id) {
 		filterByUpdated(conversationsStore.conversations);
 	}
 });
-// Au chargement de la page, on récupère toutes les rooms
-watchEffect(() => {
-	getConversations();
-});
+
+// When the page loads, we retrieve all the rooms
+watchEffect(() => getConversations());
 
 onMounted(() => {
 	const userId = User.id;
@@ -328,33 +332,38 @@ onMounted(() => {
 	socketRef.current.connect();
 
 	socketRef.current.on("message:private", ({ ConversationMaj, data }) => {
-		// on met à jour la conversation selectionnée
+		// we update the selected conversation
 		conversationsStore.selectedConversation = ConversationMaj;
-		// on met à jour la conversation dans la liste des conversations
+
+		// we update the conversation in the list of conversations
 		conversationsStore.conversations = conversationsStore.conversations.map(
 			(conversation) => {
 				if (conversation.id === data.conversationId) {
 					return ConversationMaj;
 				}
+
 				return conversation;
 			}
 		);
 	});
 
 	socketRef.current.on("message:room", ({ ConversationMaj, data }) => {
-		// on met à jour la conversation selectionnée
+		// we update the selected conversation
 		conversationsStore.selectedConversation = ConversationMaj;
-		// on met à jour la conversation dans la liste des conversations
+
+		// we update the conversation in the list of conversations
 		conversationsStore.conversations = conversationsStore.conversations.map(
 			(conversation) => {
 				if (conversation.id === data.conversationId) {
 					return ConversationMaj;
 				}
+
 				return conversation;
 			}
 		);
 	});
 });
+
 provide("ProviderMessages", messages);
 provide("ProviderConversations", conversations);
 provide("ProviderSelectedConversation", selectedConversation);
@@ -365,9 +374,7 @@ provide("ProviderParticipantsOFConversation", participantsOFConversation);
 provide("ProviderIsOpenModal", isOpenModal);
 provide("ProviderRooms", rooms);
 provide("ProviderIsOpenModalChat", isOpenModalChat);
-
 provide("ProviderSocket", socketRef.current);
-
 provide("ProviderGetConversations", getConversations);
 provide("ProviderGetConversationOfUser", getConversationOfUser);
 provide("ProviderGetMessages", getMessages);
