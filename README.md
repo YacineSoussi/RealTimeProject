@@ -4,9 +4,9 @@ Platform with instant exchange system with its customers.
 
 ## Tech Stack
 
-**Client:** VueJs, Bootstrap, Vite
+**Client:** Vue.js - Bootstrap - Vite
 
-**Server:** Node JS, Express
+**Server:** Node.js - Express
 
 **Others:** Docker
 
