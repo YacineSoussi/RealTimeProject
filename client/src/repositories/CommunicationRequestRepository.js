@@ -1,7 +1,7 @@
 import * as Request from "../services/request";
 
 export default class CommunicationRequestRepository {
-	static async getCommunicationrequests() {
+	static async getCommunicationRequests() {
 		return await Request.make("get", "/communication_request");
 	}
 

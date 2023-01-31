@@ -179,7 +179,7 @@ const isValidStyle = computed(() => {
 							type="submit"
 							:disabled="isValid"
 						>
-							<span v-if="isLoading">Chargement ...</span>
+							<span v-if="isLoading">Chargement...</span>
 							<span v-else>S'inscrire</span>
 						</button>
 					</div>
