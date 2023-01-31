@@ -31,15 +31,15 @@ const onSubmit = async () => {
 </script>
 
 <template>
-	<div class="global p-5">
-		<div class="block p-5">
+	<section class="global">
+		<div class="block">
 			<div class="block__title">
 				<h1 class="block__title-text">Connexion</h1>
 			</div>
 			<div class="block__content">
 				<form class="form" @submit.prevent="onSubmit()">
 					<div class="form__group">
-						<label class="form__label" for="email">Adresse amil</label>
+						<label class="form__label" for="email">Adresse mail</label>
 						<input
 							class="form__input"
 							type="email"
@@ -82,13 +82,13 @@ const onSubmit = async () => {
 				</form>
 			</div>
 		</div>
-	</div>
+	</section>
 </template>
 
 <style scoped>
 .block {
 	width: 100%;
-	max-width: 20%;
+	max-width: 40%;
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -98,10 +98,40 @@ const onSubmit = async () => {
 	justify-content: center;
 }
 
+@media (min-width: 1100px) {
+	.block {
+		max-width: 500px;
+	}
+}
+
+@media (max-width: 700px) {
+	.block {
+		max-width: 55%;
+	}
+}
+
+@media (max-width: 500px) {
+	.block {
+		max-width: 70%;
+	}
+}
+
+@media (max-width: 375px) {
+	.block {
+		max-width: 90%;
+	}
+}
+
 .global {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.block__title-text {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .form__group {

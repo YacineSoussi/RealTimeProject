@@ -4,7 +4,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 
 <template>
 	<UserProviderVue v-slot="{ logout, isAuth }">
-		<div class="footer-basic">
+		<section class="footer-basic">
 			<footer>
 				<div class="social">
 					<a href="#"><i class="icon fa fa-google"></i></a>
@@ -39,7 +39,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 				</ul>
 				<p class="copyright">MotoMania © 2023</p>
 			</footer>
-		</div>
+		</section>
 	</UserProviderVue>
 </template>
 
