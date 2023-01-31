@@ -171,7 +171,7 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	text-transform: uppercase;
 	font-family: "Chelsea Market", cursive;
 	margin-top: 170px;
-	text-align: left;
+	text-align: center;
 	margin-left: 30px;
 }
 
@@ -183,7 +183,7 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	font-size: 34px;
 	font-weight: 600;
 	text-transform: uppercase;
-	text-align: left;
+	text-align: center;
 	margin-left: 60px;
 }
 
