@@ -44,7 +44,7 @@ onMounted(() => document.getElementById("modal-toggle").click());
 					<ul v-if="props.users?.length > 0">
 						<template v-for="user in props.users">
 							<li>
-								<div class="flex justify-between m-1">
+								<div class="flex justify-between m-1 mb-2">
 									{{ user.firstName }} {{ user.lastName }} :
 									<button
 										v-if="
@@ -74,7 +74,11 @@ onMounted(() => document.getElementById("modal-toggle").click());
 	position: absolute;
 }
 
-.modal-container button {
+.btn_join {
+	font-size: 14px;
+}
+
+.modal-container button:not(.btn_join) {
 	display: block;
 	margin: 0 auto;
 	width: 30px;
@@ -107,6 +111,10 @@ onMounted(() => document.getElementById("modal-toggle").click());
 
 .modal-container #modal-toggle:hover ~ button {
 	background: #1e824c;
+}
+
+.mb-2 {
+	margin-bottom: 10px;
 }
 
 .modal-container #modal-toggle:checked {
