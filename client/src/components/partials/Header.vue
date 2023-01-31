@@ -175,6 +175,11 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	margin-left: 30px;
 }
 
+.header .banner .banner-content .owl-item .item h1,
+.header .banner .banner-content .owl-item .item p {
+	color: white;
+}
+
 .header .banner .banner-content h1 span {
 	color: #f04c26;
 }
