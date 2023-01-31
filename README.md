@@ -135,7 +135,6 @@ To run fixtures
   docker-compose exec server npx sequelize-cli db:seed:all 
 ```
 
-
 ## Authors
 
 - [@YacineSOUSSI](https://www.github.com/YacineSoussi)
