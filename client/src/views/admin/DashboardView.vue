@@ -117,7 +117,7 @@ const changeStatus = () => {
 
 <template>
 	<section class="dashboard">
-		<div class="flex">
+		<div class="flex heading">
 			<div class="flex flex-col">
 				<div class="mb-2">
 					<span class="toggle-label">Disponibilité de l'admin :</span>
@@ -413,6 +413,28 @@ const changeStatus = () => {
 	top: 4px;
 	left: 4px;
 	transition: left 0.25s;
+}
+
+.dashboard .heading {
+	padding-left: 7.5px;
+}
+
+@media (max-width: 767px) {
+	.dashboard .heading {
+		padding-left: 0;
+		justify-content: center;
+		margin-bottom: 12px;
+	}
+
+	.leading-normal {
+		margin-bottom: 0;
+	}
+}
+
+@media (max-width: 565px) {
+	.dashboard {
+		margin: 0;
+	}
 }
 
 .dashboard .toggle:hover .toggle-switch:before {

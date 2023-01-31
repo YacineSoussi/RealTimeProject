@@ -43,8 +43,8 @@ const submit = (e) => {
 <template>
 	<div class="w-full max-w-xl">
 		<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-			<div class="mb-4">
-				<h1 class="text-center text-2xl font-bold text-gray-700">
+			<div class="mb-4 input">
+				<h1 class="text-center text-2xl font-bold mb-2">
 					{{
 						form.name === "" && form.maxParticipants === 0
 							? "Création"
@@ -52,28 +52,20 @@ const submit = (e) => {
 					}}
 					d'un salon de discussion
 				</h1>
-
-				<label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-					Nom
-				</label>
+				<label class="block font-bold mb-2" for="name"> Nom </label>
 				<input
 					v-model="form.name"
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					class="appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none"
 					id="name"
 					type="text"
 					placeholder="Nom"
 				/>
 			</div>
-			<div class="mb-6">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="capacite"
-				>
-					Capacité
-				</label>
+			<div class="mb-6 input">
+				<label class="block font-bold mb-2" for="capacite"> Capacité </label>
 				<input
 					v-model="form.maxParticipants"
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+					class="appearance-none rounded w-full py-2 px-3 mb-3 leading-tight focus:outline-none"
 					id="capacite"
 					type="number"
 					placeholder="Capacité"
@@ -82,7 +74,7 @@ const submit = (e) => {
 			<div class="flex items-center justify-between">
 				<button
 					@click="submit"
-					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+					class="creation py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 					type="button"
 				>
 					{{
@@ -93,3 +85,28 @@ const submit = (e) => {
 		</form>
 	</div>
 </template>
+
+<style scoped>
+.creation {
+	padding: 5px;
+	border-radius: 2px;
+	border: 1px solid;
+	color: black;
+	margin-top: 10px;
+	cursor: pointer;
+	background-color: #f2f2f2;
+	width: 100px;
+}
+
+.mb-2 {
+	margin-bottom: 20px;
+}
+
+.creation:hover {
+	opacity: 0.8;
+}
+
+.input input {
+	border: 1px solid black;
+}
+</style>
