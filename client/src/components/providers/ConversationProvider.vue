@@ -304,6 +304,9 @@ const checkIfUserHaveConversationWithOtherUser = (userId) => {
 	return false;
 };
 
+const disabledModalChat = () => (isOpenModalChat.value = false);
+const disabledModal = () => (isOpenModal.value = false);
+
 // When changing the selected conversation, we retrieve the messages of the conversation & the participants of the conversation
 watchEffect(() => {
 	getUsers();
@@ -397,6 +400,8 @@ provide(
 	"ProviderCheckIfUserHaveConversationWithOtherUser",
 	checkIfUserHaveConversationWithOtherUser
 );
+provide("ProviderDisabledModalChat", disabledModalChat);
+provide("ProviderDisabledModal", disabledModal);
 </script>
 
 <template>

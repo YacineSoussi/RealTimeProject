@@ -2,23 +2,34 @@
 import { inject, defineProps, onMounted } from "vue";
 
 const setIsOpenModal = inject("ProviderSetValueModal");
+const disabledModalChat = inject("ProviderDisabledModalChat");
+const ProviderCheckUserInConversation = inject(
+	"ProviderCheckUserInConversation"
+);
+const ProviderPostParticipant = inject("ProviderPostParticipant");
+const ProviderUser = inject("ProviderUser");
+
 const props = defineProps({
 	rooms: {
 		type: Array,
 		required: true,
 	},
 });
-const ProviderCheckUserInConversation = inject(
-	"ProviderCheckUserInConversation"
-);
-const ProviderPostParticipant = inject("ProviderPostParticipant");
-const ProviderUser = inject("ProviderUser");
+
 const joinRoom = (conversationId) => {
 	const body = { conversationId, userId: ProviderUser.id };
 	ProviderPostParticipant(body);
 };
 
-onMounted(() => document.getElementById("modal-toggle").click());
+onMounted(() => {
+	disabledModalChat();
+	document.getElementById("modal-toggle").click();
+});
+
+function closeModal() {
+	disabledModalChat();
+	setIsOpenModal();
+}
 </script>
 
 <template>
@@ -29,7 +40,7 @@ onMounted(() => document.getElementById("modal-toggle").click());
 				<div class="modalHeader">
 					<h5 class="heading">Rejoindre un salon</h5>
 				</div>
-				<button class="closeBtn" @click="setIsOpenModal">
+				<button class="closeBtn" @click="closeModal">
 					<font-awesome-icon icon="xmark" style="margin-bottom: -3px" />
 				</button>
 				<div class="modalContent">

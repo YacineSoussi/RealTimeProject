@@ -1,18 +1,21 @@
 <script setup>
 import { defineProps, inject, onMounted } from "vue";
 
+const createConversation = inject("ProviderCreateConversation");
+const disabledModal = inject("ProviderDisabledModal");
+const ProviderCheckIfUserHaveConversationWithOtherUser = inject(
+	"ProviderCheckIfUserHaveConversationWithOtherUser"
+);
+const setIsOpenModalChat = inject("ProviderSetValueModalChat");
+const User = inject("ProviderUser");
+
 const props = defineProps({
 	users: {
 		type: Array,
 		required: true,
 	},
 });
-const User = inject("ProviderUser");
-const createConversation = inject("ProviderCreateConversation");
-const ProviderCheckIfUserHaveConversationWithOtherUser = inject(
-	"ProviderCheckIfUserHaveConversationWithOtherUser"
-);
-const setIsOpenModalChat = inject("ProviderSetValueModalChat");
+
 const startChat = (secondUserId) => {
 	const body = {
 		secondUserId,
@@ -26,7 +29,15 @@ const startChat = (secondUserId) => {
 	}
 };
 
-onMounted(() => document.getElementById("modal-toggle").click());
+onMounted(() => {
+	disabledModal();
+	document.getElementById("modal-toggle").click();
+});
+
+function closeModal() {
+	disabledModal();
+	setIsOpenModalChat();
+}
 </script>
 
 <template>
@@ -37,7 +48,7 @@ onMounted(() => document.getElementById("modal-toggle").click());
 				<div class="modalHeader">
 					<h5 class="heading">Contacter un client</h5>
 				</div>
-				<button class="closeBtn" @click="setIsOpenModalChat">
+				<button class="closeBtn" @click="closeModal">
 					<font-awesome-icon icon="xmark" style="margin-bottom: -3px" />
 				</button>
 				<div class="modalContent">
