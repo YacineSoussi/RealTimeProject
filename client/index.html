@@ -18,10 +18,12 @@
 		<script src="./src/assets/js/app.js"></script>
 		<script>
 			$(document).ready(function () {
-				var owl = $(".owl-carousel");
+				const owl = $(".owl-carousel");
 				owl.owlCarousel({
-					margin: 10,
-					nav: true,
+					autoplay: true,
+					autoplayTimeout: 3000,
+					autoplayHoverPause: true,
+					dots: true,
 					loop: true,
 					responsive: {
 						0: {

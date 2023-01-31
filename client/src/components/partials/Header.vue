@@ -125,6 +125,14 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	margin: 0 215px;
 }
 
+@media (max-width: 1150px) {
+	.header .navbar-option,
+	.header .banner {
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
+
 .header .navbar-brand > img {
 	margin-top: -10px;
 }
@@ -158,12 +166,21 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	font-weight: 500;
 }
 
+.header .banner-content .owl-carousel {
+	height: 100%;
+}
+
 .header .navbar-default .navbar-nav > li > a:hover {
 	color: #f04c26;
 }
 
 .header .banner {
 	cursor: grab;
+	height: calc(100% - 85px);
+}
+
+.header .banner .banner-content {
+	height: 100%;
 }
 
 .header .banner .banner-content h1 {
@@ -173,6 +190,27 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	margin-top: 170px;
 	text-align: center;
 	margin-left: 30px;
+}
+
+.header .banner .owl-dots {
+	display: flex;
+	position: absolute;
+	bottom: 10px;
+	right: 50%;
+}
+
+.header .banner .owl-dots .owl-dot span {
+	background: none repeat scroll 0 0 white;
+	border-radius: 20px;
+	display: block;
+	height: 12px;
+	margin: 5px 7px;
+	opacity: 0.5;
+	width: 12px;
+}
+
+.header .banner .owl-dots .owl-dot.active span {
+	opacity: 1;
 }
 
 .header .banner .banner-content .owl-item .item h1,
