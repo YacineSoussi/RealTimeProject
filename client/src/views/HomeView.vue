@@ -23,10 +23,6 @@
 	width: 100%;
 }
 
-.about .banner-heading {
-	margin: 0 215px;
-}
-
 .about .description {
 	text-align: center;
 }

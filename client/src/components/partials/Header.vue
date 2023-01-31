@@ -120,11 +120,6 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	top: 2px;
 }
 
-.header .navbar-option,
-.header .banner {
-	margin: 0 215px;
-}
-
 @media (max-width: 1150px) {
 	.header .navbar-option,
 	.header .banner {
@@ -151,13 +146,13 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	height: 645px;
 	background-position: center;
 	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .header .navbar-default {
 	background-color: transparent;
 	border: 0;
 	padding-top: 15px;
-	max-width: 900px;
 }
 
 .header .navbar-default .navbar-nav > li > a {
