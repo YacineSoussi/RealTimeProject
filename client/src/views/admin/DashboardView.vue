@@ -126,6 +126,7 @@ const changeStatus = () => {
 							class="toggle-checkbox"
 							type="checkbox"
 							@click="changeStatus"
+							:checked="status === 1"
 						/>
 						<div class="toggle-switch"></div>
 					</label>
@@ -208,14 +209,7 @@ const changeStatus = () => {
 			<hr class="border-b-2 border-gray-400 my-8 mx-4" />
 			<div class="flex flex-row flex-wrap flex-grow mt-2">
 				<div class="w-full md:w-1/2 p-3">
-					<RoomCard
-						v-if="isEditing"
-						:room="current_room"
-						:addRoom="fetchAddRoom"
-						:changeIsEditing="changeIsEditing"
-						:editRoom="fetchUpdateRoom"
-					/>
-					<div v-else class="bg-white border rounded shadow">
+					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3">
 							<h5 class="font-bold uppercase color-orange">Utilisateurs</h5>
 						</div>
@@ -242,7 +236,14 @@ const changeStatus = () => {
 					</div>
 				</div>
 				<div class="w-full md:w-1/2 p-3">
-					<div class="bg-white border rounded shadow">
+					<RoomCard
+						v-if="isEditing"
+						:room="current_room"
+						:addRoom="fetchAddRoom"
+						:changeIsEditing="changeIsEditing"
+						:editRoom="fetchUpdateRoom"
+					/>
+					<div v-else class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
 								<h5 class="font-bold uppercase color-orange">Salons</h5>
@@ -300,13 +301,6 @@ const changeStatus = () => {
 								<h5 class="font-bold uppercase color-orange">
 									Demande de communication
 								</h5>
-							</div>
-							<div>
-								<font-awesome-icon
-									icon="circle-plus"
-									style="cursor: pointer"
-									@click="onClickAddRoom"
-								/>
 							</div>
 						</div>
 						<div class="p-5">

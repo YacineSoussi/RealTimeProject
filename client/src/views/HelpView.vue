@@ -121,14 +121,28 @@ form {
 	padding: 20px;
 }
 
+@media (max-width: 480px) {
+	form {
+		width: 100%;
+		padding: 20px 0;
+	}
+}
+
 label {
 	margin-bottom: 10px;
+}
+
+@media (max-width: 480px) {
+	label {
+		width: 100%;
+	}
 }
 
 textarea {
 	width: 100%;
 	min-height: 100px;
 	margin-bottom: 20px;
+	margin-top: 10px;
 	padding: 10px;
 	font-size: 16px;
 	border-radius: 5px;
@@ -136,8 +150,8 @@ textarea {
 }
 
 button[type="submit"] {
-	background-color: #4caf50;
-	color: white;
+	background-color: #ccc;
+	color: black;
 	padding: 12px 20px;
 	border: none;
 	border-radius: 4px;
@@ -146,6 +160,6 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-	background-color: #3e8e41;
+	opacity: 0.8;
 }
 </style>
