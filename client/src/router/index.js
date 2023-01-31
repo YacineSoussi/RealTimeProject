@@ -44,6 +44,19 @@ const router = createRouter({
 			name: "admin-dashboard",
 			component: () => import("../views/admin/DashboardView.vue"),
 			beforeEnter: [initialFetchConversations],
+			beforeEnter(to, from, next) {
+				const token = localStorage.getItem("app-user");
+				if (token) {
+					const user = JSON.parse(token);
+					if (user.role === "admin") {
+						next();
+					} else {
+						next({ name: "home" });
+					}
+				} else {
+					next({ name: "login" });
+				}
+			},
 			meta: { requiresAuth: true },
 		},
 	],

@@ -1,6 +1,11 @@
 <script setup>
+import { onMounted } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import UserProviderVue from "../providers/UserProvider.vue";
+import LocalStorage from "../../services/LocalStorage";
+
+const role = LocalStorage.get("user").role;
+
 </script>
 
 <template>
@@ -50,7 +55,7 @@ import UserProviderVue from "../providers/UserProvider.vue";
 									>Aide</RouterLink
 								>
 							</li>
-							<li v-if="isAuth">
+							<li v-if="isAuth && role === 'admin'">
 								<RouterLink
 									to="/admin/dashboard"
 									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
