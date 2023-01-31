@@ -28,7 +28,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 						<RouterLink to="/admin/dashboard">Administrateur</RouterLink>
 					</li>
 					<li v-if="isAuth" @click="logout" class="pointer">
-						<a>Déconnexion</a>
+						<a href="#">Déconnexion</a>
 					</li>
 					<li v-if="!isAuth">
 						<RouterLink to="/register">S'enregistrer</RouterLink>

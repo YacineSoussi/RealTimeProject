@@ -59,6 +59,7 @@ import UserProviderVue from "../providers/UserProvider.vue";
 							</li>
 							<li v-if="isAuth" @click="logout" class="pointer">
 								<a
+									href="#"
 									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Déconnexion</a
 								>
