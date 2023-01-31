@@ -50,10 +50,10 @@ const fullName = (authorId) => {
 					<template v-for="message in selectedConversation.messages">
 						<div v-if="message.authorId !== User.id" class="flex mb-2">
 							<div class="rounded py-2 px-3" style="background-color: #f2f2f2">
-								<p class="text-sm text-teal">
+								<p class="text-teal">
 									{{ fullName(message.authorId) }}
 								</p>
-								<p class="text-sm mt-1">
+								<p class="mt-1">
 									{{ message.content }}
 								</p>
 								<p class="text-right text-grey-dark mt-1">
@@ -63,7 +63,7 @@ const fullName = (authorId) => {
 						</div>
 						<div v-else class="flex justify-end mb-2">
 							<div class="rounded py-2 px-3" style="background-color: #e2f7cb">
-								<p class="text-sm mt-1">
+								<p class="mt-1">
 									{{ message.content }}
 								</p>
 								<p class="text-right text-grey-dark mt-1">

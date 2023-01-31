@@ -104,10 +104,7 @@ const getUserOfOtherParticipant = (participants) => {
 							}}
 						</p>
 					</div>
-					<p
-						v-if="conversation.lastMessage"
-						class="text-grey-dark mt-1 text-sm"
-					>
+					<p v-if="conversation.lastMessage" class="text-grey-dark mt-1">
 						{{
 							conversation.lastMessage.authorId === User.id
 								? "Moi : "
