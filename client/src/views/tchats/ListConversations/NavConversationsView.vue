@@ -44,7 +44,7 @@ const getUserOfOtherParticipant = (participants) => {
 		<ModalRoomsVue v-if="isOpenModal" :rooms="rooms" />
 		<ModalChatVue v-if="isOpenModalChat" :users="users" />
 		<div
-			class="py-2 px-3 bg-grey-lighter flex flex-row justify-end items-center"
+			class="py-2 px-3 bg-grey-lighter flex flex-row justify-end items-center bloc-heading"
 		>
 			<div class="flex">
 				<div class="ml-4">
@@ -127,5 +127,9 @@ const getUserOfOtherParticipant = (participants) => {
 		width: 100%;
 		height: 100%;
 	}
+}
+
+.navConversations .bloc-heading {
+	border-bottom: 1px solid #e2e8f0;
 }
 </style>
