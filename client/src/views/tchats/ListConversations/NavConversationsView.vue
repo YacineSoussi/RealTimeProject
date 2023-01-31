@@ -52,7 +52,7 @@ const getUserOfOtherParticipant = (participants) => {
 						@click="setIsOpenModalChat"
 						icon="message"
 						style="cursor: pointer"
-						class="mr-1"
+						class="mr-4"
 					/>
 					<font-awesome-icon
 						@click="setIsOpenModal"
