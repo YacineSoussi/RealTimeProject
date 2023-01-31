@@ -5,5 +5,4 @@ const socket = io(url, {
 	autoConnect: false,
 });
 
-
 export default socket;

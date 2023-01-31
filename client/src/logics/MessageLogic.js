@@ -17,6 +17,7 @@ export default class MessageLogic {
 		if (result.response.status !== 200) {
 			throw new Error(result.response.data?.message);
 		}
+
 		return result.response.data;
 	}
 
