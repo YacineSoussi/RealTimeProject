@@ -25,7 +25,7 @@ const fullName = (authorId) => {
 </script>
 
 <template>
-	<div class="w-2/3 border flex flex-col">
+	<div class="w-2/3 border flex flex-col messagesView">
 		<div
 			class="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center"
 		>
@@ -78,3 +78,12 @@ const fullName = (authorId) => {
 		<InputMessage />
 	</div>
 </template>
+
+<style scoped>
+@media (max-width: 800px) {
+	.messagesView {
+		width: 100%;
+		height: 100%;
+	}
+}
+</style>

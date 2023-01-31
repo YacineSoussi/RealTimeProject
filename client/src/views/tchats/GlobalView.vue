@@ -7,7 +7,7 @@ import ConversationProvider from "../../components/providers/ConversationProvide
 <template>
 	<section class="global">
 		<div class="py-6 main">
-			<div class="flex border border-grey rounded shadow-lg h-full">
+			<div class="flex border border-grey rounded shadow-lg h-full globalBloc">
 				<ConversationProvider>
 					<NavConversationsVue />
 					<MessagesView />
@@ -24,5 +24,21 @@ import ConversationProvider from "../../components/providers/ConversationProvide
 
 .global .main {
 	height: 500px;
+}
+
+@media (max-width: 800px) {
+	.global .main {
+		height: 1000px;
+	}
+
+	.global .globalBloc {
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 550px) {
+	.global {
+		margin: 40px 15px 20px 15px;
+	}
 }
 </style>

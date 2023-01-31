@@ -40,7 +40,7 @@ const getUserOfOtherParticipant = (participants) => {
 </script>
 
 <template>
-	<div class="w-1/3 border flex flex-col">
+	<div class="w-1/3 border flex flex-col navConversations">
 		<ModalRoomsVue v-if="isOpenModal" :rooms="rooms" />
 		<ModalChatVue v-if="isOpenModalChat" :users="users" />
 		<div
@@ -127,8 +127,15 @@ const getUserOfOtherParticipant = (participants) => {
 </template>
 
 <style scoped>
-.searching {
+.navConversations .searching {
 	border: 1px solid black;
 	border-radius: 0.25rem;
+}
+
+@media (max-width: 800px) {
+	.navConversations {
+		width: 100%;
+		height: 100%;
+	}
 }
 </style>
