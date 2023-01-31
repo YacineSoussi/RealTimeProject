@@ -44,6 +44,7 @@ const onSubmit = async () => {
 							class="form__input"
 							type="email"
 							id="email"
+							placeholder="Adresse mail"
 							v-model="form.email"
 						/>
 					</div>
@@ -54,6 +55,7 @@ const onSubmit = async () => {
 								class="form__input"
 								:type="typePassword"
 								id="password"
+								placeholder="Mot de passe"
 								v-model="form.password"
 							/>
 							<button
