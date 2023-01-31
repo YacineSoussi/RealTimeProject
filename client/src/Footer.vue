@@ -1,5 +1,8 @@
 <script setup>
 import UserProviderVue from "./components/providers/UserProvider.vue";
+import LocalStorage from "./services/LocalStorage";
+
+const role = LocalStorage.get("user").role;
 </script>
 
 <template>
@@ -24,7 +27,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 					<li v-if="isAuth">
 						<RouterLink to="/help">Aide</RouterLink>
 					</li>
-					<li v-if="isAuth">
+					<li v-if="isAuth && role === 'admin'">
 						<RouterLink to="/admin/dashboard">Administrateur</RouterLink>
 					</li>
 					<li v-if="isAuth" @click="logout" class="pointer">
