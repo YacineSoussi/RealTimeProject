@@ -147,7 +147,7 @@ const changeStatus = () => {
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
-								<h5 class="font-bold uppercase text-gray-500">
+								<h5 class="font-bold uppercase color-orange">
 									Communications en attente
 								</h5>
 								<h3 class="font-bold text-3xl">
@@ -169,8 +169,8 @@ const changeStatus = () => {
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
-								<h5 class="font-bold uppercase text-gray-500">
-									Nombre d'utilisateur(s)
+								<h5 class="font-bold uppercase color-orange">
+									Nombre d'utilisateurs
 								</h5>
 								<h3 class="font-bold text-3xl">
 									{{ users ? users.length : null }}
@@ -191,8 +191,8 @@ const changeStatus = () => {
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
-								<h5 class="font-bold uppercase text-gray-500">
-									Nombre de salon(s)
+								<h5 class="font-bold uppercase color-orange">
+									Nombre de salons
 								</h5>
 								<h3 class="font-bold text-3xl">
 									{{ rooms ? rooms.length : null }}
@@ -217,20 +217,24 @@ const changeStatus = () => {
 					/>
 					<div v-else class="bg-white border rounded shadow">
 						<div class="border-b p-3">
-							<h5 class="font-bold uppercase text-gray-600">Utilisateurs</h5>
+							<h5 class="font-bold uppercase color-orange">Utilisateurs</h5>
 						</div>
 						<div class="p-5">
 							<table class="w-full p-5 text-gray-700">
 								<thead>
 									<tr>
-										<th class="text-left text-blue-900">Nom</th>
-										<th class="text-left text-blue-900">Adresse mail</th>
+										<th class="text-left">#</th>
+										<th class="text-left">Nom</th>
+										<th class="text-left">Adresse mail</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="user in users" :key="user.id">
-										<td>{{ user.firstName + " " + user.lastName }}</td>
-										<td>{{ user.email }}</td>
+									<tr v-for="(user, index) in users" :key="user.id">
+										<td class="pt-2">{{ index === 0 ? 1 : index + 1 }}</td>
+										<td class="pt-2">
+											{{ user.firstName + " " + user.lastName }}
+										</td>
+										<td class="pt-2">{{ user.email }}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -241,7 +245,7 @@ const changeStatus = () => {
 					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
-								<h5 class="font-bold uppercase text-gray-600">Salons</h5>
+								<h5 class="font-bold uppercase color-orange">Salons</h5>
 							</div>
 							<div>
 								<font-awesome-icon
@@ -255,17 +259,19 @@ const changeStatus = () => {
 							<table class="w-full p-5 text-gray-700">
 								<thead>
 									<tr>
-										<th class="text-left text-blue-900">Nom</th>
-										<th class="text-left text-blue-900">Capacité</th>
-										<th class="text-left text-blue-900">Membre(s)</th>
+										<th class="text-left">#</th>
+										<th class="text-left">Nom</th>
+										<th class="text-left">Capacité</th>
+										<th class="text-left">Membre</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="room in rooms" :key="room.id">
-										<td>{{ room.name }}</td>
-										<td>{{ room.maxParticipants }}</td>
-										<td>{{ room.participants.length }}</td>
-										<td>
+									<tr v-for="(room, index) in rooms" :key="room.id">
+										<td class="pt-2">{{ index === 0 ? 1 : index + 1 }}</td>
+										<td class="pt-2">{{ room.name }}</td>
+										<td class="pt-2">{{ room.maxParticipants }}</td>
+										<td class="pt-2">{{ room.participants.length }}</td>
+										<td class="pt-2">
 											<font-awesome-icon
 												icon="pen-to-square"
 												style="color: blue; cursor: pointer"
@@ -291,7 +297,7 @@ const changeStatus = () => {
 					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
-								<h5 class="font-bold uppercase text-gray-600">
+								<h5 class="font-bold uppercase color-orange">
 									Demande de communication
 								</h5>
 							</div>
@@ -307,25 +313,28 @@ const changeStatus = () => {
 							<table class="w-full p-5 text-gray-700">
 								<thead>
 									<tr>
-										<th class="text-left text-blue-900">Utilisateur</th>
-										<th class="text-left text-blue-900">Date</th>
-										<th class="text-left text-blue-900">Message</th>
+										<th class="text-left">#</th>
+										<th class="text-left">Utilisateur</th>
+										<th class="text-left">Date</th>
+										<th class="text-left">Message</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr
-										v-for="request in requestsPending"
+										v-for="(request, index) in requestsPending"
 										:key="requestsPending.id"
 									>
-										<td>{{ fullName(request.clientId) }}</td>
-										<td>
+										<td class="pt-2">{{ index === 0 ? 1 : index + 1 }}</td>
+										<td class="pt-2">{{ fullName(request.clientId) }}</td>
+										<td class="pt-2">
 											{{
 												moment(request.createdAt).startOf("minute").fromNow()
 											}}
 										</td>
-										<td>{{ request.message.substring(0, 30) }}...</td>
-
-										<td>
+										<td class="pt-2">
+											{{ request.message.substring(0, 30) }}...
+										</td>
+										<td class="pt-2">
 											<font-awesome-icon
 												icon="check"
 												style="color: blue; cursor: pointer"
@@ -351,7 +360,7 @@ const changeStatus = () => {
 					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
-								<h5 class="font-bold uppercase text-gray-600">
+								<h5 class="font-bold uppercase color-orange">
 									Créer une notification commerciale
 								</h5>
 							</div>
@@ -398,6 +407,7 @@ const changeStatus = () => {
 .dashboard .toggle-switch:after {
 	content: "";
 }
+
 .dashboard .toggle-switch:before {
 	display: block;
 	background: linear-gradient(to bottom, #fff 0%, #eee 100%);
@@ -410,6 +420,7 @@ const changeStatus = () => {
 	left: 4px;
 	transition: left 0.25s;
 }
+
 .dashboard .toggle:hover .toggle-switch:before {
 	background: linear-gradient(to bottom, #fff 0%, #fff 100%);
 	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
@@ -421,6 +432,14 @@ const changeStatus = () => {
 
 .dashboard .toggle-checkbox:checked + .toggle-switch:before {
 	left: 35px;
+}
+
+.pt-2 {
+	padding-top: 10px;
+}
+
+.dashboard .color-orange {
+	color: #f04c26;
 }
 
 .dashboard .toggle-checkbox {

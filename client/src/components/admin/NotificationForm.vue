@@ -36,8 +36,29 @@ const onSubmit = async () => {
 	<form @submit.prevent="onSubmit">
 		<div class="flex flex-col">
 			<label for="message">Message</label>
-			<input type="text" id="message" v-model="message" />
+			<textarea id="message" v-model="message"></textarea>
 		</div>
 		<button :disabled="message.length === 0" type="submit">Créer</button>
 	</form>
 </template>
+
+<style scoped>
+textarea {
+	border: 1px solid;
+}
+
+button {
+	padding: 5px;
+	border-radius: 2px;
+	border: 1px solid;
+	color: black;
+	margin-top: 10px;
+	cursor: pointer;
+	background-color: #f2f2f2;
+	width: 100px;
+}
+
+button:hover {
+	opacity: 0.8;
+}
+</style>
