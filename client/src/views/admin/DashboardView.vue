@@ -17,7 +17,6 @@ const updateUserStatus = inject("ProviderUpdateUser");
 const User = LocalStorage.get("user");
 const requestsPending = ref([]);
 
-
 const changeIsEditing = () => (isEditing.value = !isEditing.value);
 
 const fetchAddRoom = async (room) => {
@@ -59,9 +58,11 @@ const onClickAcceptRequest = async (id) => {
 	await CommunicationRequestLogic.updateCommunicationRequest(id, {
 		status: "accepted",
 	});
+
 	await UserLogic.updateUser(User.id, { status: 0 }).then(() => {
 		changeStatus();
 	});
+
 	await getRequestsPending();
 };
 
@@ -101,9 +102,9 @@ const colorStatus = computed(() => {
 
 	return "bg-yellow-500";
 });
+
 const fullName = (id) => {
 	const user = users.value.find((u) => u.id === id);
-
 	return user ? user.firstName + " " + user.lastName : "";
 };
 
@@ -348,12 +349,13 @@ const changeStatus = () => {
 						</div>
 					</div>
 				</div>
-				
 				<div class="w-full md:w-1/2 p-3">
 					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
-								<h5 class="font-bold uppercase text-gray-600">Créer une notification commerciale</h5>
+								<h5 class="font-bold uppercase text-gray-600">
+									Créer une notification commerciale
+								</h5>
 							</div>
 						</div>
 						<div class="p-5">
@@ -365,5 +367,3 @@ const changeStatus = () => {
 		</div>
 	</div>
 </template>
-
-<style scoped></style>
