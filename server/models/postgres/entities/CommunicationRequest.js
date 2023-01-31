@@ -9,7 +9,7 @@ CommunicationRequest.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'users',
+                model: 'Users',
                 key: 'id',
             },
             onUpdate: 'CASCADE',

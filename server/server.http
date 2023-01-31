@@ -135,11 +135,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROY
 
 
 ###
-GET http://localhost:3000/participantsOfConversation/19
+GET http://localhost:3000/participantsOfConversation/45
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 ###
 GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
+
+###
+GET http://localhost:3000/participants
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMjY5NDksImV4cCI6MTY4ODU4NDU0OX0.Z-f6jbd_wQu6Ae-lDQCqZoYh9cHqZ92f9W7rYjV_2l0
 
 ###
@@ -161,6 +165,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROY
 }
 
 ###
+
 
 PATCH http://localhost:3000/users/104
 Content-Type: application/json
@@ -206,3 +211,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROY
 {
     "message": "Bienvenue sur notre site à tous !"
 }
+
+###
+
+DELETE  http://localhost:3000/db
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZmlyc3ROYW1lIjoiVGhlIHJlcXVlc3QgaGFzIHN1Y2NlZWRlZC4iLCJpYXQiOjE2NTcwMzA5ODUsImV4cCI6MTY4ODU4ODU4NX0.S3IFe_e0_RBuOk25uZfYEPxWi911s2tVEAoPltGVrpQ
+
