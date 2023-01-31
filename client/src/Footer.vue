@@ -98,6 +98,22 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 	opacity: 0.5;
 }
 
+@media (max-width: 480px) {
+	.footer-basic {
+		padding-top: 30px;
+	}
+
+	.footer-basic ul.list-inline {
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 380px) {
+	.footer-basic ul.list-inline {
+		font-size: 14px;
+	}
+}
+
 .footer-basic .social > a:hover {
 	opacity: 0.9;
 }

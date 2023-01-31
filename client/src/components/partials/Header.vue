@@ -20,7 +20,7 @@ import UserProviderVue from "../providers/UserProvider.vue";
 							<span class="icon-bar"></span>
 						</button>
 					</div>
-					<div class="navbar-collapse" id="myNavbar">
+					<div class="navbar-collapse collapse" id="myNavbar">
 						<ul class="nav navbar-nav navbar-left">
 							<li>
 								<RouterLink
@@ -116,16 +116,10 @@ import UserProviderVue from "../providers/UserProvider.vue";
 
 .header .navbar-toggle {
 	border: 0;
-	right: -210px;
-	top: 2px;
 }
 
-@media (max-width: 1150px) {
-	.header .navbar-option,
-	.header .banner {
-		margin-left: 0;
-		margin-right: 0;
-	}
+.collapse {
+	visibility: visible !important;
 }
 
 .header .navbar-brand > img {
@@ -133,7 +127,20 @@ import UserProviderVue from "../providers/UserProvider.vue";
 }
 
 .header .navbar-default .navbar-toggle .icon-bar {
-	background-color: #f04c26;
+	background-color: white;
+}
+
+@media (max-width: 767px) {
+	.header .navbar-default {
+		height: 319px;
+	}
+}
+
+@media (max-width: 767px) {
+	.header .navbar-default .navbar-collapse li a {
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
 }
 
 .header .navbar-default .navbar-toggle:focus,
@@ -147,6 +154,12 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+}
+
+@media (max-width: 450px) {
+	.header {
+		background-position: initial;
+	}
 }
 
 .header .navbar-default {
@@ -174,6 +187,12 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	height: calc(100% - 85px);
 }
 
+@media (max-width: 767px) {
+	.header .banner {
+		height: calc(100% - 340px);
+	}
+}
+
 .header .banner .banner-content {
 	height: 100%;
 }
@@ -187,11 +206,32 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	margin-left: 30px;
 }
 
+@media (max-width: 767px) {
+	.header .navbar-collapse .navbar-left {
+		float: right;
+		text-align: right;
+	}
+}
+
+@media (max-width: 450px) {
+	.header .navbar-collapse .navbar-left {
+		float: left;
+		text-align: left;
+	}
+}
+
 .header .banner .owl-dots {
 	display: flex;
 	position: absolute;
 	bottom: 10px;
-	right: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@media (max-width: 767px) {
+	.header .banner .owl-dots {
+		bottom: -2px;
+	}
 }
 
 .header .banner .owl-dots .owl-dot span {
@@ -211,6 +251,39 @@ import UserProviderVue from "../providers/UserProvider.vue";
 .header .banner .banner-content .owl-item .item h1,
 .header .banner .banner-content .owl-item .item p {
 	color: white;
+}
+
+@media (max-width: 767px) {
+	.header .banner .banner-content .owl-item .item h1 {
+		margin-top: 0;
+	}
+}
+
+@media (max-width: 655px) {
+	.header .banner .banner-content .owl-item .item h1 {
+		font-size: 60px;
+	}
+
+	.header .banner .banner-content .owl-item .item p {
+		font-size: 25px;
+	}
+}
+
+@media (max-width: 450px) {
+	.header .banner .banner-content .owl-item .item h1,
+	.header .banner .banner-content .owl-item .item p {
+		margin: 0;
+	}
+}
+
+@media (max-width: 380px) {
+	.header .banner .banner-content .owl-item .item h1 {
+		font-size: 40px;
+	}
+
+	.header .banner .banner-content .owl-item .item p {
+		font-size: 15px;
+	}
 }
 
 .header .banner .banner-content h1 span {
@@ -245,27 +318,5 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	right: -30px;
 	top: 210px;
 	width: 17px;
-}
-
-@media (max-width: 767px) {
-	.header .banner .banner-content .fa.fa-chevron-left {
-		left: -10px;
-	}
-
-	.header .banner .banner-content .fa.fa-chevron-right {
-		left: 10px;
-	}
-
-	.header .banner .banner-content h1 {
-		font-size: 70px;
-	}
-
-	.header .banner .banner-content .owl-prev {
-		left: -10px;
-	}
-
-	.header .banner .banner-content .owl-next {
-		right: -10px;
-	}
 }
 </style>

@@ -27,8 +27,65 @@
 	margin: 0 50px;
 }
 
+@media (max-width: 500px) {
+	.about .banner-heading {
+		margin: 0 15px;
+	}
+}
+
+@media (max-width: 480px) {
+	.about .banner-heading h2 {
+		margin: 30px auto !important;
+		font-size: 25px !important;
+	}
+
+	.about .banner-heading h2::before {
+		top: 16px !important;
+		right: -65px !important;
+	}
+
+	.about .banner-heading h2::after {
+		top: 16px !important;
+		left: -65px !important;
+	}
+}
+
+@media (max-width: 405px) {
+	.about .banner-heading h2 {
+		font-size: 20px !important;
+	}
+
+	.about .banner-heading h2::before {
+		top: 12px !important;
+		right: -35px !important;
+	}
+
+	.about .banner-heading h2::after {
+		top: 12px !important;
+		left: -35px !important;
+	}
+}
+
+@media (max-width: 350px) {
+	.about .banner-heading h2::before {
+		width: 50px !important;
+		right: -10px !important;
+	}
+
+	.about .banner-heading h2::after {
+		width: 50px !important;
+		left: -10px !important;
+	}
+}
+
 .about .description {
 	text-align: center;
+}
+
+@media (max-width: 480px) {
+	.about .description {
+		font-size: 12px;
+	}
 }
 
 .about .banner-heading h2 {
