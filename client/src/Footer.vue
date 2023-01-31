@@ -47,7 +47,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 .footer {
 	padding: 40px 0 20px 0;
 	background-color: #ffffff;
-	color: #4b4c4d;
+	color: black;
 }
 
 .footer ul {
@@ -71,7 +71,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 
 .footer ul a:hover {
 	opacity: 1;
-	color: #f04c26;
+	color: #f04c26 !important;
 }
 
 .footer .social {
@@ -87,7 +87,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 	display: inline-block;
 	text-align: center;
 	border-radius: 50%;
-	border: 1px solid #ccc;
+	border: 1px solid black;
 	margin: 0 8px;
 	color: inherit;
 	opacity: 0.75;
@@ -126,7 +126,7 @@ import UserProviderVue from "./components/providers/UserProvider.vue";
 	margin-top: 15px;
 	text-align: center;
 	font-size: 13px;
-	color: #aaa;
+	color: black;
 	margin-bottom: 0;
 }
 </style>
