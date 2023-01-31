@@ -96,7 +96,7 @@ const getUserOfOtherParticipant = (participants) => {
 											.lastName
 							}}
 						</p>
-						<p class="text-xs text-grey-darkest">
+						<p class="text-grey-darkest">
 							{{
 								conversation.lastMessage
 									? moment(conversation.lastMessage.updatedAt).format("hh:mm a")

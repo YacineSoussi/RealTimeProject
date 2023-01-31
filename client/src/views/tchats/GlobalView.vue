@@ -6,7 +6,7 @@ import ConversationProvider from "../../components/providers/ConversationProvide
 
 <template>
 	<section class="global">
-		<div class="py-6 h-screen">
+		<div class="py-6 main">
 			<div class="flex border border-grey rounded shadow-lg h-full">
 				<ConversationProvider>
 					<NavConversationsVue />
@@ -20,5 +20,9 @@ import ConversationProvider from "../../components/providers/ConversationProvide
 <style scoped>
 .global {
 	margin: 40px 50px 20px 50px;
+}
+
+.global .main {
+	height: 500px;
 }
 </style>

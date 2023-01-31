@@ -34,7 +34,7 @@ const fullName = (authorId) => {
 					<p v-if="selectedConversation" class="text-grey-darkest">
 						{{ selectedConversation.name }}
 					</p>
-					<p class="text-grey-darker text-xs mt-1">
+					<p class="text-grey-darker mt-1">
 						<template v-if="participantsOFConversation">
 							<template v-for="participant in participantsOFConversation">
 								{{ fullName(participant.user.id) }},
@@ -56,7 +56,7 @@ const fullName = (authorId) => {
 								<p class="text-sm mt-1">
 									{{ message.content }}
 								</p>
-								<p class="text-right text-xs text-grey-dark mt-1">
+								<p class="text-right text-grey-dark mt-1">
 									{{ moment(message.createdAt).format("hh:mm a") }}
 								</p>
 							</div>
@@ -66,7 +66,7 @@ const fullName = (authorId) => {
 								<p class="text-sm mt-1">
 									{{ message.content }}
 								</p>
-								<p class="text-right text-xs text-grey-dark mt-1">
+								<p class="text-right text-grey-dark mt-1">
 									{{ moment(message.createdAt).format("hh:mm a") }}
 								</p>
 							</div>
