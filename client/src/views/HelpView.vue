@@ -63,10 +63,8 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div>
-		<h1 style="text-align: center; margin-top: 30px">
-			Contacter un conseiller de vente
-		</h1>
+	<section class="help">
+		<h1>Contacter un conseiller de vente</h1>
 		<form v-if="isJoinable" @submit.prevent="submitRequest">
 			<label>
 				Message :
@@ -74,15 +72,46 @@ onMounted(async () => {
 			</label>
 			<button type="submit">Envoyer la demande</button>
 		</form>
-		<div v-else>
-			<p style="text-align: center; margin-top: 30px">
-				Aucun conseiller de vente n'est joignable pour le moment
-			</p>
-		</div>
-	</div>
+		<p v-else>Aucun conseiller de vente n'est joignable pour le moment</p>
+	</section>
 </template>
 
 <style scoped>
+.help {
+	margin: 40px 50px 0 50px;
+	border: 1px dashed;
+	padding: 20px;
+}
+
+h1 {
+	font-weight: bold;
+	font-size: 30px;
+	text-align: center;
+}
+
+@media (max-width: 630px) {
+	h1 {
+		font-size: 25px;
+	}
+}
+
+@media (max-width: 565px) {
+	.help {
+		margin: 40px 20px 0 20px;
+	}
+}
+
+@media (max-width: 475px) {
+	h1 {
+		font-size: 20px;
+	}
+}
+
+p {
+	text-align: center;
+	margin-top: 30px;
+}
+
 form {
 	display: flex;
 	flex-direction: column;
