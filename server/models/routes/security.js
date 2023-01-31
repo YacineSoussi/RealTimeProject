@@ -43,7 +43,7 @@ router.post("/login", async (req, res) => {
 				userData: await User.findAll({ where: { email: req.body.email } }),
 			});
 		} else {
-			res.status(401).json({ message: "Vos identifiants sont incorrects." });
+			res.status(401).json({ message: "Vos identifiants sont incorrects" });
 		}
 	} catch (error) {
 		if (error instanceof ValidationError) {
