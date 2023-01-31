@@ -89,18 +89,16 @@ onMounted(async () => {
 const me = ref(null);
 const status = ref(null);
 
-const colorStatus = computed(() => {
+const clientStatus = computed(() => {
 	if (status.value === 1) {
 		updateUserStatus(me.value.id, { status: 1 });
-		return "bg-green-500";
+		return "Disponible";
 	}
 
 	if (status.value === 0) {
 		updateUserStatus(me.value.id, { status: 0 });
-		return "bg-red-500";
+		return "Non disponible";
 	}
-
-	return "bg-yellow-500";
 });
 
 const fullName = (id) => {
@@ -118,23 +116,23 @@ const changeStatus = () => {
 </script>
 
 <template>
-	<div class="container w-full mx-auto pt-20">
-		<div class="flex justify-end">
-			<div class="flex flex-col items-end">
+	<section class="dashboard">
+		<div class="flex">
+			<div class="flex flex-col">
 				<div class="mb-2">
-					<button
-						@click="changeStatus"
-						class="text-sm bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-					>
-						Changer de statut
-					</button>
+					<span class="toggle-label">Disponibilité de l'admin :</span>
+					<label class="toggle">
+						<input
+							class="toggle-checkbox"
+							type="checkbox"
+							@click="changeStatus"
+						/>
+						<div class="toggle-switch"></div>
+					</label>
 				</div>
 				<div>
-					<span>Disponibilité pour les clients</span>
-					<span
-						:class="colorStatus"
-						class="ml-3 rounded-full w-3 h-3 inline-block"
-					></span>
+					<span>Disponibilité pour les clients :</span>
+					<span class="ml-3 inline-block">{{ clientStatus }}</span>
 				</div>
 			</div>
 		</div>
@@ -145,7 +143,7 @@ const changeStatus = () => {
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
 								<div class="rounded p-3 bg-green-600">
-									<i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+									<i class="fa fa-google-wallet"></i>
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
@@ -155,7 +153,7 @@ const changeStatus = () => {
 								<h3 class="font-bold text-3xl">
 									{{ requestsPending ? requestsPending.length : 0 }}
 									<span class="text-green-500"
-										><i class="fas fa-caret-up"></i
+										><i class="fa fa-caret-up"></i
 									></span>
 								</h3>
 							</div>
@@ -167,7 +165,7 @@ const changeStatus = () => {
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
 								<div class="rounded p-3 bg-pink-600">
-									<i class="fas fa-users fa-2x fa-fw fa-inverse"></i>
+									<i class="fa fa-users"></i>
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
@@ -177,7 +175,7 @@ const changeStatus = () => {
 								<h3 class="font-bold text-3xl">
 									{{ users ? users.length : null }}
 									<span class="text-pink-500"
-										><i class="fas fa-exchange-alt"></i
+										><i class="fa fa-exchange-alt"></i
 									></span>
 								</h3>
 							</div>
@@ -189,7 +187,7 @@ const changeStatus = () => {
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
 								<div class="rounded p-3 bg-yellow-600">
-									<i class="fas fa-user-plus fa-2x fa-fw fa-inverse"></i>
+									<i class="fa fa-user-plus"></i>
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
@@ -199,7 +197,7 @@ const changeStatus = () => {
 								<h3 class="font-bold text-3xl">
 									{{ rooms ? rooms.length : null }}
 									<span class="text-yellow-600"
-										><i class="fas fa-caret-up"></i
+										><i class="fa fa-caret-up"></i
 									></span>
 								</h3>
 							</div>
@@ -365,5 +363,74 @@ const changeStatus = () => {
 				</div>
 			</div>
 		</div>
-	</div>
+	</section>
 </template>
+
+<style scoped>
+.dashboard {
+	margin: 40px 50px 20px 50px;
+}
+
+.dashboard .fa-google-wallet,
+.dashboard .fa-users,
+.dashboard .fa-user-plus {
+	font-size: 30px;
+	color: white;
+}
+
+.dashboard .toggle {
+	cursor: pointer;
+	display: inline-block;
+}
+
+.dashboard .toggle-switch {
+	display: inline-block;
+	background: #ccc;
+	border-radius: 16px;
+	width: 58px;
+	height: 26px;
+	position: relative;
+	vertical-align: middle;
+	transition: background 0.25s;
+}
+
+.dashboard .toggle-switch:before,
+.dashboard .toggle-switch:after {
+	content: "";
+}
+.dashboard .toggle-switch:before {
+	display: block;
+	background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+	border-radius: 50%;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+	width: 19px;
+	height: 19px;
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	transition: left 0.25s;
+}
+.dashboard .toggle:hover .toggle-switch:before {
+	background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.dashboard .toggle-checkbox:checked + .toggle-switch {
+	background: #f04c26;
+}
+
+.dashboard .toggle-checkbox:checked + .toggle-switch:before {
+	left: 35px;
+}
+
+.dashboard .toggle-checkbox {
+	position: absolute;
+	visibility: hidden;
+}
+
+.dashboard .toggle-label {
+	margin-right: 5px;
+	position: relative;
+	top: 2px;
+}
+</style>
