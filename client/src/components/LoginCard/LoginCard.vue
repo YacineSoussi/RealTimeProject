@@ -5,29 +5,68 @@ import { RouterLink } from "vue-router";
 
 const isLoading = ref(false);
 const showPassword = ref(false);
-const error = ref("");
-const form = reactive({
-	email: "",
-	password: "",
-});
+const errorMsg = ref("");
+const form = reactive({ email: "", password: "" });
 const login = inject("ProviderLogin");
-const redirectToHome = () => {
-	router.push({ name: "home" });
-};
-const typePassword = computed(() => {
-	return showPassword.value ? "text" : "password";
-});
+const redirectToHome = () => router.push({ name: "home" });
+const typePassword = computed(() => (showPassword.value ? "text" : "password"));
+const errors = reactive({ email: "", password: "" });
+
 const onSubmit = async () => {
 	isLoading.value = true;
+
 	try {
 		await login(form);
 		redirectToHome();
 	} catch (err) {
-		error.value = err.message;
+		errorMsg.value = err.message;
 	} finally {
 		isLoading.value = false;
 	}
 };
+
+const isPassword = () => {
+	const password = form.password;
+
+	if (password.length < 8) {
+		errors.password = "Le mot de passe doit contenir au moins 8 caractères";
+	} else {
+		errors.password = "";
+	}
+};
+
+const isEmail = () => {
+	const re = /\S+@\S+\.\S+/;
+	const email = form.email;
+
+	if (!re.test(email)) {
+		errors.email = "L'adresse mail est invalide";
+	} else {
+		errors.email = "";
+	}
+};
+
+const isValid = computed(() => {
+	if (
+		errors.email === "" &&
+		errors.password === "" &&
+		form.email !== "" &&
+		form.password !== ""
+	) {
+		return false;
+	} else {
+		return true;
+	}
+});
+
+const isValidForm = computed(() => {
+	if (isValid.value === true) {
+		return {
+			cursor: "not-allowed",
+			backgroundColor: "#e0e0e0",
+		};
+	}
+});
 </script>
 
 <template>
@@ -46,7 +85,11 @@ const onSubmit = async () => {
 							id="email"
 							placeholder="Adresse mail"
 							v-model="form.email"
+							@input="isEmail"
 						/>
+						<p class="messageErrors m-2 ml-0" v-if="errors?.email">
+							{{ errors.email }}
+						</p>
 					</div>
 					<div class="form__group">
 						<label class="form__label" for="password">Mot de passe</label>
@@ -57,6 +100,7 @@ const onSubmit = async () => {
 								id="password"
 								placeholder="Mot de passe"
 								v-model="form.password"
+								@input="isPassword"
 							/>
 							<button
 								class="form__input-button"
@@ -65,18 +109,24 @@ const onSubmit = async () => {
 							>
 								<font-awesome-icon icon="eye" />
 							</button>
+							<p class="messageErrors m-2 ml-0" v-if="errors?.password">
+								{{ errors.password }}
+							</p>
 						</div>
 					</div>
-					<div class="errors">
-						<div class="error messageErrors m-2" v-if="error">
-							<li>{{ error }}</li>
-						</div>
-					</div>
+					<p class="messageErrors m-2 ml-0" v-if="errorMsg">
+						{{ errorMsg }}
+					</p>
 					<RouterLink to="/register" class="form__link"
 						>Pas encore inscrit ?</RouterLink
 					>
-					<div class="form__group mt-10">
-						<button class="form__button" type="submit" :disabled="isLoading">
+					<div class="form__group mt-2">
+						<button
+							class="form__button"
+							:style="isValidForm"
+							type="submit"
+							:disabled="isValid"
+						>
 							<span v-if="isLoading">Chargement...</span>
 							<span v-else>Se connecter</span>
 						</button>
@@ -122,6 +172,10 @@ const onSubmit = async () => {
 	.block {
 		max-width: 90%;
 	}
+}
+
+.ml-0 {
+	margin-left: 0;
 }
 
 .global {
@@ -174,7 +228,7 @@ const onSubmit = async () => {
 	color: red;
 }
 
-.mt-10 {
+.mt-2 {
 	margin-top: 10px;
 }
 </style>

@@ -5,6 +5,10 @@ import { RouterLink } from "vue-router";
 
 const isLoading = ref(false);
 const showPassword = ref(false);
+const redirectToLogin = () => router.push({ name: "login" });
+const typePassword = computed(() => (showPassword.value ? "text" : "password"));
+const register = inject("ProviderRegister");
+const errorMsg = ref("");
 
 const form = reactive({
 	email: "",
@@ -20,14 +24,33 @@ const errors = reactive({
 	lastName: "",
 });
 
-const errorMsg = ref("");
-
 const isPassword = () => {
 	const password = form.password;
+
 	if (password.length < 8) {
-		errors.password = "Password must be at least height characters";
+		errors.password = "Le mot de passe doit contenir au moins 8 caractères";
 	} else {
 		errors.password = "";
+	}
+};
+
+const isFirstName = () => {
+	const firstName = form.firstName;
+
+	if (firstName.length < 2) {
+		errors.firstName = "Le prénom doit contenir au moins 2 caractères";
+	} else {
+		errors.firstName = "";
+	}
+};
+
+const isLastName = () => {
+	const lastName = form.lastName;
+
+	if (lastName.length < 2) {
+		errors.lastName = "Le nom doit contenir au moins 2 caractères";
+	} else {
+		errors.lastName = "";
 	}
 };
 
@@ -36,13 +59,11 @@ const isEmail = () => {
 	const email = form.email;
 
 	if (!re.test(email)) {
-		errors.email = "Email is invalid";
+		errors.email = "L'adresse mail est invalide";
 	} else {
 		errors.email = "";
 	}
 };
-
-const register = inject("ProviderRegister");
 
 const onSubmit = async () => {
 	isLoading.value = true;
@@ -56,14 +77,6 @@ const onSubmit = async () => {
 		isLoading.value = false;
 	}
 };
-
-const redirectToLogin = () => {
-	router.push({ name: "login" });
-};
-
-const typePassword = computed(() => {
-	return showPassword.value ? "text" : "password";
-});
 
 const isValid = computed(() => {
 	if (
@@ -82,7 +95,7 @@ const isValid = computed(() => {
 	}
 });
 
-const isValidStyle = computed(() => {
+const isValidForm = computed(() => {
 	if (isValid.value === true) {
 		return {
 			cursor: "not-allowed",
@@ -108,9 +121,9 @@ const isValidStyle = computed(() => {
 							id="firstName"
 							placeholder="Prénom"
 							v-model="form.firstName"
-							@blur="isFirstName"
+							@input="isFirstName"
 						/>
-						<p class="form__error" v-if="errors.firstName">
+						<p class="messageErrors m-2" v-if="errors?.firstName">
 							{{ errors.firstName }}
 						</p>
 					</div>
@@ -122,9 +135,9 @@ const isValidStyle = computed(() => {
 							placeholder="Nom"
 							id="lastName"
 							v-model="form.lastName"
-							@blur="isLastName"
+							@input="isLastName"
 						/>
-						<p class="form__error" v-if="errors.lastName">
+						<p class="messageErrors m-2" v-if="errors?.lastName">
 							{{ errors.lastName }}
 						</p>
 					</div>
@@ -138,6 +151,9 @@ const isValidStyle = computed(() => {
 							v-model="form.email"
 							@input="isEmail"
 						/>
+						<p class="messageErrors m-2 ml-0" v-if="errors?.email">
+							{{ errors.email }}
+						</p>
 					</div>
 					<div class="form__group">
 						<label class="form__label" for="password">Mot de passe</label>
@@ -158,26 +174,21 @@ const isValidStyle = computed(() => {
 							>
 								<font-awesome-icon icon="eye" />
 							</button>
+							<p class="messageErrors m-2 ml-0" v-if="errors?.password">
+								{{ errors.password }}
+							</p>
 						</div>
 					</div>
-					<div class="errors">
-						<div class="error messageErrors m-2" v-if="errors.email">
-							<li>{{ errors.email }}</li>
-						</div>
-						<div class="error messageErrors m-2" v-if="errors.password">
-							<li>{{ errors.password }}</li>
-						</div>
-					</div>
-					<div class="error messageErrors m-2" v-if="errorMsg">
-						<li>{{ errorMsg }}</li>
-					</div>
+					<p class="messageErrors m-2 ml-0" v-if="errorMsg">
+						{{ errorMsg }}
+					</p>
 					<RouterLink to="/login" class="form__link">
 						Déjà inscrit ?
 					</RouterLink>
-					<div class="form__group">
+					<div class="form__group mt-2">
 						<button
-							class="form__button mt-10"
-							:style="isValidStyle"
+							class="form__button"
+							:style="isValidForm"
 							type="submit"
 							:disabled="isValid"
 						>
@@ -202,6 +213,10 @@ const isValidStyle = computed(() => {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+.ml-0 {
+	margin-left: 0;
 }
 
 @media (min-width: 1850px) {
