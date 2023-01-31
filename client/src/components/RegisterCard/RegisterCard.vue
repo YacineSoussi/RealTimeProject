@@ -100,39 +100,40 @@ const isValidStyle = computed(() => {
 			</div>
 			<div class="block__content">
 				<form class="form" @submit.prevent="onSubmit">
-					<div class="form__group flex">
-						<div class="m-2">
-							<label class="form__label" for="firstName">Prénom</label>
-							<input
-								class="form__input"
-								type="text"
-								id="firstName"
-								v-model="form.firstName"
-								@blur="isFirstName"
-							/>
-							<p class="form__error" v-if="errors.firstName">
-								{{ errors.firstName }}
-							</p>
-						</div>
-						<div class="m-2">
-							<label class="form__label" for="lastName">Nom</label>
-							<input
-								class="form__input"
-								type="text"
-								id="lastName"
-								v-model="form.lastName"
-								@blur="isLastName"
-							/>
-							<p class="form__error" v-if="errors.lastName">
-								{{ errors.lastName }}
-							</p>
-						</div>
+					<div class="form__group">
+						<label class="form__label" for="firstName">Prénom</label>
+						<input
+							class="form__input"
+							type="text"
+							id="firstName"
+							placeholder="Prénom"
+							v-model="form.firstName"
+							@blur="isFirstName"
+						/>
+						<p class="form__error" v-if="errors.firstName">
+							{{ errors.firstName }}
+						</p>
+					</div>
+					<div class="form__group">
+						<label class="form__label" for="lastName">Nom</label>
+						<input
+							class="form__input"
+							type="text"
+							placeholder="Nom"
+							id="lastName"
+							v-model="form.lastName"
+							@blur="isLastName"
+						/>
+						<p class="form__error" v-if="errors.lastName">
+							{{ errors.lastName }}
+						</p>
 					</div>
 					<div class="form__group">
 						<label class="form__label" for="email">Adresse mail</label>
 						<input
 							class="form__input"
 							type="email"
+							placeholder="Adresse mail"
 							id="email"
 							v-model="form.email"
 							@input="isEmail"
@@ -145,6 +146,7 @@ const isValidStyle = computed(() => {
 								class="form__input"
 								:type="typePassword"
 								id="password"
+								placeholder="Mot de passe"
 								v-model="form.password"
 								@input="isPassword"
 							/>
@@ -202,10 +204,52 @@ const isValidStyle = computed(() => {
 	justify-content: center;
 }
 
+@media (min-width: 1850px) {
+	.block {
+		max-width: 500px;
+	}
+}
+
+@media (max-width: 1250px) {
+	.block {
+		max-width: 35%;
+	}
+}
+
+@media (max-width: 1000px) {
+	.block {
+		max-width: 45%;
+	}
+}
+
+@media (max-width: 800px) {
+	.block {
+		max-width: 55%;
+	}
+}
+
+@media (max-width: 600px) {
+	.block {
+		max-width: 75%;
+	}
+}
+
+@media (max-width: 400px) {
+	.block {
+		max-width: 90%;
+	}
+}
+
 .global {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.block__title-text {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .form__group {
@@ -238,9 +282,8 @@ const isValidStyle = computed(() => {
 	padding: 10px;
 	border: none;
 	border-radius: 5px;
-	background: rgb(11, 11, 11);
+	background: #ccc !important;
 	cursor: pointer;
-	color: #fff;
 }
 
 .messageErrors {
