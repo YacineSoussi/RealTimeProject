@@ -25,55 +25,55 @@ import UserProviderVue from "../providers/UserProvider.vue";
 							<li>
 								<RouterLink
 									to="/"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Accueil</RouterLink
 								>
 							</li>
 							<li v-if="isAuth">
 								<RouterLink
 									to="/conversation"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Discussions</RouterLink
 								>
 							</li>
 							<li v-if="isAuth">
 								<RouterLink
 									to="/chatbot"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Chatbot</RouterLink
 								>
 							</li>
 							<li v-if="isAuth">
 								<RouterLink
 									to="/help"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Aide</RouterLink
 								>
 							</li>
 							<li v-if="isAuth">
 								<RouterLink
 									to="/admin/dashboard"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Administrateur</RouterLink
 								>
 							</li>
 							<li v-if="isAuth" @click="logout" class="pointer">
 								<a
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Déconnexion</a
 								>
 							</li>
 							<li v-if="!isAuth">
 								<RouterLink
 									to="/register"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>S'enregistrer</RouterLink
 								>
 							</li>
 							<li v-if="!isAuth">
 								<RouterLink
 									to="/login"
-									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+									class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md font-medium"
 									>Se connecter</RouterLink
 								>
 							</li>
@@ -274,6 +274,10 @@ import UserProviderVue from "../providers/UserProvider.vue";
 	.header .banner .banner-content .owl-item .item p {
 		margin: 0;
 	}
+}
+
+.header a.router-link-active {
+	color: #f04c26 !important;
 }
 
 @media (max-width: 380px) {
