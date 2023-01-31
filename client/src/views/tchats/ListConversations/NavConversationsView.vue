@@ -65,7 +65,7 @@ const getUserOfOtherParticipant = (participants) => {
 		<div class="py-2 px-2 bg-grey-lightest">
 			<input
 				type="text"
-				class="w-full px-2 py-2 text-sm"
+				class="w-full px-2 py-2 searching"
 				placeholder="Rechercher ou commencer une nouvelle discussion"
 			/>
 		</div>
@@ -125,3 +125,10 @@ const getUserOfOtherParticipant = (participants) => {
 		</div>
 	</div>
 </template>
+
+<style scoped>
+.searching {
+	border: 1px solid black;
+	border-radius: 0.25rem;
+}
+</style>

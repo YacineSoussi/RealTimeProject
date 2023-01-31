@@ -44,11 +44,7 @@ const fullName = (authorId) => {
 				</div>
 			</div>
 		</div>
-		<div
-			class="flex-1 overflow-auto"
-			style="background-color: #dad3cc"
-			ref="input"
-		>
+		<div class="flex-1 overflow-auto" ref="input">
 			<div class="py-2 px-3">
 				<template v-if="selectedConversation">
 					<template v-for="message in selectedConversation.messages">
