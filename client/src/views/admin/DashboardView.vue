@@ -72,26 +72,25 @@ const onClickRejectRequest = async (id) => {
 	await getRequestsPending();
 };
 
-
 onMounted(async () => {
 	UserLogic.getUsers().then(
 		(data) => (users.value = data.filter((u) => u.id !== User.id))
-		);
-		
-		UserLogic.getUser(User.id).then((data) => {
-			me.value = data;
-			status.value = data.status;
-		});
-		
-		await getRequestsPending();
-	});
-	
-	const me = ref(null);
-	const status = ref(null);
+	);
 
-	const colorStatus = computed(() => {
-		if (status.value === 1) {
-			updateUserStatus(me.value.id, { status: 1 });
+	UserLogic.getUser(User.id).then((data) => {
+		me.value = data;
+		status.value = data.status;
+	});
+
+	await getRequestsPending();
+});
+
+const me = ref(null);
+const status = ref(null);
+
+const colorStatus = computed(() => {
+	if (status.value === 1) {
+		updateUserStatus(me.value.id, { status: 1 });
 		return "bg-green-500";
 	}
 
@@ -115,7 +114,6 @@ const changeStatus = () => {
 		status.value = 1;
 	}
 };
-
 </script>
 
 <template>
@@ -154,7 +152,7 @@ const changeStatus = () => {
 									Communications en attente
 								</h5>
 								<h3 class="font-bold text-3xl">
-									{{requestsPending ? requestsPending.length : 0}}
+									{{ requestsPending ? requestsPending.length : 0 }}
 									<span class="text-green-500"
 										><i class="fas fa-caret-up"></i
 									></span>
@@ -294,7 +292,9 @@ const changeStatus = () => {
 					<div class="bg-white border rounded shadow">
 						<div class="border-b p-3 flex justify-between">
 							<div>
-								<h5 class="font-bold uppercase text-gray-600">Demande de communication</h5>
+								<h5 class="font-bold uppercase text-gray-600">
+									Demande de communication
+								</h5>
 							</div>
 							<div>
 								<font-awesome-icon
@@ -311,15 +311,21 @@ const changeStatus = () => {
 										<th class="text-left text-blue-900">Utilisateur</th>
 										<th class="text-left text-blue-900">Date</th>
 										<th class="text-left text-blue-900">Message</th>
-										
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="request in requestsPending" :key="requestsPending.id">
-										<td>{{ fullName(request.clientId)}}</td>
-										<td>{{ moment(request.createdAt).startOf('minute').fromNow() }}</td>
+									<tr
+										v-for="request in requestsPending"
+										:key="requestsPending.id"
+									>
+										<td>{{ fullName(request.clientId) }}</td>
+										<td>
+											{{
+												moment(request.createdAt).startOf("minute").fromNow()
+											}}
+										</td>
 										<td>{{ request.message.substring(0, 30) }}...</td>
-										
+
 										<td>
 											<font-awesome-icon
 												icon="check"
@@ -356,7 +362,6 @@ const changeStatus = () => {
 					</div>
 				</div>
 			</div>
-			
 		</div>
 	</div>
 </template>

@@ -49,5 +49,3 @@ const onSubmit = async (e) => {
 		</div>
 	</form>
 </template>
-
-<style scoped></style>

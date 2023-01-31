@@ -31,6 +31,7 @@ const router = createRouter({
 			path: "/chatbot",
 			name: "chatbot",
 			component: () => import("../views/chatbot/ChatbotView.vue"),
+			meta: { requiresAuth: true },
 		},
 		{
 			path: "/help",

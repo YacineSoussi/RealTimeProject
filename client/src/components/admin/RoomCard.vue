@@ -93,5 +93,3 @@ const submit = (e) => {
 		</form>
 	</div>
 </template>
-
-<style scoped></style>

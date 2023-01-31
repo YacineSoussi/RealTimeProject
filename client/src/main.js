@@ -1,6 +1,7 @@
 import "./index.css";
 
 import {
+	faCheck,
 	faCirclePlus,
 	faEye,
 	faMessage,
@@ -11,7 +12,6 @@ import {
 	faTrash,
 	faUsers,
 	faXmark,
-	faCheck
 } from "@fortawesome/free-solid-svg-icons";
 
 import App from "./App.vue";
