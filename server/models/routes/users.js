@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const { User, Message, Conversation, Participant } = require("../postgres");
 const { ValidationError, Op } = require("sequelize");
-
+const { EventEmitter } = require("events");
 const checkAuthentication = require("../../middlewares/checkAuthentication");
-
+const emitter = new EventEmitter();
 const router = new Router();
 
 function formatError(error) {
@@ -128,6 +128,13 @@ router.patch("/users/:id", checkAuthentication, async (req, res) => {
 		if (!rows[0]) {
 			res.sendStatus(404);
 		} else {
+			
+			if (req.body.status !== undefined) {
+				emitter.emit("contact", {
+					userId: req.params.id,
+					status: req.body.status,
+				});
+			}
 			res.json(rows[0]);
 			res.status = 200;
 		}
@@ -139,6 +146,16 @@ router.patch("/users/:id", checkAuthentication, async (req, res) => {
 			console.error(error);
 		}
 	}
+});
+
+router.get("/communication_request_notification", async (req, res) => {
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    emitter.on("contact", (data) => {
+        res.write(`event: contact\ndata: ${JSON.stringify(data)}\n\n`);
+    });
 });
 
 router.get("/users/:id", checkAuthentication, async (req, res) => {

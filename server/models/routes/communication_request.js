@@ -3,11 +3,16 @@ const { ValidationError, Op } = require("sequelize");
 const { Router } = require("express");
 const checkAuthentication = require("../../middlewares/checkAuthentication");
 const request = require("../postgres/entities/CommunicationRequest");
+const { EventEmitter } = require("events");
 const router = new Router();
+
+
+const RequestEvents = new EventEmitter();
 
 router.get("/communication_request", checkAuthentication, async (req, res) => {
     try {
         const result = await request.findAll();
+       
         res.json(result);
     }
     catch (error) {
@@ -16,9 +21,15 @@ router.get("/communication_request", checkAuthentication, async (req, res) => {
     }
 });
 
+
+
+
 router.post("/communication_request", async (req, res) => {
     try {
         const result = await request.create(req.body);
+        console.log("result", result)
+        RequestEvents.emit("contact", req.body);
+
          res.status(201).json(result);
     }
     catch (error) {
