@@ -4,8 +4,7 @@ import { RouterLink, RouterView } from "vue-router";
 import UserProviderVue from "../providers/UserProvider.vue";
 import LocalStorage from "../../services/LocalStorage";
 
-const role = LocalStorage.get("user").role;
-
+const role = LocalStorage.get("user")?.role;
 </script>
 
 <template>

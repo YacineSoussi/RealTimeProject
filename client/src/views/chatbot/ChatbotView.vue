@@ -117,7 +117,7 @@ let questionPending = reactive({
  */
 onMounted(() => {
 	socketRef.current = socket;
-	socketRef.current.auth = { userId: LocalStorage.get("user").id };
+	socketRef.current.auth = { userId: LocalStorage.get("user")?.id };
 	socketRef.current.connect();
 
 	// Manage input availability and status color

@@ -9,11 +9,10 @@ const users = inject("ProviderUsers");
 const message = ref("");
 const isJoinable = ref(false);
 const submitRequest = () => {
-	
 	try {
 		CommunicationRequestLogic.createCommunicationRequest({
 			message: message.value,
-			clientId: LocalStorage.get("user").id,
+			clientId: LocalStorage.get("user")?.id,
 			status: "pending",
 		}).then(() => {
 			message.value = "";
@@ -61,29 +60,30 @@ onMounted(async () => {
 		}
 	});
 
-	new EventSource("http://localhost:3000/communication_request_notification").addEventListener("contact", (event) => {
-		
-			const data = JSON.parse(event.data);
-			if (data.status === 1) {
-				isJoinable.value = true;
-				createToast("Un conseiller de vente est joignable !", {
-					type: "success",
-					position: "top-right",
-					timeout: 3000,
-					dismissible: true,
-					pauseOnFocusLoss: true,
-					pauseOnHover: true,
-					draggable: true,
-					draggablePercent: 0.6,
-					showCloseButtonOnHover: false,
-					hideProgressBar: false,
-					closeButton: "button",
-					icon: true,
-					rtl: false,
-				});
-			} else {
-				isJoinable.value = false;
-			}
+	new EventSource(
+		"http://localhost:3000/communication_request_notification"
+	).addEventListener("contact", (event) => {
+		const data = JSON.parse(event.data);
+		if (data.status === 1) {
+			isJoinable.value = true;
+			createToast("Un conseiller de vente est joignable !", {
+				type: "success",
+				position: "top-right",
+				timeout: 3000,
+				dismissible: true,
+				pauseOnFocusLoss: true,
+				pauseOnHover: true,
+				draggable: true,
+				draggablePercent: 0.6,
+				showCloseButtonOnHover: false,
+				hideProgressBar: false,
+				closeButton: "button",
+				icon: true,
+				rtl: false,
+			});
+		} else {
+			isJoinable.value = false;
+		}
 	});
 });
 </script>
