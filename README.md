@@ -1,12 +1,12 @@
 # RealTimeProject
 
-Platform with instant exchange system with its customers.
+Platform d'echange entre passionnés de motos.
 
 ## Tech Stack
 
 **Client:** Vue.js - Bootstrap - Vite
 
-**Server:** Node.js - Express
+**Server:** Node.js - Express - Socket.io
 
 **Others:** Docker
 
